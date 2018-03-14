@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "328538592362",
+    "firebase_url": "https://track-my-business.firebaseio.com",
+    "project_id": "track-my-business",
+    "storage_bucket": "track-my-business.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328538592362:android:a37a549dcc8229eb",
+        "android_client_info": {
+          "package_name": "com.example.android.bookkeepingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "328538592362-rmo4btg5od7duda1gdh71660lsvv3dtb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDf3qTEjOX7qOfv47pwVayUjd7E2sNx41Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
