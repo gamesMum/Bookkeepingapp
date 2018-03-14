@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+
 /**
  * Created by Rasha on 14/03/2018.
  */
 
-public class ClientAdapter extends ArrayAdapter<Client> {
 
+public class ClientAdapter extends ArrayAdapter<Client> {
+    String  checking;
     public ClientAdapter(@NonNull Context context, int resource) {
         super(context, resource);
     }
