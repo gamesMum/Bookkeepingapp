@@ -12,79 +12,93 @@ import java.util.Map;
 public class Client {
 
     //client information
-    private String mFirstName;
-    private String mLastName;
+    private static long clientId = 0;
+    private String firstName;
+    private String lastName;
 
-    private String mCompanyName;
+    private String companyName;
 
-    private String mAddress;
-    private String mEmail;
-    private String mPhoneNumber;
+    private String address;
+    private String email;
+    private String phoneNumber;
 
+    public Client()
+    {}
 
-    public Client(String firstName, String mLastName)
+    public Client(String firstName, String lastName)
     {
-        mFirstName = firstName;
-        mLastName = getmLastName();
+        //take the last value and increase it by one
+        clientId = clientId + 1;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public Client(String companyName)
+    {
+        this.companyName = companyName;
     }
 
     public String getmAddress() {
-        return mAddress;
+        return this.address;
     }
 
-    public String getmCompanyName() {
-        return mCompanyName;
+    public String getCompanyName() {
+        return this.companyName;
     }
 
-    public String getmEmail() {
-        return mEmail;
+    public String getEmail() {
+        return this.email;
     }
 
-    public String getmFirstName() {
-        return mFirstName;
+    public String getFirstName() {
+        return this.firstName;
     }
 
-    public String getmLastName() {
-        return mLastName;
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public static long getClientId() {
+        return clientId;
     }
 
     public String getmPhoneNumber() {
-        return mPhoneNumber;
+        return this.phoneNumber;
     }
 
-    public void setmAddress(String mAddress) {
-        this.mAddress = mAddress;
+    public void setmAddress(String address) {
+        this.address = address;
     }
 
-    public void setmCompanyName(String mCompanyName) {
-        this.mCompanyName = mCompanyName;
+    public void setmCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
-    public void setmEmail(String mEmail) {
-        this.mEmail = mEmail;
+    public void setmEmail(String email) {
+        this.email = email;
     }
 
-    public void setmFirstName(String mFirstName) {
-        this.mFirstName = mFirstName;
+    public void setmFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setmLastName(String mLastName) {
-        this.mLastName = mLastName;
+    public void setmLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public void setmPhoneNumber(String mPhoneNumber) {
-        this.mPhoneNumber = mPhoneNumber;
+    public void setmPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
     public String toString() {
         return "Client{" +
-                "mFirstName='" + mFirstName + '\'' +
-                ", mLastName='" + mLastName + '\'' +
-                ", mCompanyName='" + mCompanyName + '\'' +
-                ", mAddress='" + mAddress + '\'' +
-                ", mEmail='" + mEmail + '\'' +
-                ", mPhoneNumber='" + mPhoneNumber + '\'' +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 
@@ -95,12 +109,12 @@ public class Client {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("firstName", mFirstName);
-        result.put("lastName", mLastName);
-        result.put("companyName" ,mCompanyName);
-        result.put("address" ,mAddress);
-        result.put("email" ,mEmail);
-        result.put("phoneNumber" ,mPhoneNumber);
+        result.put("firstName", firstName);
+        result.put("lastName", lastName);
+        /*result.put("companyName" ,companyName);
+        result.put("address" ,address);
+        result.put("email" ,email);
+        result.put("phoneNumber" ,phoneNumber);*/
         return result;
     }
 }

@@ -19,6 +19,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -33,22 +34,22 @@
         tools:context=".MainActivity"
         tools:showIn="@layout/activity_main">
 
-        <ListView
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/client_list_view"
-            android:scrollbars="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:scrollbars="vertical" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:id="@+id/progressBar"/>
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -56,7 +57,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_input_add" />
-
 
 
 </android.support.design.widget.CoordinatorLayout>
