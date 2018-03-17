@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentClass = ClientFragment.class;
                 break;
             case R.id.nav_expendings:
-                fragmentClass = ExpendingsFragment.class;
+                fragmentClass = ExpensesFragment.class;
                 break;
             case R.id.nav_invoices:
                 fragmentClass = InvoicesFragment.class;
