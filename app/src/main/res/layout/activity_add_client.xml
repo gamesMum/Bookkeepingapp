@@ -53,5 +53,11 @@
         android:layout_weight="1"
         android:hint="location(Optional)"/>
 
-
+    <Button
+        android:id="@+id/creat_client_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        android:layout_gravity="right"
+        />
 </LinearLayout>

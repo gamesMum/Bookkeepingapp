@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -40,13 +42,15 @@ public class LoginActivity extends AppCompatActivity {
     private final String DefaultPasswordValue = "";
     private String PasswordValue;
 
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
 
-        first_time_check();
         loginInputLayoutEmail = (TextInputLayout) findViewById(R.id.login_input_layout_email);
         loginInputLayoutPassword = (TextInputLayout) findViewById(R.id.login_input_layout_password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -71,16 +75,24 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    //Check if the user is logged in
-    //if so go directly to the mainActivity
-    private boolean first_time_check() {
-        if((auth.getCurrentUser() != null)){
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(i);
-        }
-        return false;
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    toastMessage("Successfully signed in with: " + user.getEmail());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    toastMessage("Successfully signed out.");
+                }
+                // ...
+            }
+        };
     }
 
     /**
@@ -212,4 +224,25 @@ public class LoginActivity extends AppCompatActivity {
         System.out.println("onResume load name: " + UEmailValue);
         System.out.println("onResume load password: " + PasswordValue);
     }
+
+    /**
+     * customizable toast
+     * @param message
+     */
+    private void toastMessage(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        auth.removeAuthStateListener(mAuthListener);
+    }
+
 }

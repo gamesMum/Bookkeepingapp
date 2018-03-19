@@ -22,10 +22,10 @@ public class Client {
     private String email;
     private String phoneNumber;
 
-    public Client()
+    Client()
     {}
 
-    public Client(String firstName, String lastName)
+    Client(String firstName, String lastName)
     {
         //take the last value and increase it by one
         clientId = clientId + 1;
@@ -33,12 +33,12 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public Client(String companyName)
+    Client(String companyName)
     {
         this.companyName = companyName;
     }
 
-    public String getmAddress() {
+    public String getAddress() {
         return this.address;
     }
 
@@ -62,31 +62,23 @@ public class Client {
         return clientId;
     }
 
-    public String getmPhoneNumber() {
+    public String getPhoneNumber() {
         return this.phoneNumber;
     }
 
-    public void setmAddress(String address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    public void setmCompanyName(String companyName) {
+    public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
 
-    public void setmEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public void setmFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setmLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setmPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
