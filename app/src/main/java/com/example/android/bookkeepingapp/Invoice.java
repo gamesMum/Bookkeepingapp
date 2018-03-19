@@ -8,7 +8,7 @@ import java.util.List;
 
 
 /**
- * Created by Rasha on 18/03/2018.
+ * Invoice class
  */
 
 public class Invoice {
