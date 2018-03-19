@@ -12,7 +12,7 @@ import java.util.Map;
 public class Client {
 
     //client information
-    private static long clientId = 0;
+    private String clientId;
     private String firstName;
     private String lastName;
 
@@ -25,10 +25,10 @@ public class Client {
     Client()
     {}
 
-    Client(String firstName, String lastName)
+    Client(String clientId, String firstName, String lastName)
     {
         //take the last value and increase it by one
-        clientId = clientId + 1;
+        this.clientId = clientId;
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -58,12 +58,20 @@ public class Client {
         return this.lastName;
     }
 
-    public static long getClientId() {
-        return clientId;
+    public String getClientId() {
+        return this.clientId;
     }
 
     public String getPhoneNumber() {
         return this.phoneNumber;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setAddress(String address) {
@@ -85,6 +93,7 @@ public class Client {
     @Override
     public String toString() {
         return "Client{" +
+                "clientId='" + clientId + '\'' +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", companyName='" + companyName + '\'' +

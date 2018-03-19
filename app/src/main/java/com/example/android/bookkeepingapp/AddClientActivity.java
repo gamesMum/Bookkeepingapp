@@ -77,6 +77,7 @@ public class AddClientActivity extends AppCompatActivity {
         //Check if the user enterd either the first or the last name
         if (firstName.trim().length() > 0 || lastName.trim().length() > 0) {
             String key = mClientDatabaseReference.push().getKey();
+
            /*
 
             // get user input and set it to result
@@ -85,7 +86,7 @@ public class AddClientActivity extends AppCompatActivity {
             mClientDatabaseReference.child( key ).child( "firstName" ).setValue( firstName );
             mClientDatabaseReference.child( key ).child( "lastName" ).setValue( lastName );*/
 
-            Client client = new Client(firstName,lastName);
+            Client client = new Client(key, firstName,lastName);
             mClientDatabaseReference.child(key).setValue(client);
             toastMessage("New Client has been saved.");
             mFirstNameEditText.setText("");

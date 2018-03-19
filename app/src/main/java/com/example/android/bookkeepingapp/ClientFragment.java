@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -59,13 +60,14 @@ public class ClientFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
         //find and inflate view
         final View rootView = inflater.inflate( R.layout.fragment_client, container, false );
 
         // Initialize Firebase database
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mClientDatabaseReference = mFirebaseDatabase.getReference().child( "client" );
+        //For offline sync of data
+        mClientDatabaseReference.keepSynced(true);
 
         // Initialize references to views
         mProgressBar = (ProgressBar) rootView.findViewById( R.id.progressBar );
@@ -73,7 +75,7 @@ public class ClientFragment extends Fragment {
         mAddUserFab = (FloatingActionButton) rootView.findViewById( R.id.fab );
 
         // Initialize message ListView and its adapter
-        List<Client> clients = new ArrayList<>();
+        final List<Client> clients = new ArrayList<>();
         mClientAdapter = new ClientAdapter( getActivity(), R.layout.client_item, clients );
         mClientListView.setAdapter( mClientAdapter );
 
@@ -94,6 +96,24 @@ public class ClientFragment extends Fragment {
             }
         } );
 
+        //Add itemClickListener for each list item in the list view
+        mClientListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //return the object in the list View
+                Client client = clients.get( position );
+                Intent i = new Intent( getActivity(), ViewClientActivity.class );
+                //pass the client Id to the next activity
+                i.putExtra( "clientId", client.getClientId() );
+                startActivity( i );
+                Log.v(TAG, client.toString());
+            }
+        } );
+
+
+        //Attach the onChildAdded listener only when the activity created
+        //no duplicates
+        attachDatabaseReadListener();
         return rootView;
 
     }
@@ -102,15 +122,17 @@ public class ClientFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.v(TAG, "Main activity is resumed");
-       attachDatabaseReadListener();
+        Log.v(TAG, TAG + " is resumed");
+      // attachDatabaseReadListener();
     }
+
+
 
     @Override
     public void onPause() {
         super.onPause();
         detachDatabaseReadListener();
-        Log.v(TAG, "Main activity on pause");
+        Log.v(TAG, TAG + " on pause");
     }
 
     private void detachDatabaseReadListener() {
