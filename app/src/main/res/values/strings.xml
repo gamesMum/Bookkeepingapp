@@ -20,6 +20,10 @@
     <string name="invoices_text">Invoices</string>
     <string name="customers_text">Customers</string>
     <string name="expendings_text">Expendings</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_save">Save</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

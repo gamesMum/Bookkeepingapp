@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -51,10 +52,11 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         ActionBar actionbar = getSupportActionBar();
         //Enable the app bar's "home" button
         actionbar.setDisplayHomeAsUpEnabled(true);
-        //change it to use the menu icon
+        //change it to use the edit_menu icon
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         //find the DrawerLayout
@@ -193,5 +195,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         mAuth.removeAuthStateListener(mAuthListener);
     }
+
+
 
 }

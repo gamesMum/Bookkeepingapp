@@ -1,9 +1,14 @@
 package com.example.android.bookkeepingapp;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -11,10 +16,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 public class ViewClientActivity extends AppCompatActivity {
 
+    private String TAG = "ViewClientActivity";
+    private Toolbar toolbar;
     private TextView mClientName;
     private String extras;
 
@@ -26,6 +31,12 @@ public class ViewClientActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_view_client );
+
+        // Set a Toolbar to replace the ActionBar.
+        toolbar = findViewById(R.id.toolbar_1);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionbar = getSupportActionBar();
 
         // Initialize Firebase database
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -64,5 +75,32 @@ public class ViewClientActivity extends AppCompatActivity {
         Intent intent = new Intent(this,MainActivity.class);
         intent.putExtra("fragmentName","clientFragment"); //for example
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the edit_menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.view_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.action_delete:
+                //your code here
+                //Add dialog box
+                Log.v(TAG, "Oops you just deleted me!");
+                return true;
+            case R.id.action_edit:
+                //View edit activity
+                Log.v(TAG, "OK edit me now!");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
