@@ -108,14 +108,7 @@ public class AddClientActivity extends AppCompatActivity {
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        //Go back to client fragment
-        Intent intent = new Intent(this,MainActivity.class);
-        intent.putExtra("fragmentName","clientFragment"); //for example
-        startActivity(intent);
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

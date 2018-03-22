@@ -173,5 +173,4 @@ public class ClientFragment extends Fragment {
     }
 
 
-
 }

@@ -18,8 +18,10 @@
     <string name="enter_listItem_text">New Client</string>
     <string name="summery_text">Summery</string>
     <string name="invoices_text">Invoices</string>
-    <string name="customers_text">Customers</string>
+    <string name="clints_text">Clients</string>
     <string name="expendings_text">Expendings</string>
+    <string name="clients_add">Add Client</string>
+    <string name="clients_edit">Edit Client</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_edit">Edit</string>

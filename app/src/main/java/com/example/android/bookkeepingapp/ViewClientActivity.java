@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
@@ -36,6 +37,8 @@ public class ViewClientActivity extends AppCompatActivity {
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar_1);
         setSupportActionBar(toolbar);
+        toolbar.setTitle(getString(R.string.clints_text));
+        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
 
         ActionBar actionbar = getSupportActionBar();
 
@@ -70,16 +73,23 @@ public class ViewClientActivity extends AppCompatActivity {
             //Show Client Name
 
         }
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
-    @Override
+  /*  @Override
     public void onBackPressed() {
         super.onBackPressed();
         //Go back to client fragment
         Intent intent = new Intent(this,MainActivity.class);
         intent.putExtra("fragmentName","clientFragment"); //for example
         startActivity(intent);
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

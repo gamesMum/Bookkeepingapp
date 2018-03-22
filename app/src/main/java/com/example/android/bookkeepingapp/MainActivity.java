@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
         //// Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        toolbar.setTitle(getString(R.string.app_name));
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 
         ActionBar actionbar = getSupportActionBar();
         //Enable the app bar's "home" button
@@ -111,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+
     }
 
     private void displayFragment(MenuItem item)

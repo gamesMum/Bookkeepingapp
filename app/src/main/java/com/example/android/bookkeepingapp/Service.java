@@ -4,15 +4,20 @@ package com.example.android.bookkeepingapp;
  * Created by Rasha on 19/03/2018.
  */
 
-public class Services {
-
+public class Service {
+    private String serviceId;
     private String serviceName;
     private double servicePrice;
 
-    Services(String serviceName, double servicePrice)
+    Service(String serviceId, String serviceName, double servicePrice)
     {
         this.serviceName = serviceName;
         this.servicePrice = servicePrice;
+        this.serviceId = serviceId;
+    }
+
+    public String getServiceId() {
+        return serviceId;
     }
 
     public String getServiceName()
@@ -25,13 +30,10 @@ public class Services {
         return servicePrice;
     }
 
-    public void setServiceName(String serviceName)
+    public void setNewService(String serviceName, double servicePrice )
     {
         this.serviceName = serviceName;
-    }
-
-    public void setServicePrice(double servicePrice)
-    {
         this.servicePrice = servicePrice;
     }
+
 }

@@ -1,11 +1,13 @@
 package com.example.android.bookkeepingapp;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -47,6 +49,10 @@ public class EditClientActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar_1);
         setSupportActionBar(toolbar);
 
+        toolbar.setTitle(getString(R.string.clients_edit));
+        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
+        ActionBar actionbar = getSupportActionBar();
+
         //Initialize xml element
         mFirstNameEditText = (EditText) findViewById( R.id.first_name_edit );
         mLastNameEditText = (EditText) findViewById( R.id.last_name_edit );
@@ -87,6 +93,14 @@ public class EditClientActivity extends AppCompatActivity {
 
             }
         });
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
 
     public void updaeClient() {
@@ -112,9 +126,11 @@ public class EditClientActivity extends AppCompatActivity {
 
             Client client = new Client(key, firstName,lastName);
             mClientDatabaseReference.child(key).setValue(client);
+            mClientDatabaseReference.child(key).child( "companyName" ).setValue(company);
             toastMessage("data is up to date.");
             mFirstNameEditText.setText("");
             mLastNameEditText.setText("");
+            mCompanyEditText.setText( "" );
 
             //Go back to client fragment
             Intent intent = new Intent(this,MainActivity.class);
@@ -136,15 +152,6 @@ public class EditClientActivity extends AppCompatActivity {
      */
     private void toastMessage(String message){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        //Go back to client fragment
-        Intent intent = new Intent(this,MainActivity.class);
-        intent.putExtra("fragmentName","clientFragment"); //for example
-        startActivity(intent);
     }
 
     @Override
