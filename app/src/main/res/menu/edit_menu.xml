@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity" >
     <item
-        android:id="@+id/action_edit"
+        android:id="@+id/action_save"
         android:icon="@drawable/ic_save_black_24dp"
-        android:title="@string/menu_edit"
+        android:title="@string/menu_save"
         app:showAsAction="ifRoom"/>
 
 </menu>

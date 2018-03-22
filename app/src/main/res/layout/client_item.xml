@@ -17,13 +17,14 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginBottom="16dp"
-        card_view:cardCornerRadius="10dp"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation = "1dp"
         card_view:cardBackgroundColor="@color/backCard">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
         <TextView
-            android:id="@+id/name_text"
+            android:id="@+id/name_text_view_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -31,19 +32,19 @@
             android:paddingTop="@dimen/virtical_padding"
             tools:text="Kamal Saleem" />
         <TextView
-            android:id="@+id/company_name_text"
+            android:id="@+id/company_name_text_view_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/horizontal_padding"
-            android:layout_below="@id/name_text"
+            android:layout_below="@id/name_text_view_item"
             android:textAppearance="?android:attr/textAppearanceSmall"
             tools:text="Thunder co." />
     <TextView
-        android:id="@+id/email_text"
+        android:id="@+id/email_text_view_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/horizontal_padding"
-        android:layout_below="@id/company_name_text"
+        android:layout_below="@id/company_name_text_view_item"
         android:textAppearance="?android:attr/textAppearanceSmall"
         tools:text="ttt@yyy.com" />
 

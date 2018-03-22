@@ -21,6 +21,7 @@ public class ViewClientActivity extends AppCompatActivity {
     private String TAG = "ViewClientActivity";
     private Toolbar toolbar;
     private TextView mClientName;
+    private TextView mCompany;
     private String extras;
 
     // Firebase instance variables
@@ -42,7 +43,8 @@ public class ViewClientActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mClientDatabaseReference = mFirebaseDatabase.getReference().child( "client" );
 
-        mClientName = (TextView) findViewById( R.id.name_text );
+        mClientName = (TextView) findViewById( R.id.name_text_view );
+        mCompany = (TextView) findViewById( R.id.company_text_view );
 
         mClientDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -53,6 +55,8 @@ public class ViewClientActivity extends AppCompatActivity {
                client.setFirstName( dataSnapshot.child(extras).getValue(Client.class).getFirstName()); //set the name
                 client.setLastName( dataSnapshot.child(extras).getValue(Client.class).getLastName()); //set the name
                 mClientName.setText( client.getFirstName() + " " + client.getLastName() );
+                client.setCompanyName( dataSnapshot.child(extras).getValue(Client.class).getCompanyName());
+                mCompany.setText( client.getCompanyName() );
             }
 
             @Override
@@ -97,6 +101,12 @@ public class ViewClientActivity extends AppCompatActivity {
                 return true;
             case R.id.action_edit:
                 //View edit activity
+                //return the object in the list View
+                String clientID = extras;
+                Intent i = new Intent( ViewClientActivity.this, EditClientActivity.class );
+                //pass the client Id to the next activity
+                i.putExtra( "clientId", clientID );
+                startActivity( i );
                 Log.v(TAG, "OK edit me now!");
                 return true;
             default:
