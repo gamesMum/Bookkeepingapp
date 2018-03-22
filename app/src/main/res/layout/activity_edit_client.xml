@@ -11,28 +11,28 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:title="Add Client"
+        app:title="Edit Client"
         app:titleTextColor="@android:color/white"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
 
 
     <EditText
-        android:id="@+id/first_name_add"
+        android:id="@+id/first_name_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textCapSentences"
         android:hint="@string/first_name_edit" />
 
     <EditText
-        android:id="@+id/last_name_add"
+        android:id="@+id/last_name_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textCapSentences"
         android:hint="@string/last_name_edit" />
 
     <EditText
-        android:id="@+id/company_add"
+        android:id="@+id/company_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textCapSentences"
@@ -40,29 +40,29 @@
 
 
     <EditText
-        android:id="@+id/email_add"
+        android:id="@+id/email_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:hint="@string/hint_email" />
 
     <EditText
-        android:id="@+id/phone_add"
+        android:id="@+id/phone_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="phone"
         android:hint="@string/phone_edit" />
 
     <EditText
-        android:id="@+id/street_add"
+        android:id="@+id/street_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/street_edit" />
 
-        <EditText
-            android:id="@+id/city_add"
-            android:layout_width="112dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/city_edit" />
+    <EditText
+        android:id="@+id/city_edit"
+        android:layout_width="112dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/city_edit" />
 
 </LinearLayout>

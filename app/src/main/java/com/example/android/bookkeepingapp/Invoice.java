@@ -1,5 +1,6 @@
 package com.example.android.bookkeepingapp;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,7 +9,7 @@ import java.util.List;
 
 
 /**
- * Created by Rasha on 18/03/2018.
+ * Invoice class
  */
 
 public class Invoice {
@@ -16,8 +17,8 @@ public class Invoice {
     private List<Integer> serviceID;
 
     private static long invoiceNumber = 0;
-    private Date issueDate;
-    private Date dueDate;
+    private String issueDate;
+    private String dueDate;
     private double total;
     private final boolean NOT_PAID = false;
     private boolean invoiceStatus = NOT_PAID;
@@ -25,13 +26,13 @@ public class Invoice {
     public static double profit;
 
     Invoice(int clientID, List<Integer> serviceID,
-            Date dueDate)
+            String dueDate)
     {
 
         this.clientID = clientID;
         this.serviceID = serviceID;
         this.dueDate = dueDate;
-        this.issueDate = Calendar.getInstance().getTime();
+        this.issueDate = getCurrentDate();
         this.invoiceNumber++;
         invoiceStatus = NOT_PAID;
 
@@ -41,5 +42,15 @@ public class Invoice {
         return true;
     }
 
-
+    /**
+     * Get the system date (using it for the issue date)
+     * @return
+     */
+    private String getCurrentDate()
+    {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat mdformat = new SimpleDateFormat("yyyy / MM / dd ");
+        String strDate = mdformat.format(calendar.getTime());
+        return strDate;
+    }
 }

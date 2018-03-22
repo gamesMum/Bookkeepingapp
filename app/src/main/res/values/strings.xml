@@ -20,9 +20,21 @@
     <string name="invoices_text">Invoices</string>
     <string name="customers_text">Customers</string>
     <string name="expendings_text">Expendings</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_save">Save</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="first_name_edit">First Name</string>
+    <string name="last_name_edit">Last Name</string>
+    <string name="email_edit">Email(Optional)</string>
+    <string name="phone_edit">Phone Number(Optional)</string>
+    <string name="street_edit">Street Address(Optional)</string>
+    <string name="city_edit">City(Optional)</string>
+    <string name="company_edit">Company(Optional)</string>
 
     <!--to solve the rendering issue id/invisible-->
     <item name="visible" type="id" />

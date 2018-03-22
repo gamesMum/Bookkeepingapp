@@ -37,18 +37,17 @@ public class ClientAdapter extends ArrayAdapter<Client> {
         //Find the current object
         final Client client = getItem(position);
         //Find the First and Last name TextViews
-        TextView name = (TextView) convertView.findViewById(R.id.name_text);
-       // TextView companyName = (TextView) convertView.findViewById(R.id.company_name_text);
+        TextView name = (TextView) convertView.findViewById(R.id.name_text_view_item);
+        TextView companyName = (TextView) convertView.findViewById(R.id.company_name_text_view_item);
 
         //supply the textViews with the correct data
         assert client != null;
         name.setText(client.getFirstName() + " " + client.getLastName());
-
-
+        companyName.setText(client.getCompanyName());
         //Check if there is a company name to display
        /* if(client.getmCompanyName().toString().trim().length() > 0) {
             companyName.setVisibility(View.VISIBLE);
-            companyName.setText(client.getmCompanyName());
+
         }else {
             companyName.setVisibility(View.GONE);
         }*/
