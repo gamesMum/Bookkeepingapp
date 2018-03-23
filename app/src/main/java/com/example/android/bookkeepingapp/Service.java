@@ -1,7 +1,7 @@
 package com.example.android.bookkeepingapp;
 
 /**
- * Created by Rasha on 19/03/2018.
+ * The service that will be included in each invoice
  */
 
 public class Service {

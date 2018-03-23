@@ -31,6 +31,8 @@ public class AddClientActivity extends AppCompatActivity {
     private String clientID;
 
     //Firebase variables
+    private  FirebaseUser user;
+    private  String userID;
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -57,8 +59,12 @@ public class AddClientActivity extends AppCompatActivity {
         //NOTE: Unless you are signed in, this will not be useable.
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mClientDatabaseReference = mFirebaseDatabase.getReference().child( "client" );
-
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            userID = user.getUid();
+        }
+        //store the data under loggedin user Id
+        mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "client" );
 
 
     }

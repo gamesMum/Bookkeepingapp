@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,6 +50,10 @@ public class ClientFragment extends Fragment {
     private ChildEventListener mChildEventListener;
 
     // Firebase instance variables
+    private  FirebaseUser user;
+    private  String userID;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     public FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mClientDatabaseReference;
 
@@ -65,9 +71,15 @@ public class ClientFragment extends Fragment {
 
         // Initialize Firebase database
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mClientDatabaseReference = mFirebaseDatabase.getReference().child( "client" );
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            userID = user.getUid();
+        }
+        //store the data under loggedin user Id
+        mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "client" );
         //For offline sync of data
         mClientDatabaseReference.keepSynced(true);
+
 
         // Initialize references to views
         mProgressBar = (ProgressBar) rootView.findViewById( R.id.progressBar );
@@ -110,6 +122,23 @@ public class ClientFragment extends Fragment {
             }
         } );
 
+        //Check user if authenticated
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+                if (user == null) {
+
+                    // User is signed out
+                    //go to login activity
+                    Intent i = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(i);
+                    toastMessage("Successfully signed out");
+                }
+            }
+        };
 
         //Attach the onChildAdded listener only when the activity created
         //no duplicates
@@ -170,6 +199,14 @@ public class ClientFragment extends Fragment {
             };
             mClientDatabaseReference.addChildEventListener( mChildEventListener );
         }
+    }
+
+    /**
+     * customizable toast
+     * @param message
+     */
+    private void toastMessage(String message){
+        Toast.makeText(getActivity(),message,Toast.LENGTH_SHORT).show();
     }
 
 

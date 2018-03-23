@@ -1,6 +1,7 @@
 package com.example.android.bookkeepingapp;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +30,9 @@ public class ViewClientActivity extends AppCompatActivity {
     private String extras;
 
     // Firebase instance variables
+    private FirebaseUser user;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     public FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mClientDatabaseReference;
 
@@ -80,6 +87,23 @@ public class ViewClientActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //Check user if authenticated
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    // User is signed out
+                    //go to login activity
+                    Intent i = new Intent(ViewClientActivity.this, LoginActivity.class);
+                    startActivity(i);
+                    toastMessage("Successfully signed out");
+                }
+            }
+        };
     }
 
   /*  @Override
@@ -123,4 +147,13 @@ public class ViewClientActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    /**
+     * customizable toast
+     * @param message
+     */
+    private void toastMessage(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
 }

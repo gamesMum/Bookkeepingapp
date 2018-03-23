@@ -7,26 +7,25 @@ import java.util.Calendar;
 
 
 /**
- * Invoice class
+ * Information stored in each invoice6
  */
 
 public class Invoice {
     private static long invoiceNumber;
 
     private ArrayList<Service> services;
+    private ArrayList<Payment> payments;
     private int clientID;
     private String issueDate;
     private String dueDate;
     private double InvoiceTotal;
     //the amount left after a payment
     private double InvoiceAmountLeft;
-    ArrayList<Double> payments;
     //the invoice is either paid, not paid, or partially paid
     int paid;
     private final int NOT_PAID = 0;
     private final int PAID = 1;
     private final int PARTIALLY_PAID = -1;
-    private final double NO_PAYMENT = 0;
 
 
     Invoice(int clientID, ArrayList<Service> services)
@@ -43,7 +42,7 @@ public class Invoice {
         //pass the services we will provide in this invoice
         this.services = services;
         this.paid = NOT_PAID;
-        this.payments.add(NO_PAYMENT);
+        this.payments.add(null);
 
         //start with Id number 1
         this.invoiceNumber = count++; //increase the Id with each object
@@ -122,7 +121,11 @@ public class Invoice {
             return 1;
     }
 
-    public ArrayList<Double> getPayment() {
+    /**
+     * get all the payments for specific invoice
+     * @return
+     */
+    public ArrayList<Payment> getPayment() {
         return payments;
     }
 
@@ -131,7 +134,8 @@ public class Invoice {
         {
             //th invoice is paid
             paid = PAID;
-            payments.add(payment);//add the payment to the array list
+            //add the payment to the array list and its date
+            payments.add(new Payment( payment, currentDate ));
 
         }else if(payment < InvoiceAmountLeft)
         {
@@ -140,19 +144,12 @@ public class Invoice {
             //the amount left to pay minus this payment
             InvoiceAmountLeft = InvoiceAmountLeft - payment;
             //add the payment to the array list
-            payments.add(payment);
+            payments.add(new Payment( payment, currentDate ));
         }else //the payment is more
         return; //exit
 
     }
 
-    /**
-     * get all the payments for specific invoice
-     * @return
-     */
-    public ArrayList<Double> getPayments() {
-        return payments;
-    }
 
     public void setDueDateAfter(int days) {
         this.dueDate = getDateAfter( days );
