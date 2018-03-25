@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,17 +16,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class AddInvoiceActivity extends AppCompatActivity {
 
     private  String TAG = "AddInvoiceActivity";
     //invoice xml elements
-    private EditText mFirstNameEditText;
-    private EditText mLastNameEditText;
-    private EditText mCompanyEditText;
-    private EditText mEmailEditText;
-    private EditText mPhoneNumber;
+    private TextView mClientTextView;
+    private TextView mIssueDateTextView;
+    private TextView mDueDateTextView;
+    private TextView mServicesTextView;
+    private TextView mTotalTextView;
+    private EditText mNotesEditText;
     private Toolbar toolbar;
 
 
@@ -44,16 +49,20 @@ public class AddInvoiceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_add_invoice );
+
         // Set a Toolbar to replace the ActionBar.
-        toolbar = findViewById(R.id.toolbar_1);
+        toolbar = findViewById(R.id.toolbar_invoice);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
+
 
         //Initialize xml element
-        mFirstNameEditText = (EditText) findViewById( R.id.first_name_add );
-        mLastNameEditText = (EditText) findViewById( R.id.last_name_add );
-        mCompanyEditText = (EditText) findViewById( R.id.company_add );
-        mEmailEditText = (EditText) findViewById( R.id.email_add );
-        mPhoneNumber = (EditText) findViewById( R.id.phone_add );
+        mClientTextView = (TextView) findViewById( R.id.client_add );
+        mIssueDateTextView = (TextView) findViewById( R.id.issue_date_text_value );
+        mDueDateTextView = (TextView) findViewById( R.id.due_date_text_value );
+        mServicesTextView = (TextView) findViewById( R.id.services_add );
+        mTotalTextView = (TextView) findViewById( R.id.invoice_total_value );
+        mNotesEditText = (EditText) findViewById( R.id.notes_add_edit_text );
 
         //declare the database reference object. This is what we use to access the database.
         //NOTE: Unless you are signed in, this will not be useable.
@@ -66,11 +75,36 @@ public class AddInvoiceActivity extends AppCompatActivity {
         //store the data under loggedin user Id
         mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "invoice" );
 
+        //set click listeners on textViews (mClientTextView and mServicesTextView)
+        mClientTextView.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //show dialog with clients
+                Toast.makeText( AddInvoiceActivity.this, "Select client", Toast.LENGTH_SHORT ).show();
+            }
+        } );
+
+        mServicesTextView.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //show dialog with clients
+                Toast.makeText( AddInvoiceActivity.this, "Select Service(s)", Toast.LENGTH_SHORT ).show();
+
+            }
+        } );
+
+        //close this activity
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
-    public void createNewInvoice(String clientID, ArrayList<String> serviceIds) {
+    /*public void createNewInvoice(String clientID, ArrayList<String> serviceIds) {
         //get the elements in the dialog
-        String firstName = mFirstNameEditText.getText().toString();
+       String firstName = mFirstNameEditText.getText().toString();
         String lastName = mLastNameEditText.getText().toString();
         //....the rest of infos
 
@@ -78,13 +112,13 @@ public class AddInvoiceActivity extends AppCompatActivity {
         if (firstName.trim().length() > 0 || lastName.trim().length() > 0) {
             String key = mClientDatabaseReference.push().getKey();
             String company = mCompanyEditText.getText().toString();
-           /*
+           *//*
 
             // get user input and set it to result
             // edit text
             Client client = new Client( firstName, lastName );
             mClientDatabaseReference.child( key ).child( "firstName" ).setValue( firstName );
-            mClientDatabaseReference.child( key ).child( "lastName" ).setValue( lastName );*/
+            mClientDatabaseReference.child( key ).child( "lastName" ).setValue( lastName );*//*
 
             Invoice invoice = new Invoice(clientID, serviceIds);
             mClientDatabaseReference.child(key).setValue(invoice);
@@ -104,7 +138,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
         }
 
     }
-
+*/
     /**
      * customizable toast
      * @param message

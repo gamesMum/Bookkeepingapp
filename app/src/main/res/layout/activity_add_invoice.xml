@@ -1,51 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_1"
+        android:id="@+id/toolbar_invoice"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:title="@string/clients_add"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:title="@string/invoice_new"
         app:titleTextColor="@android:color/white"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+        />
 
 
-
-    <EditText
+    <TextView
         android:id="@+id/client_add"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@drawable/dotted_square"
         android:gravity="center"
-        android:inputType="textCapSentences"
         android:hint="@string/add_client_text" />
 
 
-    <EditText
-        android:id="@+id/issue_date"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/issue_date_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="date"
-        android:hint="@string/issue_date_text" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/issue_date_text"
+        android:textColor="@android:color/darker_gray" />
 
-
-    <EditText
-        android:id="@+id/due_date"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/issue_date_text_value"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="date"
-        android:hint="@string/due_date_text" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/issue_date_text"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:textColor="@android:color/black"
+        tools:text="12/1/2018" />
 
-    <EditText
+    <TextView
+        android:id="@+id/due_date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+       android:layout_below="@id/issue_date_text_value"
+        android:text="@string/due_date_text"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/due_date_text_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/due_date_text"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:textColor="@android:color/black"
+        tools:text="22/1/2018" />
+<View
+    android:id="@+id/add_client_divider"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_below="@id/client_add"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:background="@android:color/darker_gray"
+    ></View>
+
+    <TextView
         android:id="@+id/services_add"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+
+        android:layout_below="@id/add_client_divider"
+        android:gravity="center"
+        android:background="@drawable/dotted_square"
+        android:text="@string/services_text" />
+
+    <View
+        android:id="@+id/service_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/services_add"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@android:color/darker_gray"
+        ></View>
+
+    <EditText
+        android:id="@+id/notes_add_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/services_text" />
+        android:layout_below="@id/service_divider"
+        android:hint="@string/notes_text"/>
+
+    <TextView
+        android:id="@+id/invoice_total_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_below="@id/notes_add_edit_text"
+        android:text="@string/total_text"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_total_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/invoice_total_text"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:textColor="@android:color/black"
+        tools:text="$500" />
 
 
-</LinearLayout>
+</RelativeLayout>

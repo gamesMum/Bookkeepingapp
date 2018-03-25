@@ -47,6 +47,7 @@ public class AddClientActivity extends AppCompatActivity {
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar_1);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
 
         //Initialize xml element
         mFirstNameEditText = (EditText) findViewById( R.id.first_name_add );
@@ -65,6 +66,14 @@ public class AddClientActivity extends AppCompatActivity {
         }
         //store the data under loggedin user Id
         mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "client" );
+
+        //close this activity
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
     }
@@ -121,6 +130,7 @@ public class AddClientActivity extends AppCompatActivity {
 
         // Inflate the edit_menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.edit_menu, menu);
+
         return true;
     }
 
