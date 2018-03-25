@@ -31,6 +31,7 @@ public class ViewClientActivity extends AppCompatActivity {
 
     // Firebase instance variables
     private FirebaseUser user;
+    private  String userID;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     public FirebaseDatabase mFirebaseDatabase;
@@ -51,7 +52,15 @@ public class ViewClientActivity extends AppCompatActivity {
 
         // Initialize Firebase database
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mClientDatabaseReference = mFirebaseDatabase.getReference().child( "client" );
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            userID = user.getUid();
+            //store the data under loggedin user Id
+            mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "client" );
+            //For offline sync of data
+            mClientDatabaseReference.keepSynced(true);
+        }
 
         mClientName = (TextView) findViewById( R.id.name_text_view );
         mCompany = (TextView) findViewById( R.id.company_text_view );
@@ -94,7 +103,6 @@ public class ViewClientActivity extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                user = firebaseAuth.getCurrentUser();
                 if (user == null) {
                     // User is signed out
                     //go to login activity

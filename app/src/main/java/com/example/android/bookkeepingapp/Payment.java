@@ -6,6 +6,7 @@ package com.example.android.bookkeepingapp;
  */
 
 public class Payment {
+    private String paymentId;
     private double amount;
     private String payDate;
 
@@ -21,5 +22,9 @@ public class Payment {
 
     public String getPayDate() {
         return payDate;
+    }
+
+    public String getPaymentId() {
+        return paymentId;
     }
 }

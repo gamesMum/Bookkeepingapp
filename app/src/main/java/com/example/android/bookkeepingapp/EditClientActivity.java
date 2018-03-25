@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +36,8 @@ public class EditClientActivity extends AppCompatActivity {
     private String clientID;
 
     //Firebase variables
+    private FirebaseUser user;
+    private String userID;
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -64,7 +67,11 @@ public class EditClientActivity extends AppCompatActivity {
         //NOTE: Unless you are signed in, this will not be useable.
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mClientDatabaseReference = mFirebaseDatabase.getReference().child( "client" );
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            userID = user.getUid();
+            mClientDatabaseReference = mFirebaseDatabase.getReference().child( userID ).child( "client" );
+        }
 
         //take the client Id selected from the previous activity
         extras = getIntent().getStringExtra("clientId");

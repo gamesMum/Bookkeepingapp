@@ -5,19 +5,20 @@ package com.example.android.bookkeepingapp;
  */
 
 public class Service {
-    private String serviceId;
+    private String serviceNum;
     private String serviceName;
     private double servicePrice;
+
 
     Service(String serviceId, String serviceName, double servicePrice)
     {
         this.serviceName = serviceName;
         this.servicePrice = servicePrice;
-        this.serviceId = serviceId;
+        this.serviceNum = serviceId;
     }
 
     public String getServiceId() {
-        return serviceId;
+        return serviceNum;
     }
 
     public String getServiceName()
@@ -28,12 +29,6 @@ public class Service {
     public double getServicePrice()
     {
         return servicePrice;
-    }
-
-    public void setNewService(String serviceName, double servicePrice )
-    {
-        this.serviceName = serviceName;
-        this.servicePrice = servicePrice;
     }
 
 }

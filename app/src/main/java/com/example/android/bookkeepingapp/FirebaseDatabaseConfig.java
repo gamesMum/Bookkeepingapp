@@ -24,10 +24,10 @@ public class FirebaseDatabaseConfig {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mClientDatabaseReference;
 
-    public FirebaseDatabaseConfig(DatabaseReference mClientDatabaseReference ) {
+    public FirebaseDatabaseConfig(String userID, String dataChild ) {
         // Initialize Firebase database
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        this.mClientDatabaseReference = mClientDatabaseReference;
+        this.mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( dataChild );
         //For offline sync of data
         mClientDatabaseReference.keepSynced(true);
 

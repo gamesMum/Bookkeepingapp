@@ -13,46 +13,90 @@ import java.util.Calendar;
 public class Invoice {
     private static long invoiceNumber;
 
-    private ArrayList<Service> services;
-    private ArrayList<Payment> payments;
-    private int clientID;
+    private ArrayList<String> orderNums;
+    private ArrayList<String> paymentNums;
+    private String clientID;
     private String issueDate;
     private String dueDate;
-    private double InvoiceTotal;
-    //the amount left after a payment
-    private double InvoiceAmountLeft;
+
+    private double total;
+    private double amountLeft;
+
+
     //the invoice is either paid, not paid, or partially paid
     int paid;
     private final int NOT_PAID = 0;
     private final int PAID = 1;
     private final int PARTIALLY_PAID = -1;
 
+    private final String NO_PAYMENTS = "n/y";
 
-    Invoice(int clientID, ArrayList<Service> services)
+
+    Invoice(String clientID, ArrayList<String> orderNum)
     {
         int count = 0;
-        this.InvoiceTotal = getInvoiceTotal( );
-        this.InvoiceAmountLeft = this.InvoiceTotal;
         this.clientID = clientID;
-        //at default the due date is after 15 days
-        this.dueDate = getDateAfter( 15 );
+        //by default the due date is after 15 days
+        this.dueDate = setDueDateAfter( getIssueDate(), 15 );
         //get the current system date
         this.issueDate = getCurrentDate();
 
         //pass the services we will provide in this invoice
-        this.services = services;
+        this.orderNums = orderNum;
         this.paid = NOT_PAID;
-        this.payments.add(null);
+        this.paymentNums.add(NO_PAYMENTS);
 
         //start with Id number 1
         this.invoiceNumber = count++; //increase the Id with each object
 
     }
 
-    /**
-     * Get the system date (using it for the issue date)
-     * @return
-     */
+    //*********Getters************************************************//
+    public static long getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public String getIssueDate() {
+        return issueDate;
+    }
+
+    public String getClientID() {
+        return clientID;
+    }
+
+    public ArrayList<String> getOrderNums() {
+        return orderNums;
+    }
+
+    public ArrayList<String> getPaymentNums() {
+        return paymentNums;
+    }
+
+    //give it the services to calculate the total
+    public double getInvoiceTotal(ArrayList<Order> orders) {
+        double invoiceTotal = 0;
+        //the sum of all the services for this invoice
+        for(Order order : orders) {
+           //invoiceTotal += order.getTotal();
+        }
+        return invoiceTotal;
+    }
+
+
+    public int getInvoiceStatus()
+    {
+        if(paid == NOT_PAID)
+            return 0;
+        else if(paid == PARTIALLY_PAID)
+            return -1;
+        else
+            return 1;//IS PAID
+    }
+
     private String getCurrentDate()
     {
         Calendar calendar = Calendar.getInstance();
@@ -60,13 +104,22 @@ public class Invoice {
         String strDate = mdformat.format(calendar.getTime());
         return strDate;
     }
+    //****************************************************************//
+
+
+//*******************Setters****************************************************************//
+
+
+    /**
+     * Get the system date (using it for the issue date)
+     * @return
+     */
 
     //get the date after the desired number of days
     //this is the Due date for the invoice
-    private String getDateAfter(int days)
+    public String setDueDateAfter(String date, int days)
     {
-        //get the issue date for the invoice
-        String issueDate = this.issueDate;
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy / MM / dd");
         Calendar c = Calendar.getInstance();
         try {
@@ -78,85 +131,50 @@ public class Invoice {
         c.add(Calendar.DAY_OF_MONTH, days);
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy / MM / dd ");
         //get the date in the correct format
-        String output = sdf1.format(c.getTime());
+        date = sdf1.format(c.getTime());
 
-        return output;
-    }
-
-    public String getDueDate() {
-        return dueDate;
-    }
-
-    public String getIssueDate() {
-        return issueDate;
-    }
-
-    public static long getInvoiceNumber() {
-        return invoiceNumber;
-    }
-
-    public int getClientID() {
-        return clientID;
-    }
-
-    public double getInvoiceTotal() {
-        //the sum of all the services for this invoice
-        for(Service service : services) {
-            this.InvoiceTotal += service.getServicePrice();
-        }
-        return InvoiceTotal;
-    }
-
-    public ArrayList<Service> getServices() {
-        return services;
-    }
-
-    public int getInvoiceStatus()
-    {
-        if(paid == NOT_PAID)
-            return 0;
-        else if(paid == PARTIALLY_PAID)
-            return -1;
-        else
-            return 1;
+        return date;
     }
 
     /**
-     * get all the payments for specific invoice
+     *
+     * @param paymentAmount
+     * @param currentDate
+     * @param invoiceTotal
      * @return
      */
-    public ArrayList<Payment> getPayment() {
-        return payments;
-    }
+   /* public double setPaymentGetAmountLeft(double paymentAmount, String currentDate, double invoiceTotal) {
 
-    public void setPayment(double payment, String currentDate) {
-        if(payment == InvoiceAmountLeft)
+        double invoiceAmountLeft = invoiceTotal;
+        if(paymentAmount == invoiceTotal)
         {
             //th invoice is paid
             paid = PAID;
-            //add the payment to the array list and its date
-            payments.add(new Payment( payment, currentDate ));
+            invoiceAmountLeft = 0;
+            //create new payment instance and store the date and the amount
+            Payment payment = new Payment( paymentAmount, currentDate );
+            //add it to the payments array list of Ids
+            this.paymentIds.add(payment.getPaymentId());
+            return invoiceAmountLeft;
 
-        }else if(payment < InvoiceAmountLeft)
+        }else if(paymentAmount < invoiceTotal)
         {
+
             //th invoice ia partially paid
             paid = PARTIALLY_PAID;
             //the amount left to pay minus this payment
-            InvoiceAmountLeft = InvoiceAmountLeft - payment;
-            //add the payment to the array list
-            payments.add(new Payment( payment, currentDate ));
-        }else //the payment is more
-        return; //exit
+            invoiceAmountLeft = invoiceAmountLeft - paymentAmount;
+            //create new payment instance and store the date and the amount
+            Payment payment = new Payment( paymentAmount, currentDate );
+            //add it to the payments array list of Ids
+            this.paymentIds.add(payment.getPaymentId());
+            //return the left amount
+            return invoiceAmountLeft;
+        }
+        return invoiceAmountLeft;
 
-    }
+    }*/
+//******************************************************************************************//
 
-
-    public void setDueDateAfter(int days) {
-        this.dueDate = getDateAfter( days );
-    }
-
-    public void setServices(ArrayList<Service> services) {
-        this.services = services;
-    }
 
 }

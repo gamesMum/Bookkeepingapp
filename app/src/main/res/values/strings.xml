@@ -26,6 +26,11 @@
     <string name="menu_logout">Logout</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_save">Save</string>
+    <string name="add_client_text">Client</string>
+    <string name="issue_date_text">Issue Date</string>
+    <string name="due_date_text">Due Date</string>
+    <string name="services_text">Services</string>
+    <string name="payments_text">Client</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

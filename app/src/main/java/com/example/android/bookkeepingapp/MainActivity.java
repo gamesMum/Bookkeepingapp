@@ -42,7 +42,16 @@ public class MainActivity extends AppCompatActivity {
 
         String  extras = getIntent().getStringExtra("fragmentName");
         if (extras != null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ClientFragment()).commit();
+            switch (extras)
+            {
+                case "clientFragment":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ClientFragment()).commit();
+                break;
+
+                case "invoiceFragment":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new InvoicesFragment()).commit();
+            }
+
         }
 
             //find the TextView with Id signout_text

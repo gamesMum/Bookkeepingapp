@@ -49,11 +49,12 @@ public class ClientFragment extends Fragment {
     private FloatingActionButton mAddUserFab;
     private ChildEventListener mChildEventListener;
 
-    // Firebase instance variables
     private  FirebaseUser user;
     private  String userID;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    // Firebase instance variables
+
     public FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mClientDatabaseReference;
 
@@ -69,17 +70,17 @@ public class ClientFragment extends Fragment {
         //find and inflate view
         final View rootView = inflater.inflate( R.layout.fragment_client, container, false );
 
-        // Initialize Firebase database
         mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null) {
             userID = user.getUid();
+            //store the data under loggedin user Id
+            mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "client" );
+            //For offline sync of data
+            mClientDatabaseReference.keepSynced(true);
         }
-        //store the data under loggedin user Id
-        mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "client" );
-        //For offline sync of data
-        mClientDatabaseReference.keepSynced(true);
-
 
         // Initialize references to views
         mProgressBar = (ProgressBar) rootView.findViewById( R.id.progressBar );
@@ -166,6 +167,7 @@ public class ClientFragment extends Fragment {
 
     private void detachDatabaseReadListener() {
         if (mChildEventListener != null) {
+
             mClientDatabaseReference.removeEventListener( mChildEventListener );
             mChildEventListener = null;
         }
