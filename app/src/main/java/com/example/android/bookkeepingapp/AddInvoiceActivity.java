@@ -1,9 +1,13 @@
 package com.example.android.bookkeepingapp;
 
+import android.app.LauncherActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddInvoiceActivity extends AppCompatActivity {
 
@@ -80,7 +86,25 @@ public class AddInvoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //show dialog with clients
-                Toast.makeText( AddInvoiceActivity.this, "Select client", Toast.LENGTH_SHORT ).show();
+                LayoutInflater li = LayoutInflater.from(AddInvoiceActivity.this);
+                View getClientSelectorView = li.inflate(R.layout.client_selector_dialog, null);
+                // set dialog message
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AddInvoiceActivity.this);
+
+                alertDialogBuilder.setView(getClientSelectorView);
+
+                //get xml element for the client
+               // final TextView edUserInput = (TextView) getClientSelectorView.findViewById(R.id.);
+
+                alertDialogBuilder
+                        .setCancelable(true)
+                        .setPositiveButton("Select",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                               //get the clientId, go back to new invoice passing the selected lient Id
+
+                            }
+                        }).create()
+                        .show();
             }
         } );
 
@@ -89,6 +113,34 @@ public class AddInvoiceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //show dialog with clients
                 Toast.makeText( AddInvoiceActivity.this, "Select Service(s)", Toast.LENGTH_SHORT ).show();
+
+            }
+        } );
+
+        mDueDateTextView.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //change the due date
+                LayoutInflater li = LayoutInflater.from(AddInvoiceActivity.this);
+                View getClientSelectorView = li.inflate(R.layout.due_date_selector_dialog, null);
+                // set dialog message
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AddInvoiceActivity.this);
+
+                alertDialogBuilder.setView(getClientSelectorView);
+
+                //get xml element for the client
+                // final TextView edUserInput = (TextView) getClientSelectorView.findViewById(R.id.);
+
+                alertDialogBuilder
+                        .setCancelable(true)
+                        .setPositiveButton("Done",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                //get the due date , passing the value to new invoice
+
+
+                            }
+                        }).create()
+                        .show();
 
             }
         } );

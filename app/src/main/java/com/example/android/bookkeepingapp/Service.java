@@ -8,16 +8,17 @@ public class Service {
     private String serviceNum;
     private String serviceName;
     private double servicePrice;
+    private String serviceNotes;
 
 
-    Service(String serviceId, String serviceName, double servicePrice)
+    Service(String serviceNum, String serviceName, double servicePrice)
     {
         this.serviceName = serviceName;
         this.servicePrice = servicePrice;
-        this.serviceNum = serviceId;
+        this.serviceNum = serviceNum;
     }
 
-    public String getServiceId() {
+    public String getServiceNum() {
         return serviceNum;
     }
 
@@ -31,4 +32,7 @@ public class Service {
         return servicePrice;
     }
 
+    public String getServiceNotes() {
+        return serviceNotes;
+    }
 }

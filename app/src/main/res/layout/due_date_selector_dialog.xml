@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/client_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/virtical_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:text="@string/due_date_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/on_issue_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:checked="true"
+            android:text="@string/date_on_issue"
+            android:textSize="15sp" />
+
+        <RadioButton
+            android:id="@+id/days_15_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_weight="0.13"
+            android:checked="false"
+            android:text="@string/days_after_15"
+            android:textSize="15sp" />
+
+        <RadioButton
+            android:id="@+id/days_30_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:checked="false"
+            android:text="@string/days_after_30"
+            android:textSize="15sp" />
+
+        <RadioButton
+            android:id="@+id/days_45_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:checked="false"
+            android:text="@string/days_after_45"
+            android:textSize="15sp" />
+
+        <RadioButton
+            android:id="@+id/days_60_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:checked="false"
+            android:text="@string/days_after_60"
+            android:textSize="15sp" />
+    </RadioGroup>
+</LinearLayout>

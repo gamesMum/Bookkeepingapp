@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (getFragmentManager().findFragmentById(R.id.content_frame) == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new SummeryFragment()).commit();
+        }
 
         String  extras = getIntent().getStringExtra("fragmentName");
         if (extras != null) {
@@ -49,7 +52,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
                 case "invoiceFragment":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new InvoicesFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new InvoicesFragment()).commit();
+                break;
+
+                case "serviceFragment":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ServiceFragment()).commit();
+                    break;
             }
 
         }
@@ -145,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_summery:
                 fragmentClass = SummeryFragment.class;
+                break;
+            case R.id.nav_services:
+                fragmentClass = ServiceFragment.class;
                 break;
             default:
                 fragmentClass = SummeryFragment.class;
