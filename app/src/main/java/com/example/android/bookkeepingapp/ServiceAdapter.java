@@ -3,9 +3,11 @@ package com.example.android.bookkeepingapp;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,35 @@ public class ServiceAdapter extends ArrayAdapter<Service> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        return super.getView( position, convertView, parent );
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.service_item,
+                    parent, false);
+        }
+
+        //Find the current object
+        final Service service = getItem(position);
+        //Find the First and Last name TextViews
+        TextView serviceName = (TextView) convertView.findViewById(R.id.service_name_text_view_item);
+        TextView servicePrice = (TextView) convertView.findViewById(R.id.service_price_text_view_item);
+        TextView serviceNotes = (TextView) convertView.findViewById(R.id.service_notes_text_view_item);
+
+
+        //supply the textViews with the correct data
+        assert service != null;
+        serviceName.setText(service.getServiceName());
+        servicePrice.setText( "$"+ String.valueOf(service.getServicePrice()));
+        serviceNotes.setText( service.getServiceNotes() );
+        //Check if there is a company name to display
+       /* if(client.getmCompanyName().toString().trim().length() > 0) {
+            companyName.setVisibility(View.VISIBLE);
+
+        }else {
+            companyName.setVisibility(View.GONE);
+        }*/
+
+        return convertView;
+
     }
 }

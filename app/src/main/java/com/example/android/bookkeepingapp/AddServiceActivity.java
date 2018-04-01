@@ -42,6 +42,8 @@ public class AddServiceActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_add_service );
 
+
+
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar_service);
         setSupportActionBar(toolbar);
@@ -75,7 +77,7 @@ public class AddServiceActivity extends AppCompatActivity {
 
     }
 
-    public void createNewClient() {
+    public void createNewService() {
         //get the elements in the dialog
         String serviceName = mServiceName.getText().toString();
         double servicePrice =  Double.parseDouble(mServicePrice.getText().toString());
@@ -131,7 +133,7 @@ public class AddServiceActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.action_save:
-                //createNewService();
+                createNewService();
             default:
                 return super.onOptionsItemSelected(item);
         }

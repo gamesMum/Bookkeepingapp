@@ -54,7 +54,6 @@ public class ClientFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     // Firebase instance variables
-
     public FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mClientDatabaseReference;
 

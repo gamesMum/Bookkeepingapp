@@ -35,18 +35,19 @@
         tools:showIn="@layout/activity_main">
 
         <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/client_list_view"
+            android:id="@+id/client_list_view_selector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scrollbars="vertical" />
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/progressBar_client_selector"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"/>
 
     </RelativeLayout>
 

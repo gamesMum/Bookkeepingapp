@@ -11,6 +11,8 @@ public class Service {
     private String serviceNotes;
 
 
+    Service()
+    {}
     Service(String serviceNum, String serviceName, double servicePrice)
     {
         this.serviceName = serviceName;
