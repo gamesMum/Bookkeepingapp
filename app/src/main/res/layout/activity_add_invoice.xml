@@ -1,9 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.android.bookkeepingapp.AddInvoiceActivity">
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_invoice"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:title="@string/invoice_new"
+        app:titleTextColor="@android:color/white"
+        />
+
+    <TextView
+        android:id="@+id/invoice_number_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/invoice_number"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_number_text_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/invoice_number_text"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:textColor="@android:color/black"
+        tools:text="00001" />
+
+    <TextView
+        android:id="@+id/client_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@drawable/dotted_square"
+        android:gravity="center"
+        android:hint="@string/add_client_text" />
+
+
+    <TextView
+        android:id="@+id/issue_date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+      android:layout_below="@id/invoice_number_text_value"
+        android:text="@string/issue_date_text"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/issue_date_text_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/issue_date_text"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:textColor="@android:color/black"
+        tools:text="12/1/2018" />
+
+    <TextView
+        android:id="@+id/due_date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+       android:layout_below="@id/issue_date_text_value"
+        android:text="@string/due_date_text"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/due_date_text_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/due_date_text"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:textColor="@android:color/black"
+        android:paddingBottom="@dimen/virtical_padding"
+        tools:text="12/1/2018" />
+<View
+    android:id="@+id/add_client_divider"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_below="@id/client_add"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:background="@android:color/darker_gray"
+    ></View>
+
+    <TextView
+        android:id="@+id/services_add"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+
+        android:layout_below="@id/add_client_divider"
+        android:gravity="center"
+        android:background="@drawable/dotted_square"
+        android:text="@string/service_add" />
+
+    <View
+        android:id="@+id/service_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/services_add"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@android:color/darker_gray"
+        ></View>
+
+    <EditText
+        android:id="@+id/notes_add_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/service_divider"
+        android:hint="@string/notes_text"/>
+
+    <TextView
+        android:id="@+id/invoice_total_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_below="@id/notes_add_edit_text"
+        android:text="@string/total_text"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_total_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/invoice_total_text"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:textColor="@android:color/black"
+        tools:text="$500" />
+
+
+</RelativeLayout>

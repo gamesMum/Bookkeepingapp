@@ -5,12 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,9 +21,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ViewClientActivity extends AppCompatActivity {
+public class ViewServiceActivity extends AppCompatActivity {
 
-    private String TAG = "ViewClientActivity";
+
+    private String TAG = "ViewServiceActivity";
     private Toolbar toolbar;
     private TextView mClientName;
     private TextView mCompany;
@@ -31,7 +32,7 @@ public class ViewClientActivity extends AppCompatActivity {
 
     // Firebase instance variables
     private FirebaseUser user;
-    private  String userID;
+    private String userID;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     public FirebaseDatabase mFirebaseDatabase;
@@ -40,13 +41,14 @@ public class ViewClientActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_view_client );
+        setContentView( R.layout.activity_view_service );
+
 
         // Set a Toolbar to replace the ActionBar.
-        toolbar = findViewById(R.id.toolbar_1);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getString(R.string.clints_text));
-        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
+        toolbar = findViewById( R.id.toolbar_service_view );
+        setSupportActionBar( toolbar );
+        toolbar.setTitle( getString( R.string.clints_text ) );
+        toolbar.setNavigationIcon( R.drawable.ic_close_black_24dp );
 
         ActionBar actionbar = getSupportActionBar();
 
@@ -54,27 +56,27 @@ public class ViewClientActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null) {
+        if (user != null) {
             userID = user.getUid();
             //store the data under loggedin user Id
-            mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "client" );
+            mClientDatabaseReference = mFirebaseDatabase.getReference().child( userID ).child( "client" );
             //For offline sync of data
-            mClientDatabaseReference.keepSynced(true);
+            mClientDatabaseReference.keepSynced( true );
         }
 
         mClientName = (TextView) findViewById( R.id.name_text_view );
         mCompany = (TextView) findViewById( R.id.company_text_view );
 
-        mClientDatabaseReference.addValueEventListener(new ValueEventListener() {
+        mClientDatabaseReference.addValueEventListener( new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-               Client client = new Client(  );
-               client.setFirstName( dataSnapshot.child(extras).getValue(Client.class).getFirstName()); //set the name
-                client.setLastName( dataSnapshot.child(extras).getValue(Client.class).getLastName()); //set the name
+                Client client = new Client();
+                client.setFirstName( dataSnapshot.child( extras ).getValue( Client.class ).getFirstName() ); //set the name
+                client.setLastName( dataSnapshot.child( extras ).getValue( Client.class ).getLastName() ); //set the name
                 mClientName.setText( client.getFirstName() + " " + client.getLastName() );
-                client.setCompanyName( dataSnapshot.child(extras).getValue(Client.class).getCompanyName());
+                client.setCompanyName( dataSnapshot.child( extras ).getValue( Client.class ).getCompanyName() );
                 mCompany.setText( client.getCompanyName() );
             }
 
@@ -82,20 +84,20 @@ public class ViewClientActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        } );
 
-        extras = getIntent().getStringExtra("clientId");
+        extras = getIntent().getStringExtra( "clientId" );
         if (extras != null) {
             //Show Client Name
 
         }
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
-        });
+        } );
 
         //Check user if authenticated
         mAuth = FirebaseAuth.getInstance();
@@ -106,62 +108,51 @@ public class ViewClientActivity extends AppCompatActivity {
                 if (user == null) {
                     // User is signed out
                     //go to login activity
-                    Intent i = new Intent(ViewClientActivity.this, LoginActivity.class);
-                    startActivity(i);
-                    toastMessage("Successfully signed out");
+                    Intent i = new Intent( ViewServiceActivity.this, LoginActivity.class );
+                    startActivity( i );
+                    toastMessage( "Successfully signed out" );
                 }
             }
         };
     }
 
-  /*  @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        //Go back to client fragment
-        Intent intent = new Intent(this,MainActivity.class);
-        intent.putExtra("fragmentName","clientFragment"); //for example
-        startActivity(intent);
-    }*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the edit_menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.view_menu, menu);
+        getMenuInflater().inflate( R.menu.view_menu, menu );
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.action_delete:
                 //your code here
                 //Add dialog box
-                Log.v(TAG, "Oops you just deleted me!");
+                Log.v( TAG, "Oops you just deleted me!" );
                 return true;
             case R.id.action_edit:
                 //View edit activity
                 //return the object in the list View
                 String clientID = extras;
-                Intent i = new Intent( ViewClientActivity.this, EditClientActivity.class );
+                Intent i = new Intent( ViewServiceActivity.this, EditClientActivity.class );
                 //pass the client Id to the next activity
                 i.putExtra( "clientId", clientID );
                 startActivity( i );
-                Log.v(TAG, "OK edit me now!");
+                Log.v( TAG, "OK edit me now!" );
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected( item );
         }
     }
 
     /**
      * customizable toast
+     *
      * @param message
      */
-    private void toastMessage(String message){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    private void toastMessage(String message) {
+        Toast.makeText( this, message, Toast.LENGTH_SHORT ).show();
     }
-
 }

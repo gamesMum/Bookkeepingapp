@@ -39,10 +39,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (getFragmentManager().findFragmentById(R.id.content_frame) == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new SummeryFragment()).commit();
+        }
 
         String  extras = getIntent().getStringExtra("fragmentName");
         if (extras != null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ClientFragment()).commit();
+            switch (extras)
+            {
+                case "clientFragment":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ClientFragment()).commit();
+                break;
+
+                case "invoiceFragment":
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new InvoicesFragment()).commit();
+                break;
+
+                case "serviceFragment":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ServiceFragment()).commit();
+                    break;
+            }
+
         }
 
             //find the TextView with Id signout_text
@@ -51,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
         //// Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        toolbar.setTitle(getString(R.string.app_name));
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
 
         ActionBar actionbar = getSupportActionBar();
         //Enable the app bar's "home" button
@@ -111,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+
     }
 
     private void displayFragment(MenuItem item)
@@ -133,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_summery:
                 fragmentClass = SummeryFragment.class;
+                break;
+            case R.id.nav_services:
+                fragmentClass = ServiceFragment.class;
                 break;
             default:
                 fragmentClass = SummeryFragment.class;

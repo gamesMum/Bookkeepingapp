@@ -1,22 +1,18 @@
 package com.example.android.bookkeepingapp;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,38 +22,35 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
- * Use the {@link ClientFragment} factory method to
- * create an instance of this fragment.
+ * A simple {@link Fragment} subclass.
  */
-public class ClientFragment extends Fragment {
+public class ServiceFragment extends Fragment {
 
-    private static final String TAG = "ClientFragment";
+    private static final String TAG = "ServiceFragment";
 
     //client xml attributes
-    private ListView mClientListView;
-    private ClientAdapter mClientAdapter;
+    private ListView mServiceListView;
+    private ServiceAdapter mServiceAdapter;
     private ProgressBar mProgressBar;
-    private FloatingActionButton mAddUserFab;
+    private FloatingActionButton mAddServiceFab;
     private ChildEventListener mChildEventListener;
 
-    private  FirebaseUser user;
+    private FirebaseUser user;
     private  String userID;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     // Firebase instance variables
+
     public FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mClientDatabaseReference;
 
-    public ClientFragment() {
+    public ServiceFragment() {
         // Required empty public constructor
     }
 
@@ -67,7 +60,7 @@ public class ClientFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //find and inflate view
-        final View rootView = inflater.inflate( R.layout.fragment_client, container, false );
+        final View rootView = inflater.inflate( R.layout.fragment_service, container, false );
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -76,49 +69,48 @@ public class ClientFragment extends Fragment {
         if(user != null) {
             userID = user.getUid();
             //store the data under loggedin user Id
-            mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "client" );
+            mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "service" );
             //For offline sync of data
             mClientDatabaseReference.keepSynced(true);
         }
 
         // Initialize references to views
         mProgressBar = (ProgressBar) rootView.findViewById( R.id.progressBar );
-        mClientListView = (ListView) rootView.findViewById( R.id.client_list_view );
-        mAddUserFab = (FloatingActionButton) rootView.findViewById( R.id.fab );
+        mServiceListView = (ListView) rootView.findViewById( R.id.service_list_view );
+        mAddServiceFab = (FloatingActionButton) rootView.findViewById( R.id.fab_service );
 
         // Initialize message ListView and its adapter
-        final List<Client> clients = new ArrayList<>();
-        mClientAdapter = new ClientAdapter( getActivity(), R.layout.client_item, clients );
-        mClientListView.setAdapter( mClientAdapter );
+        final List<Service> services = new ArrayList<>();
+        mServiceAdapter = new ServiceAdapter( getActivity(), R.layout.client_item, services );
+        mServiceListView.setAdapter( mServiceAdapter );
 
         // Initialize progress bar
         mProgressBar.setVisibility( ProgressBar.VISIBLE );
 
 
         //Add new client
-        mAddUserFab.setOnClickListener( new View.OnClickListener() {
+        mAddServiceFab.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //go to Add new client activity
-                //go to login activity
-                Intent i = new Intent( getActivity(), AddClientActivity.class );
+                //go to Add new service activity
+                Intent i = new Intent( getActivity(), AddServiceActivity.class );
                 startActivity( i );
 
             }
         } );
 
         //Add itemClickListener for each list item in the list view
-        mClientListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+        mServiceListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //return the object in the list View
-                Client client = clients.get( position );
-                Intent i = new Intent( getActivity(), ViewClientActivity.class );
-                //pass the client Id to the next activity
-                i.putExtra( "clientId", client.getClientId() );
+                Service service = services.get( position );
+                Intent i = new Intent( getActivity(), ViewServiceActivity.class );
+                //pass the service number to the next activity
+                i.putExtra( "serviceNum", service.getServiceNum() );
                 startActivity( i );
-                Log.v(TAG, client.toString());
+                Log.v(TAG, service.toString());
             }
         } );
 
@@ -152,7 +144,7 @@ public class ClientFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.v(TAG, TAG + " is resumed");
-      // attachDatabaseReadListener();
+        // attachDatabaseReadListener();
     }
 
 
@@ -177,8 +169,8 @@ public class ClientFragment extends Fragment {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Client client = dataSnapshot.getValue( Client.class );
-                    mClientAdapter.add( client );
+                    Service service = dataSnapshot.getValue( Service.class );
+                    mServiceAdapter.add( service );
                     mProgressBar.setVisibility( ProgressBar.INVISIBLE );
                     if (!dataSnapshot.exists()) {
                         mProgressBar.setVisibility( ProgressBar.INVISIBLE );
@@ -212,3 +204,4 @@ public class ClientFragment extends Fragment {
 
 
 }
+

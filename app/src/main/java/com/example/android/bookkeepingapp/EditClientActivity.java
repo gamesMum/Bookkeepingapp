@@ -1,15 +1,18 @@
 package com.example.android.bookkeepingapp;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +36,8 @@ public class EditClientActivity extends AppCompatActivity {
     private String clientID;
 
     //Firebase variables
+    private FirebaseUser user;
+    private String userID;
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -47,6 +52,10 @@ public class EditClientActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar_1);
         setSupportActionBar(toolbar);
 
+        toolbar.setTitle(getString(R.string.clients_edit));
+        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
+        ActionBar actionbar = getSupportActionBar();
+
         //Initialize xml element
         mFirstNameEditText = (EditText) findViewById( R.id.first_name_edit );
         mLastNameEditText = (EditText) findViewById( R.id.last_name_edit );
@@ -58,7 +67,11 @@ public class EditClientActivity extends AppCompatActivity {
         //NOTE: Unless you are signed in, this will not be useable.
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mClientDatabaseReference = mFirebaseDatabase.getReference().child( "client" );
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            userID = user.getUid();
+            mClientDatabaseReference = mFirebaseDatabase.getReference().child( userID ).child( "client" );
+        }
 
         //take the client Id selected from the previous activity
         extras = getIntent().getStringExtra("clientId");
@@ -87,6 +100,14 @@ public class EditClientActivity extends AppCompatActivity {
 
             }
         });
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
 
     public void updaeClient() {
@@ -112,9 +133,11 @@ public class EditClientActivity extends AppCompatActivity {
 
             Client client = new Client(key, firstName,lastName);
             mClientDatabaseReference.child(key).setValue(client);
+            mClientDatabaseReference.child(key).child( "companyName" ).setValue(company);
             toastMessage("data is up to date.");
             mFirstNameEditText.setText("");
             mLastNameEditText.setText("");
+            mCompanyEditText.setText( "" );
 
             //Go back to client fragment
             Intent intent = new Intent(this,MainActivity.class);
@@ -136,15 +159,6 @@ public class EditClientActivity extends AppCompatActivity {
      */
     private void toastMessage(String message){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        //Go back to client fragment
-        Intent intent = new Intent(this,MainActivity.class);
-        intent.putExtra("fragmentName","clientFragment"); //for example
-        startActivity(intent);
     }
 
     @Override

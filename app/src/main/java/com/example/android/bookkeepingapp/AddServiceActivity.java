@@ -17,14 +17,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class AddClientActivity extends AppCompatActivity {
+public class AddServiceActivity extends AppCompatActivity {
 
-    private  String TAG = "AddClientActivity";
-    private EditText mFirstNameEditText;
-    private EditText mLastNameEditText;
-    private EditText mCompanyEditText;
-    private EditText mEmailEditText;
-    private EditText mPhoneNumber;
+    private  String TAG = "AddServiceActivity";
+    private EditText mServiceName;
+    private EditText mServicePrice;
+    private EditText mNotes;
     private Toolbar toolbar;
 
 
@@ -36,25 +34,26 @@ public class AddClientActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference mClientDatabaseReference;
+    private DatabaseReference mServiceDatabaseReference;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_add_client );
+        setContentView( R.layout.activity_add_service );
+
+
 
         // Set a Toolbar to replace the ActionBar.
-        toolbar = findViewById(R.id.toolbar_1);
+        toolbar = findViewById(R.id.toolbar_service);
         setSupportActionBar(toolbar);
+        //add (X) icon to the custom toolbar
         toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
 
         //Initialize xml element
-        mFirstNameEditText = (EditText) findViewById( R.id.first_name_add );
-        mLastNameEditText = (EditText) findViewById( R.id.last_name_add );
-        mCompanyEditText = (EditText) findViewById( R.id.company_add );
-        mEmailEditText = (EditText) findViewById( R.id.email_add );
-        mPhoneNumber = (EditText) findViewById( R.id.phone_add );
+        mServiceName = (EditText) findViewById( R.id.service_name );
+        mServicePrice = (EditText) findViewById( R.id.service_price );
+        mNotes = (EditText) findViewById( R.id.service_notes );
 
         //declare the database reference object. This is what we use to access the database.
         //NOTE: Unless you are signed in, this will not be useable.
@@ -65,9 +64,9 @@ public class AddClientActivity extends AppCompatActivity {
             userID = user.getUid();
         }
         //store the data under loggedin user Id
-        mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "client" );
+        mServiceDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "service" );
 
-        //close this activity
+        //close this activity when we press (X) icon
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,39 +77,33 @@ public class AddClientActivity extends AppCompatActivity {
 
     }
 
-    public void createNewClient() {
+    public void createNewService() {
         //get the elements in the dialog
-        String firstName = mFirstNameEditText.getText().toString();
-        String lastName = mLastNameEditText.getText().toString();
+        String serviceName = mServiceName.getText().toString();
+        double servicePrice =  Double.parseDouble(mServicePrice.getText().toString());
+        String serviceNotes = mNotes.getText().toString();
         //....the rest of infos
 
-        //Check if the user enterd either the first or the last name
-        if (firstName.trim().length() > 0 || lastName.trim().length() > 0) {
-            String key = mClientDatabaseReference.push().getKey();
-            String company = mCompanyEditText.getText().toString();
-           /*
+        //Check if the user enterd the service name and price
+        if (serviceName.trim().length() > 0 && servicePrice > 0) {
+            String key = mServiceDatabaseReference.push().getKey();
 
-            // get user input and set it to result
-            // edit text
-            Client client = new Client( firstName, lastName );
-            mClientDatabaseReference.child( key ).child( "firstName" ).setValue( firstName );
-            mClientDatabaseReference.child( key ).child( "lastName" ).setValue( lastName );*/
+            Service service = new Service(key, serviceName,servicePrice);
+            mServiceDatabaseReference.child(key).setValue(service);
+            mServiceDatabaseReference.child(key).child( "notes" ).setValue(serviceNotes);
+            toastMessage("New Service has been saved.");
+            mServiceName.setText("");
+            mServicePrice.setText("");
+            mNotes.setText( "" );
 
-            Client client = new Client(key, firstName,lastName);
-            mClientDatabaseReference.child(key).setValue(client);
-            mClientDatabaseReference.child(key).child( "companyName" ).setValue(company);
-            toastMessage("New Client has been saved.");
-            mFirstNameEditText.setText("");
-            mLastNameEditText.setText("");
-
-            //Go back to client fragment
+            //Go back to service fragment
             Intent intent = new Intent(this,MainActivity.class);
-            intent.putExtra("fragmentName","clientFragment"); //for example
+            intent.putExtra("fragmentName","serviceFragment"); //for example
             startActivity(intent);
 
         } else {
             //else tell the user that there is an error
-            toastMessage( "Enter customer name or company name" );
+            toastMessage( "did you forget to put service name or price" );
         }
 
     }
@@ -140,7 +133,7 @@ public class AddClientActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.action_save:
-                createNewClient();
+                createNewService();
             default:
                 return super.onOptionsItemSelected(item);
         }

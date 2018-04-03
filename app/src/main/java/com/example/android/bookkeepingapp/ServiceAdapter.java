@@ -13,34 +13,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Rasha on 18/03/2018.
+ * Created by Rasha on 30/03/2018.
  */
 
-public class InvoiceAdapter extends ArrayAdapter<Invoice> {
-
-    private ArrayList<String> serviceIds;
-
-    public InvoiceAdapter(Context context, int resource, List<Invoice> objects) {
+public class ServiceAdapter extends ArrayAdapter<Service> {
+    public ServiceAdapter(@NonNull Context context, int resource, List<Service> objects) {
         super( context, resource, objects );
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.client_item,
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.service_item,
                     parent, false);
         }
+
         //Find the current object
-        final Invoice invoice = getItem(position);
+        final Service service = getItem(position);
         //Find the First and Last name TextViews
-        TextView name = (TextView) convertView.findViewById(R.id.name_text_view_item);
-        TextView total = (TextView) convertView.findViewById(R.id.total_text);
+        TextView serviceName = (TextView) convertView.findViewById(R.id.service_name_text_view_item);
+        TextView servicePrice = (TextView) convertView.findViewById(R.id.service_price_text_view_item);
+        TextView serviceNotes = (TextView) convertView.findViewById(R.id.service_notes_text_view_item);
+
 
         //supply the textViews with the correct data
-        assert invoice != null;
-        //name.setText(invoice.getFirstName() + " " + client.getLastName());
-        total.setText("500");//TESTTING
+        assert service != null;
+        serviceName.setText(service.getServiceName());
+        servicePrice.setText( "$"+ String.valueOf(service.getServicePrice()));
+        serviceNotes.setText( service.getServiceNotes() );
         //Check if there is a company name to display
        /* if(client.getmCompanyName().toString().trim().length() > 0) {
             companyName.setVisibility(View.VISIBLE);
@@ -50,5 +52,6 @@ public class InvoiceAdapter extends ArrayAdapter<Invoice> {
         }*/
 
         return convertView;
+
     }
 }

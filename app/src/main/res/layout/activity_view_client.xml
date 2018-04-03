@@ -35,7 +35,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:paddingRight="@dimen/horizontal_padding"
         android:textAppearance="?android:attr/textAppearanceLarge"
         tools:text="Kamal Saleem" />
@@ -46,7 +45,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
-    android:layout_below="@id/name_text"
+    android:layout_below="@id/name_text_view"
     android:textAppearance="?android:attr/textAppearanceLarge"
     tools:text="SalRAd co." />
 
