@@ -1,6 +1,5 @@
 package com.example.android.bookkeepingapp;
 
-
 import android.app.Dialog;
 import android.app.LauncherActivity;
 import android.content.DialogInterface;
@@ -255,7 +254,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
             public void onDismiss(DialogInterface dialog) {
                 toastMessage( "OnDismissListener" );
                 //detach database reader on dismissing
-                detachDatabaseReadListener();
+
+
             }
         } );
 
