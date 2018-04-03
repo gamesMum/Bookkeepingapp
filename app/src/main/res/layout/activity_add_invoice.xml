@@ -77,7 +77,7 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:paddingBottom="@dimen/virtical_padding"
         android:textColor="@android:color/black"
-        android:text="12/1/2018" />
+        tools:text="12/1/2018" />
 
     <TextView
         android:id="@+id/due_date_text"
@@ -101,7 +101,8 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:textColor="@android:color/black"
-        android:text="12/1/2018" />
+        android:paddingBottom="@dimen/virtical_padding"
+        tools:text="12/1/2018" />
 <View
     android:id="@+id/add_client_divider"
     android:layout_width="match_parent"

@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,10 +29,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +57,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
 
 
+
     private String clientID;
 
     //Firebase variables
@@ -66,6 +73,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
     private ServiceAdapterCheckBox mServiceAdapter;
     ProgressBar mClientDialogProgressBar;
     ProgressBar mServiceDialogProgressBar;
+    String clientIdFromDialog;
     //**************************************************
     private ChildEventListener mChiltEventListener;
     private ChildEventListener mServiceEventListener;
@@ -92,6 +100,10 @@ public class AddInvoiceActivity extends AppCompatActivity {
         mNotesEditText = (EditText) findViewById( R.id.notes_add_edit_text );
         mClientDialogProgressBar = null;
 
+        //set the values for the issue date and due date textviews
+        //Due date default is same date of issue
+        mIssueDateTextView.setText( getCurrentDate() );
+        mDueDateTextView.setText( getCurrentDate());
 
         //declare the database reference object. This is what we use to access the database.
         //NOTE: Unless you are signed in, this will not be useable.
@@ -101,24 +113,29 @@ public class AddInvoiceActivity extends AppCompatActivity {
         if (user != null) {
             userID = user.getUid();
         }
-        //store the data under loggedin user Id
-        mInvoiceDatabaseReference = mFirebaseDatabase.getReference().child( userID ).child( "invoice" );
-        //store the data under loggedin user Id for clients
-        mClientDatabaseReference = mFirebaseDatabase.getReference().child( userID ).child( "client" );
-        //store the data under loggedin user Id for services
-        mServiceDatabaseReference = mFirebaseDatabase.getReference().child( userID ).child( "service" );
+        //get the data for stored invoices for the logged in user
+        mInvoiceDatabaseReference = mFirebaseDatabase.getReference().
+                child( userID ).child( "invoice" );
+        //get the data for stored clients for the logged in user
+        mClientDatabaseReference = mFirebaseDatabase.getReference().
+                child( userID ).child( "client" );
+        //get the data for stored services for the logged in user
+        mServiceDatabaseReference = mFirebaseDatabase.getReference().
+                child( userID ).child( "service" );
+
 
         //set click listeners on textViews (mClientTextView and mServicesTextView)
         mClientTextView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //show list of clients
+                //show list of stored clients
                 createClientDialog();
 
             }
         } );
 
+        //when click on services open a dialog with the available services
         mServicesTextView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,25 +145,49 @@ public class AddInvoiceActivity extends AppCompatActivity {
             }
         } );
 
+        //change the due date for the invoice from default
         mDueDateTextView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //change the due date
                 LayoutInflater li = LayoutInflater.from( AddInvoiceActivity.this );
 
-                View getClientSelectorView = li.inflate( R.layout.due_date_selector_dialog, null );
+                //inflate the dialog view and get the RadioGroup element in it
+                final View getDateSelectorView = li.inflate( R.layout.due_date_selector_dialog, null );
+                final RadioGroup daysAfterRadioGroup = getDateSelectorView.findViewById( R.id.days_radio_group );
                 // set dialog message
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder( AddInvoiceActivity.this );
 
-                alertDialogBuilder.setView( getClientSelectorView );
+                alertDialogBuilder.setView( getDateSelectorView );
 
-                //get xml element for the client
-                // final TextView edUserInput = (TextView) getClientSelectorView.findViewById(R.id.);
-
+                //When Done is pressed do the following
                 alertDialogBuilder.setCancelable( true ).setPositiveButton( "Done", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //get the due date , passing the value to new invoice
+                        //get the days selected , passing the value to new invoice
+                        int selectedId = daysAfterRadioGroup.getCheckedRadioButtonId();
+                        RadioButton checkedRadio = getDateSelectorView.findViewById( selectedId );
+                        String checkedRadioText = checkedRadio.getText().toString();
+                        //set due date according to the selected days number
+                      switch (checkedRadioText)
+                       {
+                           case "On date of issue":
+                               mDueDateTextView.setText( setDueDateAfter( 0 ) );
+                               break;
+                           case "After 15 days":
+                              mDueDateTextView.setText( setDueDateAfter( 15 ) );
+                              break;
+                           case "After 30 days":
+                               mDueDateTextView.setText( setDueDateAfter( 30 ) );
+                               break;
+                           case "After 45 days":
+                               mDueDateTextView.setText( setDueDateAfter( 45 ) );
+                               break;
+                           case "After 60 days":
+                               mDueDateTextView.setText( setDueDateAfter( 60 ) );
+                               break;
 
+
+                       }
 
                     }
                 } ).create().show();
@@ -169,7 +210,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
     private void createClientDialog() {
 
         //initializing the dialog box with the correct layout
-        Dialog dialog = new Dialog( AddInvoiceActivity.this );
+        final Dialog dialog = new Dialog( AddInvoiceActivity.this );
         dialog.setContentView( R.layout.client_selector_dialog );
 
         dialog.setTitle( "Clients" );
@@ -182,6 +223,26 @@ public class AddInvoiceActivity extends AppCompatActivity {
             @Override
             public void onCancel(DialogInterface dialog) {
                 toastMessage( "OnCancelListener" );
+                //use client id from dialog when the dialog is cloased
+                if(clientIdFromDialog != null) {
+                    mClientDatabaseReference.addValueEventListener( new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+                            Client client = new Client();
+                            client.setFirstName( dataSnapshot.child( clientIdFromDialog ).getValue( Client.class ).getFirstName() ); //set the name
+                            client.setLastName( dataSnapshot.child( clientIdFromDialog ).getValue( Client.class ).getLastName() ); //set the name
+                            mClientTextView.setText( client.getFirstName() + " " + client.getLastName() );
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    } );
+                }
+
                 //detach database reader on canceling
                 detachDatabaseReadListener();
             }
@@ -215,11 +276,10 @@ public class AddInvoiceActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //return the object in the list View
                 Client client = clients.get( position );
-                Intent i = new Intent( AddInvoiceActivity.this, AddInvoiceActivity.class );
-                //pass the client Id to the next activity
-                i.putExtra( "clientId", client.getClientId() );
-                startActivity( i );
+               clientIdFromDialog = client.getClientId();
                 Log.v(TAG, client.toString());
+               dialog.cancel();
+
             }
         } );
     dialog.show();//display the dialog
@@ -390,6 +450,36 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
 
     }
+
+    //get the date after the desired number of days
+    //this is the Due date for the invoice
+    public String setDueDateAfter( int days)
+    {
+        String date;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy / MM / dd");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(mIssueDateTextView.getText().toString()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //add the number of days for the invoice over due
+        c.add(Calendar.DAY_OF_MONTH, days);
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy / MM / dd ");
+        //get the date in the correct format
+        date = sdf1.format(c.getTime());
+
+        return date;
+    }
+
+    private String getCurrentDate()
+    {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat mdformat = new SimpleDateFormat("yyyy / MM / dd ");
+        String strDate = mdformat.format(calendar.getTime());
+        return strDate;
+    }
+
 
     /**
      * customizable toast
