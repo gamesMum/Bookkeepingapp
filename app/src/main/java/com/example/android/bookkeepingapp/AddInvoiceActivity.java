@@ -9,11 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -58,6 +61,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
 
 
+
     private String clientID;
 
     //Firebase variables
@@ -74,6 +78,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
     ProgressBar mClientDialogProgressBar;
     ProgressBar mServiceDialogProgressBar;
     String clientIdFromDialog;
+    //store the selected services in Array list of String
+    private ArrayList<String> serviceNumsFromDialog;
     //**************************************************
     private ChildEventListener mChiltEventListener;
     private ChildEventListener mServiceEventListener;
@@ -99,6 +105,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
         mTotalTextView = (TextView) findViewById( R.id.invoice_total_value );
         mNotesEditText = (EditText) findViewById( R.id.notes_add_edit_text );
         mClientDialogProgressBar = null;
+        serviceNumsFromDialog = new ArrayList<String>(  );
 
         //set the values for the issue date and due date textviews
         //Due date default is same date of issue
@@ -149,50 +156,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
         mDueDateTextView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //change the due date
-                LayoutInflater li = LayoutInflater.from( AddInvoiceActivity.this );
-
-                //inflate the dialog view and get the RadioGroup element in it
-                final View getDateSelectorView = li.inflate( R.layout.due_date_selector_dialog, null );
-                final RadioGroup daysAfterRadioGroup = getDateSelectorView.findViewById( R.id.days_radio_group );
-                // set dialog message
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder( AddInvoiceActivity.this );
-
-                alertDialogBuilder.setView( getDateSelectorView );
-
-                //When Done is pressed do the following
-                alertDialogBuilder.setCancelable( true ).setPositiveButton( "Done", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //get the days selected , passing the value to new invoice
-                        int selectedId = daysAfterRadioGroup.getCheckedRadioButtonId();
-                        RadioButton checkedRadio = getDateSelectorView.findViewById( selectedId );
-                        String checkedRadioText = checkedRadio.getText().toString();
-                        //set due date according to the selected days number
-                      switch (checkedRadioText)
-                       {
-                           case "On date of issue":
-                               mDueDateTextView.setText( setDueDateAfter( 0 ) );
-                               break;
-                           case "After 15 days":
-                              mDueDateTextView.setText( setDueDateAfter( 15 ) );
-                              break;
-                           case "After 30 days":
-                               mDueDateTextView.setText( setDueDateAfter( 30 ) );
-                               break;
-                           case "After 45 days":
-                               mDueDateTextView.setText( setDueDateAfter( 45 ) );
-                               break;
-                           case "After 60 days":
-                               mDueDateTextView.setText( setDueDateAfter( 60 ) );
-                               break;
-
-
-                       }
-
-                    }
-                } ).create().show();
-
-
+                //create, and set the due date according to the number picked
+                createDaysDialog();
             }
         } );
 
@@ -203,6 +168,55 @@ public class AddInvoiceActivity extends AppCompatActivity {
                 finish();
             }
         } );
+
+    }
+
+    //Show the days selector dialog and set the due date after the selected date
+    private void createDaysDialog()
+    {
+        //change the due date
+        LayoutInflater li = LayoutInflater.from( AddInvoiceActivity.this );
+
+        //inflate the dialog view and get the RadioGroup element in it
+        final View getDateSelectorView = li.inflate( R.layout.due_date_selector_dialog, null );
+        final RadioGroup daysAfterRadioGroup = getDateSelectorView.findViewById( R.id.days_radio_group );
+        // set dialog message
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder( AddInvoiceActivity.this );
+
+        alertDialogBuilder.setView( getDateSelectorView );
+
+        //When Done is pressed do the following
+        alertDialogBuilder.setCancelable( true ).setPositiveButton( "Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //get the days selected , passing the value to new invoice
+                int selectedId = daysAfterRadioGroup.getCheckedRadioButtonId();
+                RadioButton checkedRadio = getDateSelectorView.findViewById( selectedId );
+                String checkedRadioText = checkedRadio.getText().toString();
+                //set due date according to the selected days number
+                switch (checkedRadioText)
+                {
+                    case "On date of issue":
+                        mDueDateTextView.setText( setDueDateAfter( 0 ) );
+                        break;
+                    case "After 15 days":
+                        mDueDateTextView.setText( setDueDateAfter( 15 ) );
+                        break;
+                    case "After 30 days":
+                        mDueDateTextView.setText( setDueDateAfter( 30 ) );
+                        break;
+                    case "After 45 days":
+                        mDueDateTextView.setText( setDueDateAfter( 45 ) );
+                        break;
+                    case "After 60 days":
+                        mDueDateTextView.setText( setDueDateAfter( 60 ) );
+                        break;
+
+
+                }
+
+            }
+        } ).create().show();
+
 
     }
 
@@ -289,17 +303,22 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
     //helping method to create, populate and showing the client dialog box
     private void createServiceDialog() {
-
         //initializing the dialog box with the correct layout
-        Dialog dialog = new Dialog( AddInvoiceActivity.this );
-        dialog.setContentView( R.layout.services_selector_dialog );
+        //change the due date
+        LayoutInflater li = LayoutInflater.from( AddInvoiceActivity.this );
 
-        dialog.setTitle( "Services" );
-        dialog.setCancelable( true );
-        dialog.setCanceledOnTouchOutside( true );
+        //inflate the dialog view and get the RadioGroup element in it
+        final View getServiceSelectorView = li.inflate( R.layout.services_selector_dialog, null );
+
+        // set dialog message
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder( AddInvoiceActivity.this );
+
+        alertDialogBuilder.setView( getServiceSelectorView );
+        alertDialogBuilder.setTitle( "Services" );
+        alertDialogBuilder.setCancelable( true );
 
         //setting dialog listeners
-        dialog.setOnCancelListener( new DialogInterface.OnCancelListener() {
+        alertDialogBuilder.setOnCancelListener( new DialogInterface.OnCancelListener() {
 
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -309,7 +328,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
             }
         } );
 
-        dialog.setOnDismissListener( new DialogInterface.OnDismissListener() {
+        alertDialogBuilder.setOnDismissListener( new DialogInterface.OnDismissListener() {
 
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -319,59 +338,72 @@ public class AddInvoiceActivity extends AppCompatActivity {
             }
         } );
 
+
+
         //Prepare ListView in dialog
-        mServiceListView = (ListView) dialog.findViewById( R.id.service_list_view_selector );
-        mServiceDialogProgressBar = (ProgressBar) dialog.findViewById( R.id.progressBar_service_selector );
+        mServiceListView = (ListView) getServiceSelectorView.findViewById( R.id.service_list_view_selector );
+        mServiceDialogProgressBar = (ProgressBar) getServiceSelectorView.findViewById( R.id.progressBar_service_selector );
         mServiceDialogProgressBar.setVisibility( View.VISIBLE );
         // Initialize client ListView and its adapter
         final List<Service> services = new ArrayList<>();
-        mServiceAdapter = new ServiceAdapterCheckBox( AddInvoiceActivity.this, R.layout.service_item_check_box, services );
+        mServiceAdapter = new ServiceAdapterCheckBox( AddInvoiceActivity.this, R.layout.service_item_check_box, services, serviceNumsFromDialog );
         mServiceListView.setAdapter( mServiceAdapter );
+        mServiceListView.setItemsCanFocus( false );
+        // we want multiple clicks
+        mServiceListView.setChoiceMode( ListView.CHOICE_MODE_MULTIPLE );
         //attach the data base reader listener to display the latest clients records
         attachServiceDatabaseReadListener();
 
-        dialog.show();//display the dialog
+        mServiceListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                CheckedTextView ctv = (CheckedTextView) view;
+                Service service = (Service) parent.getItemAtPosition(position);
+
+                if (ctv.isChecked()) {
+                    //store the selescted services numbers in arraylist
+                    serviceNumsFromDialog.add(service.getServiceNum());
+                    toastMessage( service.getServiceNum() + " is added" );
+
+                } else {
+
+                    //remove that object
+                    serviceNumsFromDialog.remove(service.getServiceNum());
+                    toastMessage( service.getServiceNum() + " is removed" );
+                }
+            }
+        } );
+
+        alertDialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                 mServiceAdapter.setSelectedServices( serviceNumsFromDialog );
+                for(String serviceNum : mServiceAdapter.getSelectedServices())
+                {
+                    Log.v("when we press doneXXX", "service Number" + serviceNum);
+                }
+            }
+        });
+
+        alertDialogBuilder.show();//display the dialog
 
     }
 
-    /*public void createNewInvoice(String clientID, ArrayList<String> serviceIds) {
-        //get the elements in the dialog
-       String firstName = mFirstNameEditText.getText().toString();
-        String lastName = mLastNameEditText.getText().toString();
-        //....the rest of infos
-
-        //Check if the user enterd either the first or the last name
-        if (firstName.trim().length() > 0 || lastName.trim().length() > 0) {
-            String key = mClientDatabaseReference.push().getKey();
-            String company = mCompanyEditText.getText().toString();
-           *//*
-
-            // get user input and set it to result
-            // edit text
-            Client client = new Client( firstName, lastName );
-            mClientDatabaseReference.child( key ).child( "firstName" ).setValue( firstName );
-            mClientDatabaseReference.child( key ).child( "lastName" ).setValue( lastName );*//*
-
-            Invoice invoice = new Invoice(clientID, serviceIds);
-            mClientDatabaseReference.child(key).setValue(invoice);
-            //mClientDatabaseReference.child(key).child( "companyName" ).setValue(company);
-            toastMessage("New Invoice has been saved.");
-            mFirstNameEditText.setText("");
-            mLastNameEditText.setText("");
-
-            //Go back to client fragment
-            Intent intent = new Intent(this,MainActivity.class);
-            intent.putExtra("fragmentName","invoiceFragment");
-            startActivity(intent);
-
-        } else {
-            //else tell the user that there is an error
-            toastMessage( "Enter customer name or company name" );
-        }
-
+    public void createNewInvoice(String clientID, ArrayList<String> serviceIds) {
+      //use the list of orders we created in createOrderList to create the new invoice
+        //with the extra information payments, dates, and client num, etc
     }
 
-*/
+
+
+    private void createOrderList()
+    {
+        //list of orders for each selected service(s)
+        //ServiceName, serviceNum, ServicePrice
+        //store the list of orders in database each with unique number
+        //use these numbers to create invoice (invoice is list of order(s) adding invoice number
+        // and issue date and due date as extra information)
+    }
     private void detachServiceDatabaseReadListener() {
         if (mServiceEventListener != null) {
 
