@@ -28,26 +28,18 @@ public class InvoiceAdapter extends ArrayAdapter<Invoice> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.client_item,
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.invoice_item,
                     parent, false);
         }
         //Find the current object
         final Invoice invoice = getItem(position);
         //Find the First and Last name TextViews
-        TextView name = (TextView) convertView.findViewById(R.id.name_text_view_item);
+        //TextView name = (TextView) convertView.findViewById(R.id.name_text_view_item);
         TextView total = (TextView) convertView.findViewById(R.id.total_text);
 
         //supply the textViews with the correct data
         assert invoice != null;
-        //name.setText(invoice.getFirstName() + " " + client.getLastName());
-        total.setText("500");//TESTTING
-        //Check if there is a company name to display
-       /* if(client.getmCompanyName().toString().trim().length() > 0) {
-            companyName.setVisibility(View.VISIBLE);
-
-        }else {
-            companyName.setVisibility(View.GONE);
-        }*/
+       total.setText( "₺" + String.valueOf( invoice.getTotal() ));
 
         return convertView;
     }

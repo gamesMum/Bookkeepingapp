@@ -26,6 +26,7 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="@string/invoice_number"
+        android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/darker_gray" />
 
     <TextView
@@ -38,6 +39,7 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:paddingBottom="@dimen/virtical_padding"
+        android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/black"
         tools:text="00001" />
 
@@ -66,6 +68,7 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:text="@string/issue_date_text"
+        android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/darker_gray" />
 
     <TextView
@@ -78,6 +81,7 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:paddingBottom="@dimen/virtical_padding"
+        android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/black"
         tools:text="12/1/2018" />
 
@@ -91,6 +95,7 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:text="@string/due_date_text"
+        android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/darker_gray" />
 
     <TextView
@@ -103,6 +108,7 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:paddingBottom="@dimen/virtical_padding"
+        android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/black"
         tools:text="12/1/2018" />
 
@@ -115,26 +121,27 @@
         android:background="@android:color/darker_gray"></View>
 
     <TextView
-    android:id="@+id/services_add"
-    android:layout_width="500dp"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/add_client_divider"
+        android:id="@+id/services_add"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_client_divider"
 
-    android:paddingLeft="40dp"
-    android:paddingStart="40dp"
-    android:paddingTop="@dimen/virtical_padding"
-    android:lines="4"
-    android:maxLines="4"
-    android:text="@string/service_add"
-    android:textAppearance="?android:textAppearanceMedium" />
+        android:lines="4"
+        android:maxLines="4"
+        android:paddingLeft="40dp"
+        android:paddingStart="40dp"
+        android:paddingTop="@dimen/virtical_padding"
+        android:text="@string/service_add"
+        android:textAppearance="?android:textAppearanceMedium" />
+
     <TextView
         android:id="@+id/services_add_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/services_add"
         android:layout_below="@id/add_client_divider"
-        android:paddingRight="@dimen/horizontal_padding"
+        android:layout_toRightOf="@id/services_add"
         android:paddingEnd="@dimen/horizontal_padding"
+        android:paddingRight="@dimen/horizontal_padding"
         android:paddingTop="@dimen/virtical_padding"
         android:textAppearance="?android:textAppearanceMedium" />
 
@@ -167,6 +174,7 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="@string/total_text"
+        android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/darker_gray" />
 
     <TextView

@@ -23,7 +23,8 @@
         <activity android:name=".ViewClientActivity" />
         <activity android:name=".EditClientActivity" />
         <activity android:name=".AddServiceActivity" />
-        <activity android:name=".ViewServiceActivity"></activity>
+        <activity android:name=".ViewServiceActivity" />
+        <activity android:name=".ViewInvoiceActivity"></activity>
     </application>
 
 </manifest>

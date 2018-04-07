@@ -11,8 +11,8 @@ import java.util.Calendar;
  */
 
 public class Invoice {
-    private static long invoiceNumber;
 
+    private String invoiceNumber;
     private ArrayList<String> orderNums;
     private ArrayList<String> paymentNums;
     private String clientID;
@@ -31,28 +31,31 @@ public class Invoice {
 
     private final String NO_PAYMENTS = "n/y";
 
-
-    Invoice(String clientID, ArrayList<String> orderNum)
+    Invoice()
     {
-        int count = 0;
+
+    }
+    Invoice(String invoiceNumber, String clientID, ArrayList<String> orderNum,
+            String issueDate, String dueDate, double total)
+    {
+        this.invoiceNumber = invoiceNumber;
         this.clientID = clientID;
-        //by default the due date is after 15 days
-        this.dueDate = setDueDateAfter( getIssueDate(), 15 );
-        //get the current system date
-        this.issueDate = getCurrentDate();
+        this.dueDate = dueDate;
+        this.issueDate = issueDate;
+
+        this.total = total;
 
         //pass the services we will provide in this invoice
         this.orderNums = orderNum;
         this.paid = NOT_PAID;
-        this.paymentNums.add(NO_PAYMENTS);
+        //this.paymentNums.add(NO_PAYMENTS);
 
-        //start with Id number 1
-        this.invoiceNumber = count++; //increase the Id with each object
+
 
     }
 
     //*********Getters************************************************//
-    public static long getInvoiceNumber() {
+    public String getInvoiceNumber() {
         return invoiceNumber;
     }
 
@@ -76,16 +79,9 @@ public class Invoice {
         return paymentNums;
     }
 
-    //give it the services to calculate the total
-    public double getInvoiceTotal(ArrayList<Order> orders) {
-        double invoiceTotal = 0;
-        //the sum of all the services for this invoice
-        for(Order order : orders) {
-           //invoiceTotal += order.getTotal();
-        }
-        return invoiceTotal;
+    public double getTotal() {
+        return total;
     }
-
 
     public int getInvoiceStatus()
     {
@@ -97,13 +93,6 @@ public class Invoice {
             return 1;//IS PAID
     }
 
-    private String getCurrentDate()
-    {
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat mdformat = new SimpleDateFormat("yyyy / MM / dd ");
-        String strDate = mdformat.format(calendar.getTime());
-        return strDate;
-    }
     //****************************************************************//
 
 
@@ -114,27 +103,6 @@ public class Invoice {
      * Get the system date (using it for the issue date)
      * @return
      */
-
-    //get the date after the desired number of days
-    //this is the Due date for the invoice
-    public String setDueDateAfter(String date, int days)
-    {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy / MM / dd");
-        Calendar c = Calendar.getInstance();
-        try {
-            c.setTime(sdf.parse(issueDate));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        //add the number of days for the invoice over due
-        c.add(Calendar.DAY_OF_MONTH, days);
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy / MM / dd ");
-        //get the date in the correct format
-        date = sdf1.format(c.getTime());
-
-        return date;
-    }
 
     /**
      *

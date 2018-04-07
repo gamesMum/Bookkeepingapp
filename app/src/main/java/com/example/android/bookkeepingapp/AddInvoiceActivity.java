@@ -58,6 +58,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
     private ListView mClientListView;
     private ListView mServiceListView;
     private TextView mServicePriceTextView;
+    private TextView mInvoiceNumberTextView;
     private ProgressBar mProgressBar;
 
 
@@ -86,7 +87,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
     private ArrayList<Order> orderArrayList;
     //the invoice object that will contain the list of orders
     private Invoice invoice;
-    private int toltalPrice;
+    private   String keyInvoice;
+    private double toltalPrice;
     //**************************************************
     private ChildEventListener mChiltEventListener;
     private ChildEventListener mServiceEventListener;
@@ -97,6 +99,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_add_invoice );
+        //Create new Invoice instence with giving the first Id
+        mInvoiceNumberTextView = (TextView) findViewById( R.id.invoice_number_text_value );
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById( R.id.toolbar_invoice );
@@ -115,6 +119,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
         mClientDialogProgressBar = null;
 
         serviceNumsFromDialog = new ArrayList<String>(  );
+        clientIdFromDialog = "";
         orderArrayList = new ArrayList<Order>( );
 
         //set the values for the issue date and due date textviews
@@ -143,7 +148,10 @@ public class AddInvoiceActivity extends AppCompatActivity {
         mServiceDatabaseReference = mFirebaseDatabase.getReference().
                 child( userID ).child( "service" );
 
-
+        //get new key for the invoice to display it in the text view
+         keyInvoice = mInvoiceDatabaseReference.push().getKey();
+        //set the text to that number
+        mInvoiceNumberTextView.setText( keyInvoice );
         //set click listeners on textViews (mClientTextView and mServicesTextView)
         mClientTextView.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -252,7 +260,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
             public void onCancel(DialogInterface dialog) {
                 //toastMessage( "OnCancelListener" );
                 //use client id from dialog when the dialog is cloased
-                if(clientIdFromDialog != null) {
+                if(clientIdFromDialog.length() != 0) {
                     mClientDatabaseReference.addValueEventListener( new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -269,7 +277,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
                         }
                     } );
-                }
+                }else
+                    mClientTextView.setText( R.string.add_client_text );
 
                 //detach database reader on canceling
                 detachDatabaseReadListener();
@@ -401,6 +410,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
                     mServiceDatabaseReference.addValueEventListener( new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            toltalPrice = 0;
                             // This method is called once with the initial value and again
                             // whenever data at this location is updated.
                             //for every service selected by the user, display the name
@@ -415,7 +425,6 @@ public class AddInvoiceActivity extends AppCompatActivity {
                             }
                             //set the text View with the total value
                             mTotalTextView.setText( "₺" + String.valueOf(toltalPrice) );
-                            toltalPrice = 0;
                         }
 
                         @Override
@@ -538,22 +547,35 @@ public class AddInvoiceActivity extends AppCompatActivity {
             for(String s: serviceNumsFromDialog)
             {
                 //generate new key for each order
-                String key = mClientDatabaseReference.push().getKey();
-                //TODO add quantity later for each service ordered
-                Order order = new Order(key,clientIdFromDialog, s );
+                String keyOrder = mOrderDatabaseReference.push().getKey();
+                //TODO 1: add quantity later for each service ordered
+                //TODO 2: multiply the each service price by its quantity
+                //TODO 3: get the total price depending on quantity
+                //TODO 4: delete the order(s) before deleting the invoice
+
+                Order order = new Order(keyOrder,clientIdFromDialog, s );
                 Log.v(TAG, "list of orders " + order.toString());
                 orderArrayList.add(order);//use this to get total and create invoice
-
-                //get the total price
-                //for()
+                //fetch order numbers from arrayList
+                ArrayList<String> orderNums = new ArrayList<String>(  );
+                for(Order o : orderArrayList)
+                {
+                    orderNums.add(o.getOrderNum());
+                }
                 //Create the new Invoice
-
+                invoice = new Invoice(keyInvoice, clientIdFromDialog.toString(), orderNums,
+                        mIssueDateTextView.toString(), mDueDateTextView.toString(), toltalPrice );
                 //store order in database when invoice is saved and created
-                //mOrderDatabaseReference.child(key).setValue(order);
+                mOrderDatabaseReference.child(keyOrder).setValue(order);
+                //store the Invoice in the database
+                mInvoiceDatabaseReference.child( keyInvoice ).setValue( invoice );
                 toastMessage( "New Invoice is created" );
 
-                //
-                this.finish();
+                //Go back to Invoice fragment
+                Intent intent = new Intent(this,MainActivity.class);
+                intent.putExtra("fragmentName","invoiceFragment"); //for example
+                startActivity(intent);
+
             }
 
 
