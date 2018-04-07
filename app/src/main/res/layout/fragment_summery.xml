@@ -5,89 +5,99 @@
     android:orientation="vertical"
     tools:context="com.example.android.bookkeepingapp.SummeryFragment">
 
-    <android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/invoice_sum_card_view"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:layout_gravity="center"
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-        android:layout_weight="1"
-    card_view:cardElevation = "1dp"
-    card_view:cardBackgroundColor="@color/backCard">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
         <TextView
             android:id="@+id/invoice_not_paied_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/horizontal_padding"
             android:paddingBottom="@dimen/virtical_padding"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:textStyle="bold"
+            android:padding="@dimen/virtical_padding"
+            android:textColor="@android:color/holo_orange_dark"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Due Date Invoices" />
-        <TextView
-            android:id="@+id/invoice_not_paied"
+            android:text="Check Invoices Status" />
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="horizontal">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/virtical_padding"
+        android:src="@drawable/red_sq"/>
+    <TextView
+        android:id="@+id/invoice_over_due"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="@dimen/virtical_padding"
+        android:layout_below="@id/invoice_not_paied_text"
+        android:paddingRight="@dimen/horizontal_padding"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/darker_gray"
+        android:text="1 Over due invoice(s)" />
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:padding="@dimen/virtical_padding"
+            android:src="@drawable/yellow_sq"/>
+        <TextView
+            android:id="@+id/invoice_not_paied"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/darker_gray"
+            android:padding="@dimen/virtical_padding"
             android:layout_below="@id/invoice_not_paied_text"
             android:paddingRight="@dimen/horizontal_padding"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="You have: 2 Due date invoice(s)" />
-
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+            android:text="3 Due date invoice(s)" />
+    </LinearLayout>
+</LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/client_add"
         android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:background="@android:color/darker_gray"
         ></View>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Profits"
+    android:layout_gravity="center"
+    android:textStyle="bold"
+    android:textColor="@android:color/holo_green_dark"
+    android:textAppearance="?android:textAppearanceLarge"
+    />
+           <ImageView
+               android:layout_width="wrap_content"
+               android:layout_height="0dp"
+               android:layout_weight="1"
+               android:scaleType="centerCrop"
+               android:layout_marginRight="@dimen/activity_horizontal_margin"
+               android:layout_marginEnd="@dimen/activity_horizontal_margin"
+               android:layout_marginLeft="@dimen/activity_horizontal_margin"
+               android:layout_marginStart="@dimen/activity_horizontal_margin"
+               android:src="@drawable/chart_test"/>
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profits_card_view"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        card_view:cardElevation = "1dp"
-        card_view:cardBackgroundColor="@color/backCard">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/profits_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/horizontal_padding"
-                android:paddingBottom="@dimen/virtical_padding"
-                android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Your Profits" />
 
-            <TextView
-                android:id="@+id/profits_text_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_below="@id/profits_text"
-                android:paddingRight="@dimen/horizontal_padding"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="$1000" />
-
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
 
     <View
         android:layout_width="match_parent"
@@ -97,19 +107,7 @@
         android:background="@android:color/darker_gray"
         ></View>
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/send_email"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        card_view:cardElevation = "1dp"
-        card_view:cardBackgroundColor="@color/backCard">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+
             <TextView
                 android:id="@+id/others_text"
                 android:layout_width="wrap_content"
@@ -119,20 +117,21 @@
                 android:paddingRight="@dimen/horizontal_padding"
                 android:paddingBottom="@dimen/virtical_padding"
                 android:textStyle="bold"
+                android:textColor="@android:color/holo_red_dark"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Other things to do" />
+                android:text="Expenses" />
 
             <TextView
                 android:id="@+id/email_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_below="@id/others_text"
                 android:paddingRight="@dimen/horizontal_padding"
+                android:textColor="@android:color/darker_gray"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Send email" />
+                android:text="Create new expenses" />
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
 </LinearLayout>

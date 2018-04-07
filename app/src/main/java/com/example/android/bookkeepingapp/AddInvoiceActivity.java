@@ -57,6 +57,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ListView mClientListView;
     private ListView mServiceListView;
+    private TextView mServicePriceTextView;
     private ProgressBar mProgressBar;
 
 
@@ -73,13 +74,19 @@ public class AddInvoiceActivity extends AppCompatActivity {
     private DatabaseReference mInvoiceDatabaseReference;
     private DatabaseReference mClientDatabaseReference;
     private DatabaseReference mServiceDatabaseReference;
+    private DatabaseReference mOrderDatabaseReference;
     private ClientAdapter mClientAdapter;
     private ServiceAdapterCheckBox mServiceAdapter;
     ProgressBar mClientDialogProgressBar;
     ProgressBar mServiceDialogProgressBar;
-    String clientIdFromDialog;
+    private String clientIdFromDialog;
     //store the selected services in Array list of String
     private ArrayList<String> serviceNumsFromDialog;
+    //List of orders for each service
+    private ArrayList<Order> orderArrayList;
+    //the invoice object that will contain the list of orders
+    private Invoice invoice;
+    private int toltalPrice;
     //**************************************************
     private ChildEventListener mChiltEventListener;
     private ChildEventListener mServiceEventListener;
@@ -102,10 +109,13 @@ public class AddInvoiceActivity extends AppCompatActivity {
         mIssueDateTextView = (TextView) findViewById( R.id.issue_date_text_value );
         mDueDateTextView = (TextView) findViewById( R.id.due_date_text_value );
         mServicesTextView = (TextView) findViewById( R.id.services_add );
+        mServicePriceTextView = (TextView) findViewById( R.id.services_add_price );
         mTotalTextView = (TextView) findViewById( R.id.invoice_total_value );
         mNotesEditText = (EditText) findViewById( R.id.notes_add_edit_text );
         mClientDialogProgressBar = null;
+
         serviceNumsFromDialog = new ArrayList<String>(  );
+        orderArrayList = new ArrayList<Order>( );
 
         //set the values for the issue date and due date textviews
         //Due date default is same date of issue
@@ -123,6 +133,9 @@ public class AddInvoiceActivity extends AppCompatActivity {
         //get the data for stored invoices for the logged in user
         mInvoiceDatabaseReference = mFirebaseDatabase.getReference().
                 child( userID ).child( "invoice" );
+        //get the data for stored invoices for the logged in user
+        mOrderDatabaseReference = mFirebaseDatabase.getReference().
+                child( userID ).child( "order" );
         //get the data for stored clients for the logged in user
         mClientDatabaseReference = mFirebaseDatabase.getReference().
                 child( userID ).child( "client" );
@@ -236,7 +249,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
             @Override
             public void onCancel(DialogInterface dialog) {
-                toastMessage( "OnCancelListener" );
+                //toastMessage( "OnCancelListener" );
                 //use client id from dialog when the dialog is cloased
                 if(clientIdFromDialog != null) {
                     mClientDatabaseReference.addValueEventListener( new ValueEventListener() {
@@ -266,7 +279,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
             @Override
             public void onDismiss(DialogInterface dialog) {
-                toastMessage( "OnDismissListener" );
+                //toastMessage( "OnDismissListener" );
                 //detach database reader on dismissing
 
 
@@ -322,7 +335,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
             @Override
             public void onCancel(DialogInterface dialog) {
-                toastMessage( "OnCancelListener" );
+              //  toastMessage( "OnCancelListener" );
                 //detach database reader on canceling
                 detachServiceDatabaseReadListener();
             }
@@ -332,7 +345,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
             @Override
             public void onDismiss(DialogInterface dialog) {
-                toastMessage( "OnDismissListener" );
+               // toastMessage( "OnDismissListener" );
                 //detach database reader on dismissing
                 detachServiceDatabaseReadListener();
             }
@@ -351,8 +364,9 @@ public class AddInvoiceActivity extends AppCompatActivity {
         mServiceListView.setItemsCanFocus( false );
         // we want multiple clicks
         mServiceListView.setChoiceMode( ListView.CHOICE_MODE_MULTIPLE );
-        //attach the data base reader listener to display the latest clients records
+        //attach the data base reader listener to display the services
         attachServiceDatabaseReadListener();
+
 
 
         mServiceListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
@@ -365,46 +379,70 @@ public class AddInvoiceActivity extends AppCompatActivity {
                 if (ctv.isChecked()) {
                     //store the selescted services numbers in arraylist
                     serviceNumsFromDialog.add(service.getServiceNum());
-                    toastMessage( service.getServiceNum() + " is added" );
+                    //toastMessage( service.getServiceNum() + " is added" );
 
                 } else {
 
                     //remove that object
                     serviceNumsFromDialog.remove(service.getServiceNum());
-                    toastMessage( service.getServiceNum() + " is removed" );
+                    //toastMessage( service.getServiceNum() + " is removed" );
                 }
             }
         } );
 
         alertDialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                 mServiceAdapter.setSelectedServices( serviceNumsFromDialog );
-                for(String serviceNum : mServiceAdapter.getSelectedServices())
-                {
-                    Log.v("when we press doneXXX", "service Number" + serviceNum);
+
+                //if there is service(s) selected
+                if(serviceNumsFromDialog.size() != 0) {
+                    //remove the initial text
+                    mServicesTextView.setText( "" );
+                    mServiceDatabaseReference.addValueEventListener( new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+                            //for every service selected by the user, display the name
+                            for(String s : serviceNumsFromDialog) {
+                                Service service = new Service();
+                                service.setServiceName( dataSnapshot.child( s ).getValue( Service.class ).getServiceName() ); //set the name
+                                service.setServicePrice( dataSnapshot.child( s ).getValue(Service.class).getServicePrice() );
+                                //take the sum of all the services
+                                toltalPrice += service.getServicePrice();
+                                mServicesTextView.append( "- " + service.getServiceName() + "\n");
+                                mServicePriceTextView.append("₺" + service.getServicePrice()+ "\n");
+                            }
+                            //set the text View with the total value
+                            mTotalTextView.setText( "₺" + String.valueOf(toltalPrice) );
+                            toltalPrice = 0;
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    } );
                 }
+                else
+                {
+                    //if there is no service selected reset text views
+                    mServicesTextView.setText( R.string.service_add );
+                    mTotalTextView.setText( " ₺0" );
+                    toltalPrice = 0;
+                }
+
             }
+
         });
 
         alertDialogBuilder.show();//display the dialog
 
     }
 
-    public void createNewInvoice(String clientID, ArrayList<String> serviceIds) {
-      //use the list of orders we created in createOrderList to create the new invoice
-        //with the extra information payments, dates, and client num, etc
-    }
 
 
 
-    private void createOrderList()
-    {
-        //list of orders for each selected service(s)
-        //ServiceName, serviceNum, ServicePrice
-        //store the list of orders in database each with unique number
-        //use these numbers to create invoice (invoice is list of order(s) adding invoice number
-        // and issue date and due date as extra information)
-    }
+
     private void detachServiceDatabaseReadListener() {
         if (mServiceEventListener != null) {
 
@@ -420,6 +458,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
             mChiltEventListener = null;
         }
     }
+
+
 
     private void attachServiceDatabaseReadListener() {
         if (mServiceEventListener == null) {
@@ -485,6 +525,42 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
     }
 
+    //create list of the orders (for each service, quantity, and price)
+    //create new Invoice contains the list of orders
+    public void createNewInvoice()
+    {
+        //Check if the client and services are selected (not empty)
+        if(clientIdFromDialog.length() != 0 && serviceNumsFromDialog.size() != 0)
+        {
+            //Create new Order object passing the information provided by the user
+            //create order for every service and add it to the ordet list
+            for(String s: serviceNumsFromDialog)
+            {
+                //generate new key for each order
+                String key = mClientDatabaseReference.push().getKey();
+                //TODO add quantity later for each service ordered
+                Order order = new Order(key,clientIdFromDialog, s );
+                Log.v(TAG, "list of orders " + order.toString());
+                orderArrayList.add(order);//use this to get total and create invoice
+
+                //get the total price
+                //for()
+                //Create the new Invoice
+
+                //store order in database when invoice is saved and created
+                //mOrderDatabaseReference.child(key).setValue(order);
+                toastMessage( "New Invoice is created" );
+
+                //
+                this.finish();
+            }
+
+
+        }
+        else
+            toastMessage( "Please pick a client and service!" );
+    }
+
     //get the date after the desired number of days
     //this is the Due date for the invoice
     public String setDueDateAfter( int days)
@@ -537,7 +613,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                //createNewInvoice("", {"",""});
+                createNewInvoice();
             default:
                 return super.onOptionsItemSelected( item );
         }

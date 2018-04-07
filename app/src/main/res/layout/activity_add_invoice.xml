@@ -14,8 +14,7 @@
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:title="@string/invoice_new"
-        app:titleTextColor="@android:color/white"
-        />
+        app:titleTextColor="@android:color/white" />
 
     <TextView
         android:id="@+id/invoice_number_text"
@@ -33,8 +32,8 @@
         android:id="@+id/invoice_number_text_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/invoice_number_text"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
@@ -46,12 +45,15 @@
         android:id="@+id/client_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/invoice_number_text"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:background="@drawable/dotted_square"
         android:gravity="center"
-        android:hint="@string/add_client_text" />
+        android:hint="@string/add_client_text"
+        android:textAppearance="?android:textAppearanceMedium" />
 
 
     <TextView
@@ -60,9 +62,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@id/invoice_number_text_value"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-      android:layout_below="@id/invoice_number_text_value"
         android:text="@string/issue_date_text"
         android:textColor="@android:color/darker_gray" />
 
@@ -70,8 +72,8 @@
         android:id="@+id/issue_date_text_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/issue_date_text"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
@@ -85,9 +87,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@id/issue_date_text_value"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-       android:layout_below="@id/issue_date_text_value"
         android:text="@string/due_date_text"
         android:textColor="@android:color/darker_gray" />
 
@@ -95,32 +97,46 @@
         android:id="@+id/due_date_text_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/due_date_text"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:textColor="@android:color/black"
         android:paddingBottom="@dimen/virtical_padding"
+        android:textColor="@android:color/black"
         tools:text="12/1/2018" />
-<View
-    android:id="@+id/add_client_divider"
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:layout_below="@id/client_add"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:background="@android:color/darker_gray"
-    ></View>
+
+    <View
+        android:id="@+id/add_client_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/client_add"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@android:color/darker_gray"></View>
 
     <TextView
-        android:id="@+id/services_add"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
+    android:id="@+id/services_add"
+    android:layout_width="500dp"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/add_client_divider"
 
+    android:paddingLeft="40dp"
+    android:paddingStart="40dp"
+    android:paddingTop="@dimen/virtical_padding"
+    android:lines="4"
+    android:maxLines="4"
+    android:text="@string/service_add"
+    android:textAppearance="?android:textAppearanceMedium" />
+    <TextView
+        android:id="@+id/services_add_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/services_add"
         android:layout_below="@id/add_client_divider"
-        android:gravity="center"
-        android:background="@drawable/dotted_square"
-        android:text="@string/service_add" />
+        android:paddingRight="@dimen/horizontal_padding"
+        android:paddingEnd="@dimen/horizontal_padding"
+        android:paddingTop="@dimen/virtical_padding"
+        android:textAppearance="?android:textAppearanceMedium" />
 
     <View
         android:id="@+id/service_divider"
@@ -128,15 +144,17 @@
         android:layout_height="1dp"
         android:layout_below="@id/services_add"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:background="@android:color/darker_gray"
-        ></View>
+        android:background="@android:color/darker_gray"></View>
 
     <EditText
         android:id="@+id/notes_add_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/service_divider"
-        android:hint="@string/notes_text"/>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/service_divider"
+        android:hint="@string/notes_text"
+        android:textAppearance="?android:textAppearanceLarge" />
 
     <TextView
         android:id="@+id/invoice_total_text"
@@ -144,10 +162,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@id/notes_add_edit_text"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_below="@id/notes_add_edit_text"
         android:text="@string/total_text"
         android:textColor="@android:color/darker_gray" />
 
@@ -155,11 +173,12 @@
         android:id="@+id/invoice_total_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/invoice_total_text"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/black"
         tools:text="$500" />
 

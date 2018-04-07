@@ -52,27 +52,6 @@ public class ServiceAdapterCheckBox extends ArrayAdapter<Service> {
         assert service != null;
 
         serviceName.setText( service.getServiceName() );
-       // ((ListView) parent).setItemChecked(position, true);
-
-      /* ((ListView) parent).setOnItemClickListener( new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for (String s : selectedServices) {
-                    Log.v("AdapterXXX", "the list" + s);
-                   *//* if () {
-                        //store the selescted services numbers in arrayList
-                        selectedServices.add( service.getServiceNum() );
-                        toastMessage( service.getServiceNum() + " is added" );
-                    } else {
-
-                        //remove that object
-                        selectedServices.remove( service.getServiceNum() );
-                        toastMessage( service.getServiceNum() + " is removed" );
-                    }
-                    // ((ListView) parent).setItemChecked(position, true);*//*
-                }
-            }
-        } );*/
 
         //iterate through the list of selected services
         //check if it is already selected

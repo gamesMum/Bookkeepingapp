@@ -37,4 +37,12 @@ public class Service {
     public String getServiceNotes() {
         return serviceNotes;
     }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public void setServicePrice(double servicePrice) {
+        this.servicePrice = servicePrice;
+    }
 }

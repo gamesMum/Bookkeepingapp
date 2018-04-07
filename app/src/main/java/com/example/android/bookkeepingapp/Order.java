@@ -18,6 +18,14 @@ public class Order {
         this.clientId = clientId;
     }
 
+    Order(String orderNum, String clientId, String serviceNum)
+    {
+        this.orderNum = orderNum;
+        this.serviceNum = serviceNum;
+        this.quantity = 1;
+        this.clientId = clientId;
+    }
+
     /**use this to get the service price, name
      *
      * @return
@@ -46,10 +54,11 @@ public class Order {
         this.quantity = quantity;
     }
 
-    public void setServiceNum(String serviceNum) {
-        this.serviceNum = serviceNum;
+    @Override
+    public String toString() {
+        return "Order{" + "clientId='" + clientId + '\'' +
+                ", orderNum='" + orderNum + '\'' + ", serviceNum='" +
+                serviceNum + '\'' + ", quantity=" + quantity + '}';
     }
-
-
 }
 
