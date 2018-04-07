@@ -354,7 +354,6 @@ public class AddInvoiceActivity extends AppCompatActivity {
         //attach the data base reader listener to display the latest clients records
         attachServiceDatabaseReadListener();
 
-
         mServiceListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
