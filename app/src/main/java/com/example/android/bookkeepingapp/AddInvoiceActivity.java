@@ -231,6 +231,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
         } ).create().show();
 
 
+
     }
 
     //helping method to create, populate and showing the client dialog box
