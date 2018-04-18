@@ -1,4 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string-array name="country_arrays">
+        <item>Malaysia</item>
+        <item>United States</item>
+        <item>Indonesia</item>
+        <item>France</item>
+        <item>Italy</item>
+        <item>Singapore</item>
+        <item>New Zealand</item>
+        <item>India</item>
+        <item>Iraq</item>
+        <item>Turkey</item>
+    </string-array>
+    <string name="country_prompt">Choose a country</string>
     <string name="app_name">TRACK</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="auth_failed">Authentication error, Please enter a valid email and password or sign up</string>
@@ -18,13 +33,18 @@
     <string name="enter_listItem_text">New Client</string>
     <string name="summery_text">Summery</string>
     <string name="invoices_text">Invoices</string>
+
+    <string name="Service_view_text">View Service</string>
+    <string name="clints_view_text">View Client</string>
     <string name="clints_text">Clients</string>
     <string name="service_text">Services</string>
     <string name="expendings_text">Expenses</string>
     <string name="clients_add">Add Client</string>
     <string name="service_add">Add Service</string>
+    <string name="service_edit">Edit Service</string>
     <string name="clients_edit">Edit Client</string>
     <string name="menu_delete">Delete</string>
+    <string name="menu_pay">Mark as Paid</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_save">Save</string>
@@ -57,10 +77,14 @@
     <string name="city_edit">City(Optional)</string>
     <string name="company_edit">Company(Optional)</string>
 
+
+    <string name="green_stripe">Paid</string>
+    <string name="yellow_stripe">Not Paid</string>
+    <string name="red_stripe">Over Due</string>
+
+
     <!--to solve the rendering issue id/invisible-->
     <item name="visible" type="id" />
     <item name="masked" type="id" />
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

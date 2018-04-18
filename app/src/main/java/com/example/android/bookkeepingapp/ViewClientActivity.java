@@ -21,12 +21,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 public class ViewClientActivity extends AppCompatActivity {
 
     private String TAG = "ViewClientActivity";
     private Toolbar toolbar;
     private TextView mClientName;
     private TextView mCompany;
+    private TextView mPhoneNumber;
+    private TextView mEmail;
+    private TextView mAddress;
+    private TextView mCountry;
     private String extras;
 
     // Firebase instance variables
@@ -45,7 +51,7 @@ public class ViewClientActivity extends AppCompatActivity {
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar_1);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getString(R.string.clints_text));
+        toolbar.setTitle(getString(R.string.clints_view_text));
         toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
 
         ActionBar actionbar = getSupportActionBar();
@@ -64,7 +70,10 @@ public class ViewClientActivity extends AppCompatActivity {
 
         mClientName = (TextView) findViewById( R.id.name_text_view );
         mCompany = (TextView) findViewById( R.id.company_text_view );
-
+        mEmail = (TextView) findViewById( R.id.email_text_view );
+        mAddress = (TextView) findViewById( R.id.address_text );
+        mPhoneNumber = (TextView) findViewById( R.id.phone_text_view );
+        mCountry = (TextView) findViewById( R.id.email_text_view );
         mClientDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -73,9 +82,30 @@ public class ViewClientActivity extends AppCompatActivity {
                Client client = new Client(  );
                client.setFirstName( dataSnapshot.child(extras).getValue(Client.class).getFirstName()); //set the name
                 client.setLastName( dataSnapshot.child(extras).getValue(Client.class).getLastName()); //set the name
-                mClientName.setText( client.getFirstName() + " " + client.getLastName() );
+                if(client.getFirstName() != null || client.getLastName() != null) {
+                    mClientName.setText( client.getFirstName() + " " + client.getLastName() );
+                }
                 client.setCompanyName( dataSnapshot.child(extras).getValue(Client.class).getCompanyName());
-                mCompany.setText( client.getCompanyName() );
+
+                if(client.getCompanyName() != null) {
+                    mCompany.append( client.getCompanyName() );
+                }
+                client.setAddress( dataSnapshot.child(extras).getValue(Client.class).getAddress());
+                if(client.getAddress() != null) {
+                    mAddress.append( client.getAddress() );
+                }
+                client.setPhoneNumber( dataSnapshot.child(extras).getValue(Client.class).getPhoneNumber());
+                if(client.getPhoneNumber() != null) {
+                    mPhoneNumber.append( client.getPhoneNumber() );
+                }
+                client.setEmail( dataSnapshot.child(extras).getValue(Client.class).getEmail());
+                if(client.getEmail() != null) {
+                    mEmail.append( client.getEmail() );
+                }
+                client.setCountry( dataSnapshot.child(extras).getValue(Client.class).getCountry());
+                if(client.getCountry() != null) {
+                    mCountry.append( client.getCountry() );
+                }
             }
 
             @Override

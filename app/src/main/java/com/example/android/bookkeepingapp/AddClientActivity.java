@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
@@ -25,6 +26,8 @@ public class AddClientActivity extends AppCompatActivity {
     private EditText mCompanyEditText;
     private EditText mEmailEditText;
     private EditText mPhoneNumber;
+    private EditText mAddressEditText;
+    private Spinner mCountrySpinner;
     private Toolbar toolbar;
 
 
@@ -55,6 +58,8 @@ public class AddClientActivity extends AppCompatActivity {
         mCompanyEditText = (EditText) findViewById( R.id.company_add );
         mEmailEditText = (EditText) findViewById( R.id.email_add );
         mPhoneNumber = (EditText) findViewById( R.id.phone_add );
+        mAddressEditText = (EditText) findViewById( R.id.street_add );
+        mCountrySpinner = (Spinner) findViewById( R.id.city_add_spinner );
 
         //declare the database reference object. This is what we use to access the database.
         //NOTE: Unless you are signed in, this will not be useable.
@@ -88,6 +93,10 @@ public class AddClientActivity extends AppCompatActivity {
         if (firstName.trim().length() > 0 || lastName.trim().length() > 0) {
             String key = mClientDatabaseReference.push().getKey();
             String company = mCompanyEditText.getText().toString();
+            String email = mEmailEditText.getText().toString();
+            String phoneNumber = mPhoneNumber.getText().toString();
+            String address = mAddressEditText.getText().toString();
+            String country = String.valueOf( mCountrySpinner.getSelectedItem() );
            /*
 
             // get user input and set it to result
@@ -99,6 +108,10 @@ public class AddClientActivity extends AppCompatActivity {
             Client client = new Client(key, firstName,lastName);
             mClientDatabaseReference.child(key).setValue(client);
             mClientDatabaseReference.child(key).child( "companyName" ).setValue(company);
+            mClientDatabaseReference.child(key).child( "email" ).setValue(email);
+            mClientDatabaseReference.child(key).child( "phoneNumber" ).setValue(phoneNumber);
+            mClientDatabaseReference.child(key).child( "address" ).setValue(address);
+            mClientDatabaseReference.child(key).child( "country" ).setValue(country);
             toastMessage("New Client has been saved.");
             mFirstNameEditText.setText("");
             mLastNameEditText.setText("");

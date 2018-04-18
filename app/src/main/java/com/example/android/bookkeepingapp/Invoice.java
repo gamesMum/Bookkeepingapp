@@ -83,6 +83,10 @@ public class Invoice {
         return total;
     }
 
+    public int getIsPaid() {
+        return paid;
+    }
+
     public int getInvoiceStatus()
     {
         if(paid == NOT_PAID)
@@ -91,6 +95,34 @@ public class Invoice {
             return -1;
         else
             return 1;//IS PAID
+    }
+
+    public void setClientID(String clientID) {
+        this.clientID = clientID;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+
+    public void setIssueDate(String issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public void setOrderNums(ArrayList<String> orderNums) {
+        this.orderNums = orderNums;
+    }
+
+    public void setPaid(int paid) {
+        this.paid = paid;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 
     //****************************************************************//

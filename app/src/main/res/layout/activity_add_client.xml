@@ -59,10 +59,13 @@
         android:layout_height="wrap_content"
         android:hint="@string/street_edit" />
 
-        <EditText
-            android:id="@+id/city_add"
+        <Spinner
+            android:id="@+id/city_add_spinner"
             android:layout_width="112dp"
             android:layout_height="wrap_content"
-            android:hint="@string/city_edit" />
+            android:entries="@array/country_arrays"
+            android:prompt="@string/country_prompt">
+
+        </Spinner>
 
 </LinearLayout>

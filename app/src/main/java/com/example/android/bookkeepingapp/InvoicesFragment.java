@@ -48,7 +48,6 @@ public class InvoicesFragment extends Fragment {
     // Firebase instance variables
     public FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mInvoiceDatabaseReference;
-
     public InvoicesFragment() {
         // Required empty public constructor
     }
@@ -79,7 +78,7 @@ public class InvoicesFragment extends Fragment {
         mInvoiceListView = (ListView) rootView.findViewById( R.id.invoices_list_view );
         mAddUserFab = (FloatingActionButton) rootView.findViewById( R.id.fab_invoice );
 
-        // Initialize message ListView and its adapter
+        // Initialize invoice ListView and its adapter
         final List<Invoice> invoices = new ArrayList<>();
         mInvoiceAdapter = new InvoiceAdapter( getActivity(), R.layout.invoice_item, invoices );
         mInvoiceListView.setAdapter( mInvoiceAdapter );

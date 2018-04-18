@@ -27,7 +27,9 @@ public class EditClientActivity extends AppCompatActivity {
     private EditText mLastNameEditText;
     private EditText mCompanyEditText;
     private EditText mEmailEditText;
-    private EditText mPhoneNumber;
+    private EditText mPhoneNumberEditText;
+    private EditText mAddressEditText;
+    private EditText mCountryEditText;
     private Toolbar toolbar;
 
     private String extras;
@@ -61,9 +63,11 @@ public class EditClientActivity extends AppCompatActivity {
         mLastNameEditText = (EditText) findViewById( R.id.last_name_edit );
         mCompanyEditText = (EditText) findViewById( R.id.company_edit );
         mEmailEditText = (EditText) findViewById( R.id.email_edit );
-        mPhoneNumber = (EditText) findViewById( R.id.phone_edit );
+        mPhoneNumberEditText = (EditText) findViewById( R.id.phone_edit );
+        mAddressEditText= (EditText) findViewById( R.id.address_edit );
+        mCountryEditText = (EditText) findViewById( R.id.country_edit );
 
-        //declare the database reference object. This is what we use to access the database.
+                        //declare the database reference object. This is what we use to access the database.
         //NOTE: Unless you are signed in, this will not be useable.
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -88,11 +92,31 @@ public class EditClientActivity extends AppCompatActivity {
                 Client client = new Client(  );
                 client.setFirstName( dataSnapshot.child(extras).getValue(Client.class).getFirstName()); //set the name
                 client.setLastName( dataSnapshot.child(extras).getValue(Client.class).getLastName()); //set the name
-                client.setCompanyName( dataSnapshot.child(extras).getValue(Client.class).getCompanyName()); //set the name
-                mFirstNameEditText.setText( client.getFirstName());
-                mLastNameEditText.setText( client.getLastName());
-                //set the rest of data
-                mCompanyEditText.setText( client.getCompanyName() );
+                if(client.getFirstName() != null || client.getLastName() != null) {
+                    mFirstNameEditText.setText( client.getFirstName());
+                    mLastNameEditText.setText( client.getLastName());
+                }
+                client.setCompanyName( dataSnapshot.child(extras).getValue(Client.class).getCompanyName());
+
+                if(client.getCompanyName() != null) {
+                    mCompanyEditText.append( client.getCompanyName() );
+                }
+                client.setAddress( dataSnapshot.child(extras).getValue(Client.class).getAddress());
+                if(client.getAddress() != null) {
+                    mAddressEditText.append( client.getAddress() );
+                }
+                client.setPhoneNumber( dataSnapshot.child(extras).getValue(Client.class).getPhoneNumber());
+                if(client.getPhoneNumber() != null) {
+                    mPhoneNumberEditText.append( client.getPhoneNumber() );
+                }
+                client.setEmail( dataSnapshot.child(extras).getValue(Client.class).getEmail());
+                if(client.getEmail() != null) {
+                    mEmailEditText.append( client.getEmail() );
+                }
+                client.setCountry( dataSnapshot.child(extras).getValue(Client.class).getCountry());
+                if(client.getCountry() != null) {
+                    mCountryEditText.append( client.getCountry() );
+                }
             }
 
             @Override
@@ -116,7 +140,8 @@ public class EditClientActivity extends AppCompatActivity {
         String lastName = mLastNameEditText.getText().toString();
         String company = mCompanyEditText.getText().toString();
         String email = mEmailEditText.getText().toString();
-        String phone = mPhoneNumber.getText().toString();
+        String phone = mPhoneNumberEditText.getText().toString();
+        String country = mCountryEditText.getText().toString();
         //....the rest of infos
 
         //Check if the user enterd either the first or the last name
@@ -134,10 +159,18 @@ public class EditClientActivity extends AppCompatActivity {
             Client client = new Client(key, firstName,lastName);
             mClientDatabaseReference.child(key).setValue(client);
             mClientDatabaseReference.child(key).child( "companyName" ).setValue(company);
-            toastMessage("data is up to date.");
+            mClientDatabaseReference.child(key).child( "email" ).setValue(email);
+            mClientDatabaseReference.child(key).child( "phoneNumber" ).setValue(phone);
+            mClientDatabaseReference.child(key).child( "address" ).setValue(country);
+            mClientDatabaseReference.child(key).child( "country" ).setValue(country);
+
+                    toastMessage("data is up to date.");
             mFirstNameEditText.setText("");
             mLastNameEditText.setText("");
             mCompanyEditText.setText( "" );
+            mPhoneNumberEditText.setText( "" );
+            mCountryEditText.setText("" );
+            mAddressEditText.setText( "" );
 
             //Go back to client fragment
             Intent intent = new Intent(this,MainActivity.class);

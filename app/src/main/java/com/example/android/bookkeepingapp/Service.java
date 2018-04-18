@@ -45,4 +45,8 @@ public class Service {
     public void setServicePrice(double servicePrice) {
         this.servicePrice = servicePrice;
     }
+
+    public void setServiceNotes(String serviceNotes) {
+        this.serviceNotes = serviceNotes;
+    }
 }

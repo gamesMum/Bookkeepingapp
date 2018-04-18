@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="backCard">#ffffff</color>
+    <color name="green">#30ec2a</color>
+    <color name="yellow">#f9f256</color>
+    <color name="red">#d90000</color>
 </resources>

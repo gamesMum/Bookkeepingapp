@@ -150,8 +150,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
         //get new key for the invoice to display it in the text view
          keyInvoice = mInvoiceDatabaseReference.push().getKey();
-        //set the text to that number
-        mInvoiceNumberTextView.setText( keyInvoice );
+        //set the text to that number (or part of it)
+        mInvoiceNumberTextView.setText( keyInvoice.substring( keyInvoice.length() - 5 ) );
         //set click listeners on textViews (mClientTextView and mServicesTextView)
         mClientTextView.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -563,8 +563,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
                     orderNums.add(o.getOrderNum());
                 }
                 //Create the new Invoice
-                invoice = new Invoice(keyInvoice, clientIdFromDialog.toString(), orderNums,
-                        mIssueDateTextView.toString(), mDueDateTextView.toString(), toltalPrice );
+                invoice = new Invoice(keyInvoice, clientIdFromDialog, orderNums,
+                        mIssueDateTextView.getText().toString(), mDueDateTextView.getText().toString(), toltalPrice );
                 //store order in database when invoice is saved and created
                 mOrderDatabaseReference.child(keyOrder).setValue(order);
                 //store the Invoice in the database
@@ -577,8 +577,6 @@ public class AddInvoiceActivity extends AppCompatActivity {
                 startActivity(intent);
 
             }
-
-
         }
         else
             toastMessage( "Please pick a client and service!" );

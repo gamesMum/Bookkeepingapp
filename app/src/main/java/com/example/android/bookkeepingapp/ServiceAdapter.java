@@ -35,14 +35,12 @@ public class ServiceAdapter extends ArrayAdapter<Service> {
         //Find the First and Last name TextViews
         TextView serviceName = (TextView) convertView.findViewById(R.id.service_name_text_view_item);
         TextView servicePrice = (TextView) convertView.findViewById(R.id.service_price_text_view_item);
-        TextView serviceNotes = (TextView) convertView.findViewById(R.id.service_notes_text_view_item);
 
 
         //supply the textViews with the correct data
         assert service != null;
         serviceName.setText(service.getServiceName());
-        servicePrice.setText( "$"+ String.valueOf(service.getServicePrice()));
-        serviceNotes.setText( service.getServiceNotes() );
+        servicePrice.setText( "₺"+ String.valueOf(service.getServicePrice()));
         //Check if there is a company name to display
        /* if(client.getmCompanyName().toString().trim().length() > 0) {
             companyName.setVisibility(View.VISIBLE);

@@ -21,10 +21,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ViewServiceActivity extends AppCompatActivity {
+public class EditServiceActivity extends AppCompatActivity {
 
 
-    private String TAG = "ViewServiceActivity";
+    private String TAG = "EditServiceActivity";
     private Toolbar toolbar;
     private TextView mServiceName;
     private TextView mServicePrice;
@@ -42,13 +42,13 @@ public class ViewServiceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_view_service );
+        setContentView( R.layout.activity_edit_service );
 
 
         // Set a Toolbar to replace the ActionBar.
-        toolbar = findViewById( R.id.toolbar_service_view );
+        toolbar = findViewById( R.id.toolbar_edit_service );
         setSupportActionBar( toolbar );
-        toolbar.setTitle( getString( R.string.Service_view_text ) );
+        toolbar.setTitle( getString( R.string.service_edit ) );
         toolbar.setNavigationIcon( R.drawable.ic_close_black_24dp );
 
         ActionBar actionbar = getSupportActionBar();
@@ -65,9 +65,9 @@ public class ViewServiceActivity extends AppCompatActivity {
             mServiceDatabaseReference.keepSynced( true );
         }
 
-        mServiceName = (TextView) findViewById( R.id.service_name_text_view );
-        mServicePrice = (TextView) findViewById( R.id.service_price_text_view );
-        mServiceNotes = (TextView) findViewById( R.id.service_notes_text_view );
+        mServiceName = (TextView) findViewById( R.id.service_name_edit );
+        mServicePrice = (TextView) findViewById( R.id.service_price_edit );
+        mServiceNotes = (TextView) findViewById( R.id.service_notes_edit );
 
         mServiceDatabaseReference.addValueEventListener( new ValueEventListener() {
             @Override
@@ -114,7 +114,7 @@ public class ViewServiceActivity extends AppCompatActivity {
                 if (user == null) {
                     // User is signed out
                     //go to login activity
-                    Intent i = new Intent( ViewServiceActivity.this, LoginActivity.class );
+                    Intent i = new Intent( EditServiceActivity.this, LoginActivity.class );
                     startActivity( i );
                     toastMessage( "Successfully signed out" );
                 }
@@ -126,32 +126,10 @@ public class ViewServiceActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the edit_menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate( R.menu.view_menu, menu );
+        getMenuInflater().inflate( R.menu.edit_menu, menu );
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_delete:
-                //your code here
-                //Add dialog box
-                Log.v( TAG, "Oops you just deleted me!" );
-                return true;
-            case R.id.action_edit:
-                //View edit activity
-                //return the object in the list View
-                String serviceNum = extras;
-                Intent i = new Intent( ViewServiceActivity.this, EditServiceActivity.class );
-                //pass the client Id to the next activity
-                i.putExtra( "serviceNum", serviceNum );
-                startActivity( i );
-                Log.v( TAG, "OK edit me now!" );
-                return true;
-            default:
-                return super.onOptionsItemSelected( item );
-        }
-    }
 
     /**
      * customizable toast
@@ -160,5 +138,61 @@ public class ViewServiceActivity extends AppCompatActivity {
      */
     private void toastMessage(String message) {
         Toast.makeText( this, message, Toast.LENGTH_SHORT ).show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.action_save:
+                updateService();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void updateService() {
+        //get the elements in the dialog
+        String serviceName = mServiceName.getText().toString();
+        double servicePrice = Double.valueOf(  mServicePrice.getText().toString());
+        String serviceNotes = mServiceNotes.getText().toString();
+
+        //....the rest of infos
+
+        //Check if the user enterd either the first or the last name
+        if ((serviceName.trim().length() > 0 && servicePrice > 0)) {
+            //set the values at the same clientId selected (update)
+            String key = extras;
+           /*
+
+            // get user input and set it to result
+            // edit text
+            Client client = new Client( firstName, lastName );
+            mClientDatabaseReference.child( key ).child( "firstName" ).setValue( firstName );
+            mClientDatabaseReference.child( key ).child( "lastName" ).setValue( lastName );*/
+
+            Service service = new Service(key, serviceName,servicePrice);
+            mServiceDatabaseReference.child(key).setValue(service);
+            mServiceDatabaseReference.child(key).child( "serviceNotes" ).setValue(serviceNotes);
+
+            mServiceName.setText("");
+            mServicePrice.setText("");
+            mServiceNotes.setText( "" );
+            toastMessage("data is up to date.");
+
+
+            //Go back to client fragment
+            Intent intent = new Intent(this,MainActivity.class);
+            intent.putExtra("fragmentName","serviceFragment"); //for example
+            startActivity(intent);
+
+        } else {
+            //else tell the user that there is an error
+            toastMessage( "Fill service name and price information!" );
+        }
+
+
+
     }
 }

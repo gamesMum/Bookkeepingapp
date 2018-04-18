@@ -10,6 +10,12 @@ public class Order {
     private String serviceNum;
     private int quantity;
 
+    //empty constructor
+    Order()
+    {
+
+    }
+
     Order(String orderNum, String clientId, String serviceNum, int quantity)
     {
         this.orderNum = orderNum;
@@ -53,6 +59,15 @@ public class Order {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public void setServiceNum(String serviceNum) {
+        this.serviceNum = serviceNum;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
 
     @Override
     public String toString() {
