@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -28,12 +30,20 @@ public class SignupActivity extends AppCompatActivity {
     private EditText edSignupInputEmail, edSignupInputPassword;
     private TextInputLayout signupInputLayoutEmail, signupInputLayoutPassword;
 
+    private String newUserID;
+    private String newUserEmail;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mUserDatabaseReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         auth = FirebaseAuth.getInstance();
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+
 
         signupInputLayoutEmail = (TextInputLayout) findViewById(R.id.signup_input_layout_email);
         signupInputLayoutPassword = (TextInputLayout) findViewById(R.id.signup_input_layout_password);
@@ -94,12 +104,35 @@ public class SignupActivity extends AppCompatActivity {
                             Log.d(TAG,"Authentication failed." + task.getException());
 
                         } else {
-                            startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                            finish();
+                            //Check if the user logged in for the first time
+                            boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
+                            if(isNew) {
+                                newUserID = task.getResult().getUser().getUid();
+                                newUserEmail = task.getResult().getUser().getEmail();
+                                //store the data under loggedin user Id
+                                mUserDatabaseReference = mFirebaseDatabase.getReference().child( newUserID ).child( "user" );
+
+                                addUserInfo( newUserID, newUserEmail );
+                                 
+                                Log.d( TAG, "onComplete: " + (isNew ? "new user" : "old user") );
+                                startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                finish();
+                            }
+                            else //if old user
+                                 {
+                                startActivity( new Intent( SignupActivity.this, MainActivity.class ) );
+                                finish();
+                            }
                         }
                     }
                 });
         Toast.makeText(getApplicationContext(), "You are successfully Registered !!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void addUserInfo(String userId, String userEmail) {
+        User user = new User( userId, newUserEmail, 0);
+        mUserDatabaseReference.setValue( user );
+
     }
 
     private boolean checkEmail() {

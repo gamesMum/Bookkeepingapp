@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
@@ -122,10 +123,16 @@ public class LoginActivity extends AppCompatActivity {
                         // signed in user can be handled in the listener.
                         progressBar.setVisibility(View.GONE);
                         if (!task.isSuccessful()) {
+                            Log.e("LoginActivity", "Failed Registration" + task.getException().toString());
                             // there was an error
                             Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
 
                         } else {
+                            //The user is successfully logged in...
+                            //Check if the user logged in for the first time
+                            /*boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
+                            Log.d(TAG, "onComplete: " + (isNew ? "new user" : "old user"));*/
+
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
