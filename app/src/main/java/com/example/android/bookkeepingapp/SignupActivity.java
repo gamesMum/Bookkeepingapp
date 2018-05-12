@@ -113,7 +113,8 @@ public class SignupActivity extends AppCompatActivity {
                                 mUserDatabaseReference = mFirebaseDatabase.getReference().child( newUserID ).child( "user" );
 
                                 addUserInfo( newUserID, newUserEmail );
-                                 
+
+
                                 Log.d( TAG, "onComplete: " + (isNew ? "new user" : "old user") );
                                 startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                 finish();
