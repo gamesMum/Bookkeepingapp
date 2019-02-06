@@ -13,6 +13,12 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
 
+    <item android:id="@+id/action_un_pay"
+        android:title="@string/menu__un_pay"
+        android:orderInCategory="100"
+        android:visible="false"
+        app:showAsAction="never" />
+
     <item android:id="@+id/action_delete"
         android:title="@string/menu_delete"
         android:orderInCategory="101"

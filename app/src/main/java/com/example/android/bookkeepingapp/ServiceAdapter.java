@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,10 @@ public class ServiceAdapter extends ArrayAdapter<Service> {
         //supply the textViews with the correct data
         assert service != null;
         serviceName.setText(service.getServiceName());
-        servicePrice.setText( "₺"+ String.valueOf(service.getServicePrice()));
+        //format the price in the label as(2,000,000)
+        DecimalFormat formatter = new DecimalFormat( "##,###,###" );
+        String FormatString = formatter.format( service.getServicePrice() );
+        servicePrice.setText( "₺"+ String.valueOf(FormatString));
         //Check if there is a company name to display
        /* if(client.getmCompanyName().toString().trim().length() > 0) {
             companyName.setVisibility(View.VISIBLE);

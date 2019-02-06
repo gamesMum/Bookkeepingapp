@@ -18,7 +18,8 @@ public class Invoice {
     private String clientID;
     private String issueDate;
     private String dueDate;
-
+    private double invoiceProfit;
+    private double invoiceExpenses;
     private double total;
     private double amountLeft;
 
@@ -36,13 +37,14 @@ public class Invoice {
 
     }
     Invoice(String invoiceNumber, String clientID, ArrayList<String> orderNum,
-            String issueDate, String dueDate, double total)
+            String issueDate, String dueDate, double total, double profit, double expenses)
     {
         this.invoiceNumber = invoiceNumber;
         this.clientID = clientID;
         this.dueDate = dueDate;
         this.issueDate = issueDate;
-
+        this.invoiceExpenses = expenses;
+        this.invoiceProfit = profit;
         this.total = total;
 
         //pass the services we will provide in this invoice
@@ -81,6 +83,12 @@ public class Invoice {
 
     public double getTotal() {
         return total;
+    }
+
+    public double getInvoiceProfit(){return  invoiceProfit; }
+
+    public double getInvoiceExpenses() {
+        return invoiceExpenses;
     }
 
     public int getIsPaid() {
@@ -123,6 +131,14 @@ public class Invoice {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public void setInvoiceProfit(double invoiceProfit) {
+        this.invoiceProfit = invoiceProfit;
+    }
+
+    public void setInvoiceExpenses(double invoiceExpenses) {
+        this.invoiceExpenses = invoiceExpenses;
     }
 
     //****************************************************************//

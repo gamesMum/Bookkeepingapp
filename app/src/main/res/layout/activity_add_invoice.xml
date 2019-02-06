@@ -50,8 +50,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/invoice_number_text"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:background="@drawable/dotted_square"
         android:gravity="center"
         android:hint="@string/add_client_text"
@@ -160,24 +160,25 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/service_divider"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:hint="@string/notes_text"
         android:lines="4"
         android:maxLines="4"
         android:textAppearance="?android:textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/invoice_total_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/notes_add_edit_text"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/total_text"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="@android:color/darker_gray" />
+    android:id="@+id/invoice_total_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:layout_below="@id/notes_add_edit_text"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:text="@string/total_text"
+    android:textAppearance="?android:textAppearanceMedium"
+    android:textColor="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/invoice_total_value"
@@ -188,6 +189,48 @@
         android:layout_below="@id/invoice_total_text"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="$500" />
+
+    <TextView
+    android:id="@+id/invoice_expenses_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/notes_add_edit_text"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:text="@string/expenses_text"
+    android:textAppearance="?android:textAppearanceMedium"
+    android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_expenses_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/invoice_total_text"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="$500" />
+
+    <TextView
+        android:id="@+id/invoice_profit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notes_add_edit_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/profit_text"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_profit_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/invoice_total_text"
+        android:layout_centerHorizontal="true"
         android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/black"
         tools:text="$500" />

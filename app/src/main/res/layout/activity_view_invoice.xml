@@ -200,6 +200,51 @@
         android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/black"
         tools:text="$500" />
+    <TextView
+        android:id="@+id/invoice_profit_invoice_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/notes_add_invoice_view"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/profit_text"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_profit_value_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/invoice_total_invoice_view"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="$500" />
+
+    <TextView
+        android:id="@+id/invoic_expenses_invoice_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notes_add_invoice_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/expenses_text"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_expenses_value_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/invoice_total_invoice_view"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="$500" />
+
 <!--Show notification to let the user know the invoice status-->
     <!--Make them all one TextView and chenge the text and background...daaaaaah-->
 
@@ -216,7 +261,7 @@
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="@android:color/white"
         android:gravity="center" />
-    <!--TODO 5: Add discount option-->
+    <!--TODO 5: Add discount option
  <TextView
          android:id="@+id/discount_text_view"
          android:layout_width="wrap_content"
@@ -226,6 +271,6 @@
          android:paddingEnd="@dimen/horizontal_padding"
          android:layout_above="@id/notification_stripe"
          android:layout_toLeftOf="@id/invoice_total_value_view"
-         android:text="Add Discount"/>
+         android:text="Add Discount"/>-->
 
 </RelativeLayout>

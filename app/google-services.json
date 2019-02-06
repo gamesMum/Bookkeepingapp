@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "328538592362-qspmq4mg87aeo5tmklge4tk9jgtps6rv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.bookkeepingapp",
+            "certificate_hash": "5335cd76fdb1c30d3435181d607227897be98f9f"
+          }
+        },
+        {
           "client_id": "328538592362-rmo4btg5od7duda1gdh71660lsvv3dtb.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328538592362-rmo4btg5od7duda1gdh71660lsvv3dtb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

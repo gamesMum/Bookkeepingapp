@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.core.view.Change;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class ViewInvoiceActivity extends AppCompatActivity {
 
     private String TAG = "ViewInvoiceActivity";
     private final int PAID = 1;
+    private final int NOTPAID = 0;
     private Toolbar toolbar;
     private TextView mClientName;
     private TextView mIssueDate;
@@ -43,7 +46,10 @@ public class ViewInvoiceActivity extends AppCompatActivity {
     private TextView mNote;
     private TextView mTotal;
     private TextView mInvoiceNum;
+    private TextView mInvoiceProfit;
+    private TextView mInvoiceExpenses;
 
+    private Menu menu;
     private TextView mNotificationStripe;
 
     private boolean isOverDue;
@@ -53,7 +59,12 @@ public class ViewInvoiceActivity extends AppCompatActivity {
     private ArrayList<String> mOrderNum;
     private ArrayList<String> mServiceNum;
     private Invoice invoice;
+    private User userData;
     private String extras;
+    private double userCurrentExp;
+    private double userCurrentProfit;
+    private double newUserProfit;
+    private double newUserExp;
 
     // Firebase instance variables
     private FirebaseUser user;
@@ -62,6 +73,7 @@ public class ViewInvoiceActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     public FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mInvoiceDatabaseReference;
+    private DatabaseReference mUserDatabaseReference;
     private DatabaseReference mClientDatabaseReference;
     private DatabaseReference mOrderDatabaseReference;
     private DatabaseReference mServiceDatabaseReference;
@@ -80,6 +92,7 @@ public class ViewInvoiceActivity extends AppCompatActivity {
         toolbar.setTitle(getString(R.string.invoices_text));
         toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
 
+        userData = new User(  );
         ActionBar actionbar = getSupportActionBar();
 
         // Initialize Firebase database
@@ -88,24 +101,27 @@ public class ViewInvoiceActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null) {
             userID = user.getUid();
-            //store the data under loggedin user Id
+            //store the data under logged in user Id
             mInvoiceDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "invoice" );
             mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "client" );
             mOrderDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "order" );
             mServiceDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "service" );
+            mUserDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "user" );
             //For offline sync of data
             mInvoiceDatabaseReference.keepSynced(true);
         }
 
         //find the view in the xml layout
-        mClientName = (TextView) findViewById( R.id.client_invoice_view_text );
-        mDueDate = (TextView) findViewById( R.id.due_date_invoice_view_value );
-        mIssueDate = (TextView) findViewById( R.id.issue_date_text_invoice_view_value );
-        mServices = (TextView) findViewById( R.id.services_invoice_view );
-        mServicePrice = (TextView) findViewById( R.id.services_add_price_invoice_view );
-        mNote = (TextView) findViewById( R.id.notes_add_invoice_view );
-        mInvoiceNum= (TextView) findViewById( R.id.invoice_number_invoice_view_value );
-        mTotal = (TextView) findViewById( R.id.invoice_total_value_view );
+        mClientName =  findViewById( R.id.client_invoice_view_text );
+        mDueDate =  findViewById( R.id.due_date_invoice_view_value );
+        mIssueDate =  findViewById( R.id.issue_date_text_invoice_view_value );
+        mServices = findViewById( R.id.services_invoice_view );
+        mServicePrice =  findViewById( R.id.services_add_price_invoice_view );
+        mNote =  findViewById( R.id.notes_add_invoice_view );
+        mInvoiceNum=  findViewById( R.id.invoice_number_invoice_view_value );
+        mTotal =  findViewById( R.id.invoice_total_value_view );
+        mInvoiceProfit  =  findViewById( R.id. invoice_profit_value_view);
+        mInvoiceExpenses =  findViewById( R.id.invoice_expenses_value_view );
 
         mNotificationStripe = (TextView) findViewById( R.id.notification_stripe );
 
@@ -118,6 +134,7 @@ public class ViewInvoiceActivity extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 invoice = new Invoice(  );
+
                 invoice.setDueDate( dataSnapshot.child(extras).getValue(Invoice.class).getDueDate()); //set the name
                 invoice.setIssueDate( dataSnapshot.child(extras).getValue(Invoice.class).getIssueDate()); //set the name
                 invoice.setInvoiceNumber( dataSnapshot.child(extras).getValue(Invoice.class).getInvoiceNumber());
@@ -126,10 +143,12 @@ public class ViewInvoiceActivity extends AppCompatActivity {
                 invoice.setClientID( dataSnapshot.child(extras).getValue(Invoice.class).getClientID() );
                 invoice.setTotal( dataSnapshot.child(extras).getValue(Invoice.class).getTotal());
                 invoice.setPaid( dataSnapshot.child(extras).getValue(Invoice.class).getIsPaid()  );
-
+                invoice.setInvoiceExpenses( dataSnapshot.child(extras).getValue(Invoice.class).getInvoiceExpenses() );
+                invoice.setInvoiceProfit( dataSnapshot.child(extras).getValue(Invoice.class).getInvoiceProfit() );
                 keyInvoice = invoice.getInvoiceNumber();
                 //check if it is paid or not
                 mInvoiceStatus = invoice.getIsPaid();
+
 
                 //check if the invoice is overdue
                 SimpleDateFormat sdf = new SimpleDateFormat( "yyyy / MM / dd " );
@@ -163,11 +182,13 @@ public class ViewInvoiceActivity extends AppCompatActivity {
                mIssueDate.setText( invoice.getIssueDate() );
                mInvoiceNum.setText( invoice.getInvoiceNumber().
                        substring( invoice.getInvoiceNumber().length() - 5 ) );
-               mTotal.setText( String.valueOf( invoice.getTotal()  ) );
+               mTotal.setText( formatPrice( invoice.getTotal()) );
+               mInvoiceProfit.setText( String.valueOf( invoice.getInvoiceProfit() ) );
+               mInvoiceExpenses.setText( String.valueOf( invoice.getInvoiceExpenses() ) );
 
 
                 //Check if the invoice is paid or not
-                checkIsPaied();
+                updateInvoiceStatus();
 
             }
 
@@ -176,6 +197,31 @@ public class ViewInvoiceActivity extends AppCompatActivity {
 
             }
         });
+
+        //get current profit and expenses for the user
+        mUserDatabaseReference.addValueEventListener( new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //TODO:check if this work
+                //get the current total expenses for the user
+                userData.setTotalExpenses( dataSnapshot.getValue( User.class ).getTotalExpenses() ); //set the ecp
+                userData.setTotalProfit( dataSnapshot.getValue(User.class).getTotalProfit());
+                //add the sum of this invoice expenses to the current user's
+                //expenses
+                //calculate the total expenses
+                // double newExpenses  = invoiceExpenses + userData.getTotalExpenses();
+                Log.v(TAG, "The current value of the  expenses: " + userData.getTotalExpenses());
+                Log.v(TAG, "The current value of the  profits: " + userData.getTotalProfit());
+                userCurrentExp = userData.getTotalExpenses();
+                userCurrentProfit = userData.getTotalProfit();
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        } );
 
         //get the client name
         mClientDatabaseReference.addValueEventListener(new ValueEventListener() {
@@ -204,7 +250,7 @@ public class ViewInvoiceActivity extends AppCompatActivity {
                 // whenever data at this location is updated.
                 for(String o : mOrderNum) {
                     Order order = new Order();
-                    order.setServiceNum( dataSnapshot.child( o ).getValue( Order.class ).getServiceNum() ); //set the name
+                    order.setServiceNum( dataSnapshot.child( o ).getValue( Order.class ).getServiceNum() ); //set the NUM
                     //get the list of services in each order
                     mServiceNum.add(order.getServiceNum());
                 }
@@ -227,10 +273,10 @@ public class ViewInvoiceActivity extends AppCompatActivity {
                 for(String s : mServiceNum) {
                     Service service = new Service();
                     service.setServiceName( dataSnapshot.child( s ).getValue( Service.class ).getServiceName() ); //set the name
-                    service.setServicePrice( dataSnapshot.child( s ).getValue( Service.class ).getServicePrice() );
+                    service.setServicePriceIQ( dataSnapshot.child( s ).getValue( Service.class ).getServicePriceIQ() );
 
                     mServices.append( "- " + service.getServiceName() + "\n");
-                    mServicePrice.append("₺" + service.getServicePrice()+ "\n");
+                    mServicePrice.append("ID " + formatPrice( service.getServicePriceIQ() )+ "\n");
                 }
             }
 
@@ -277,7 +323,8 @@ public class ViewInvoiceActivity extends AppCompatActivity {
         };
     }
 
-    private void checkIsPaied() {
+    //Change the stripe color
+    private void updateInvoiceStatus() {
 
         //invoice is paid
         if(mInvoiceStatus == 1)
@@ -299,7 +346,7 @@ public class ViewInvoiceActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
+        this.menu = menu;
         // Inflate the edit_menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.invoice_edit_menu, menu);
         return true;
@@ -329,9 +376,42 @@ public class ViewInvoiceActivity extends AppCompatActivity {
                 //mark this invoice as paid
                 invoice.setPaid( PAID );
                 mInvoiceDatabaseReference.child( keyInvoice ).setValue( invoice );
-                checkIsPaied();
+                //Update the user expenses and profit
+                //Add the invoice value to user profit (current profit plus the new paid invoice)
+                newUserProfit = userCurrentProfit + invoice.getInvoiceProfit();
+                //subtract the profit from the total expenses
+                newUserExp = userCurrentExp - invoice.getInvoiceExpenses();
+                //update user data
+                mUserDatabaseReference.child( "totalProfit" ).setValue( newUserProfit );
+                mUserDatabaseReference.child( "totalExpenses" ).setValue( newUserExp);
+                //change the stripe color
+                updateInvoiceStatus();
                 toastMessage("This invoice is Paid");//store the Invoice in the database
+                item.setVisible( false );//hide the invoice mark as paid
+                //show the mark Not paid instead
+                item = menu.findItem( R.id.action_un_pay );
+                item.setVisible( true );
+                return true;
 
+            case R.id.action_un_pay:
+                //mark this invoice as unpaid
+                invoice.setPaid(NOTPAID);
+                mInvoiceDatabaseReference.child( keyInvoice ).setValue( invoice );
+                //Update the user expenses and profit
+                //Add the invoice value to user profit (current profit plus the new paid invoice)
+                newUserProfit = userCurrentProfit - invoice.getInvoiceProfit();
+                //subtract the profit from the total expenses
+                newUserExp = userCurrentExp + invoice.getInvoiceExpenses();
+                //update user data
+                mUserDatabaseReference.child( "totalProfit" ).setValue( newUserProfit );
+                mUserDatabaseReference.child( "totalExpenses" ).setValue( newUserExp);
+                //change the stripe color
+                updateInvoiceStatus();
+                toastMessage("This invoice is Not Paid");//store the Invoice in the database
+                item.setVisible( false );//hide the invoice mark as paid
+                //show the mark as paid instead
+                item = menu.findItem( R.id.action_pay );
+                item.setVisible( true );
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -352,4 +432,12 @@ public class ViewInvoiceActivity extends AppCompatActivity {
         String strDate = mdformat.format( calendar.getTime() );
         return strDate;
     }
+
+    private String formatPrice(double price){
+        //format the price in the label as(2,000,000)
+        DecimalFormat formatter = new DecimalFormat( "##,###,###" );
+        String priceFormatted = formatter.format( price );
+        return priceFormatted;
+    }
+
 }

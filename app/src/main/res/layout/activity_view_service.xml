@@ -17,39 +17,88 @@
         app:title="View Service"
         app:titleTextColor="@android:color/white" />
 
-
-        <TextView
-            android:id="@+id/service_name_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/horizontal_padding"
-            android:paddingStart="@dimen/horizontal_padding"
-            android:paddingBottom="@dimen/virtical_padding"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            tools:text="Service: " />
+    <ImageView
+        android:id="@+id/service_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:background="@drawable/dotted_square"
+        android:gravity="center"
+        android:hint="@string/add_client_text"
+        android:textAppearance="?android:textAppearanceMedium" />
 
 
     <TextView
-        android:id="@+id/service_price_text_view"
+        android:id="@+id/service_name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:paddingStart="@dimen/horizontal_padding"
+        android:paddingLeft="@dimen/horizontal_padding"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        tools:text="Service: " />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/service_price_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:paddingStart="@dimen/horizontal_padding"
+            android:paddingLeft="@dimen/horizontal_padding"
+            android:paddingBottom="@dimen/virtical_padding"
+            android:text="@string/service_view_price"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/service_view_profit_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:paddingStart="@dimen/horizontal_padding"
+            android:paddingLeft="@dimen/horizontal_padding"
+            android:paddingBottom="@dimen/virtical_padding"
+            android:text="@string/service_view_profit_rate"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/service_plus_profit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:paddingLeft="@dimen/horizontal_padding"
         android:paddingStart="@dimen/horizontal_padding"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:paddingLeft="@dimen/horizontal_padding"
         android:paddingBottom="@dimen/virtical_padding"
-        android:text="Price: ₺" />
+        android:text="@string/service_view_plus_profit"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/service_price_IQ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:paddingStart="@dimen/horizontal_padding"
+        android:paddingLeft="@dimen/horizontal_padding"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:text="@string/service_view_price_IQ"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/service_notes_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/horizontal_padding"
         android:paddingStart="@dimen/horizontal_padding"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:paddingLeft="@dimen/horizontal_padding"
         android:paddingBottom="@dimen/virtical_padding"
-        android:text="Notes: " />
+        android:text="Notes: "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
 </LinearLayout>

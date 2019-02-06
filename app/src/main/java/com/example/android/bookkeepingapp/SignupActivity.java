@@ -35,6 +35,8 @@ public class SignupActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserDatabaseReference;
 
+    double defaultProfit;
+    double defaultExpensee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         auth = FirebaseAuth.getInstance();
 
+        defaultExpensee = 0.0;
+        defaultProfit = 0.0;
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
 
@@ -112,8 +116,7 @@ public class SignupActivity extends AppCompatActivity {
                                 //store the data under loggedin user Id
                                 mUserDatabaseReference = mFirebaseDatabase.getReference().child( newUserID ).child( "user" );
 
-                                addUserInfo( newUserID, newUserEmail );
-
+                                addUserInfo( newUserID);
 
                                 Log.d( TAG, "onComplete: " + (isNew ? "new user" : "old user") );
                                 startActivity(new Intent(SignupActivity.this, MainActivity.class));
@@ -130,10 +133,9 @@ public class SignupActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "You are successfully Registered !!", Toast.LENGTH_SHORT).show();
     }
 
-    private void addUserInfo(String userId, String userEmail) {
-        User user = new User( userId, newUserEmail, 0);
+    private void addUserInfo(String userId) {
+        User user = new User( userId, newUserEmail, defaultProfit, defaultExpensee);
         mUserDatabaseReference.setValue( user );
-
     }
 
     private boolean checkEmail() {

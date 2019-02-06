@@ -36,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,6 +54,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
     private TextView mDueDateTextView;
     private TextView mServicesTextView;
     private TextView mTotalTextView;
+    private TextView mTotalExpensesTextView;
+    private TextView mProfitTextView;
     private EditText mNotesEditText;
     private Toolbar toolbar;
     private ListView mClientListView;
@@ -76,6 +79,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
     private DatabaseReference mClientDatabaseReference;
     private DatabaseReference mServiceDatabaseReference;
     private DatabaseReference mOrderDatabaseReference;
+    private DatabaseReference mUserDatabaseReference;
     private ClientAdapter mClientAdapter;
     private ServiceAdapterCheckBox mServiceAdapter;
     ProgressBar mClientDialogProgressBar;
@@ -88,7 +92,12 @@ public class AddInvoiceActivity extends AppCompatActivity {
     //the invoice object that will contain the list of orders
     private Invoice invoice;
     private   String keyInvoice;
-    private double toltalPrice;
+    private double totalPrice;
+    private double invoiceExpenses;
+    private double currentTotalExp;
+    private double userNewExp;
+    private double invoiceProfit;
+    private User userData;
     //**************************************************
     private ChildEventListener mChiltEventListener;
     private ChildEventListener mServiceEventListener;
@@ -107,6 +116,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
         setSupportActionBar( toolbar );
         toolbar.setNavigationIcon( R.drawable.ic_close_black_24dp );
 
+         userData = new User();
 
         //Initialize xml element
         mClientTextView = (TextView) findViewById( R.id.client_add );
@@ -115,6 +125,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
         mServicesTextView = (TextView) findViewById( R.id.services_add );
         mServicePriceTextView = (TextView) findViewById( R.id.services_add_price );
         mTotalTextView = (TextView) findViewById( R.id.invoice_total_value );
+        mTotalExpensesTextView = (TextView) findViewById( R.id.invoice_expenses_value );
+        mProfitTextView = (TextView) findViewById( R.id.invoice_profit_value );
         mNotesEditText = (EditText) findViewById( R.id.notes_add_edit_text );
         mClientDialogProgressBar = null;
 
@@ -134,6 +146,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             userID = user.getUid();
+            mUserDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "user" );
         }
         //get the data for stored invoices for the logged in user
         mInvoiceDatabaseReference = mFirebaseDatabase.getReference().
@@ -156,7 +169,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
         mClientTextView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //clear privious texts__no repetition problem
+                //-------------------------------------------
                 //show list of stored clients
                 createClientDialog();
 
@@ -189,6 +203,30 @@ public class AddInvoiceActivity extends AppCompatActivity {
                 finish();
             }
         } );
+
+        //get the current User expenses (before invoice is created)
+        mUserDatabaseReference.addValueEventListener( new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //TODO:check if this work
+                //get the current total expenses for the user
+                userData.setTotalExpenses( dataSnapshot.getValue( User.class ).getTotalExpenses() ); //set the ecp
+                //add the sum of this invoice expenses to the current user's
+                //expenses
+                //calculate the total expenses
+                // double newExpenses  = invoiceExpenses + userData.getTotalExpenses();
+                Log.v(TAG, "The value of the  expenses before invoice: " + userData.getTotalExpenses());
+                currentTotalExp = userData.getTotalExpenses();
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        } );
+
 
     }
 
@@ -406,11 +444,14 @@ public class AddInvoiceActivity extends AppCompatActivity {
                 //if there is service(s) selected
                 if(serviceNumsFromDialog.size() != 0) {
                     //remove the initial text
-                    mServicesTextView.setText( "" );
+                    mServicesTextView.setText( " " );
+                    mServicePriceTextView.setText( " " );
                     mServiceDatabaseReference.addValueEventListener( new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            toltalPrice = 0;
+                            totalPrice = 0;
+                            invoiceExpenses = 0;
+                            invoiceProfit = 0;
                             // This method is called once with the initial value and again
                             // whenever data at this location is updated.
                             //for every service selected by the user, display the name
@@ -418,13 +459,32 @@ public class AddInvoiceActivity extends AppCompatActivity {
                                 Service service = new Service();
                                 service.setServiceName( dataSnapshot.child( s ).getValue( Service.class ).getServiceName() ); //set the name
                                 service.setServicePrice( dataSnapshot.child( s ).getValue(Service.class).getServicePrice() );
-                                //take the sum of all the services
-                                toltalPrice += service.getServicePrice();
+                                service.setServicePriceIQ( dataSnapshot.child( s ).getValue(Service.class).getServicePriceIQ() );
+                                service.setServicePlusProfit( dataSnapshot.child( s ).getValue(Service.class).getServicePlusProfit() );
+                                //format the  price ID
+                                //format the price in the label as(2,000,000)
+                                String priceIDFormatted = formatPrice( service.getServicePriceIQ() );
+                                //take the sum of all the services and produce the total
+                                //for customers
+                                totalPrice += service.getServicePriceIQ();
+                                //total expenses (original price in tr) for user
+                                invoiceExpenses += service.getServicePrice();
+
+                                //net profit (for user)
+                                invoiceProfit += service.getServicePlusProfit()-service.getServicePrice();
+
                                 mServicesTextView.append( "- " + service.getServiceName() + "\n");
-                                mServicePriceTextView.append("₺" + service.getServicePrice()+ "\n");
+                                mServicePriceTextView.append("ID " + priceIDFormatted + "\n");
+
                             }
-                            //set the text View with the total value
-                            mTotalTextView.setText( "₺" + String.valueOf(toltalPrice) );
+                            //format the total price
+                            //format the price in the label as(2,000,000)
+                            String totalPriceFormatted = formatPrice( totalPrice );
+
+                            //set the text View with the total value for each field
+                            mTotalTextView.setText( totalPriceFormatted );
+                            mTotalExpensesTextView.setText( String.valueOf( invoiceExpenses ) );
+                            mProfitTextView.setText( String.valueOf( invoiceProfit ) );
                         }
 
                         @Override
@@ -437,8 +497,10 @@ public class AddInvoiceActivity extends AppCompatActivity {
                 {
                     //if there is no service selected reset text views
                     mServicesTextView.setText( R.string.service_add );
-                    mTotalTextView.setText( " ₺0" );
-                    toltalPrice = 0;
+                    mTotalTextView.setText( "ID 0" );
+                    mTotalExpensesTextView.setText( "/" );
+                    mProfitTextView.setText( "/" );
+                    totalPrice = 0;
                 }
 
             }
@@ -460,6 +522,10 @@ public class AddInvoiceActivity extends AppCompatActivity {
             mServiceEventListener = null;
         }
     }
+
+    /*private void detacheUserDataReadListener(){
+        if(mUser)
+    }*/
 
     private void detachDatabaseReadListener() {
         if (mChiltEventListener != null) {
@@ -564,12 +630,19 @@ public class AddInvoiceActivity extends AppCompatActivity {
                 }
                 //Create the new Invoice
                 invoice = new Invoice(keyInvoice, clientIdFromDialog, orderNums,
-                        mIssueDateTextView.getText().toString(), mDueDateTextView.getText().toString(), toltalPrice );
+                        mIssueDateTextView.getText().toString(), mDueDateTextView.getText().toString(), totalPrice,
+                       invoiceProfit, invoiceExpenses );
                 //store order in database when invoice is saved and created
                 mOrderDatabaseReference.child(keyOrder).setValue(order);
                 //store the Invoice in the database
                 mInvoiceDatabaseReference.child( keyInvoice ).setValue( invoice );
+                //calculate the user total expenses
+                userNewExp = currentTotalExp + invoiceExpenses;
                 toastMessage( "New Invoice is created" );
+                //Update the user expenses by updating the currentTotalExp to the userNewExp
+                mUserDatabaseReference.child( "totalExpenses" ).setValue( userNewExp );
+                Log.v(TAG, "The current value of the  expenses :" + userData.getTotalExpenses());
+
 
                 //Go back to Invoice fragment
                 Intent intent = new Intent(this,MainActivity.class);
@@ -638,6 +711,13 @@ public class AddInvoiceActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected( item );
         }
+    }
+
+    private String formatPrice(double price){
+        //format the price in the label as(2,000,000)
+        DecimalFormat formatter = new DecimalFormat( "##,###,###" );
+        String priceFormatted = formatter.format( price );
+        return priceFormatted;
     }
 
     @Override

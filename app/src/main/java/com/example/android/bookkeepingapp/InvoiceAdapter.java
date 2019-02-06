@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -79,9 +80,16 @@ public class InvoiceAdapter extends ArrayAdapter<Invoice> {
         // if(invoice.getDueDate() getCurrentDate() )
         //supply the textViews with the correct data
         assert invoice != null;
-        total.setText( "₺" + String.valueOf( invoice.getTotal() ) );
+        String strInvoiceTotal = formatPrice(invoice.getTotal() );
+        total.setText( "₺" + strInvoiceTotal );
 
         return convertView;
+    }
+    private String formatPrice(double price){
+        //format the price in the label as(2,000,000)
+        DecimalFormat formatter = new DecimalFormat( "##,###,###" );
+        String priceFormatted = formatter.format( price );
+        return priceFormatted;
     }
 
     private String getCurrentDate() {

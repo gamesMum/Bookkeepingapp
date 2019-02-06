@@ -88,8 +88,8 @@ public class LoginActivity extends AppCompatActivity {
                     toastMessage("Successfully signed in with: " + user.getEmail());
                 } else {
                     // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                    toastMessage("Successfully signed out.");
+                   /* Log.d(TAG, "onAuthStateChanged:signed_out");
+                    toastMessage("Successfully signed out.");*/
                 }
                 // ...
             }
@@ -132,8 +132,9 @@ public class LoginActivity extends AppCompatActivity {
                             //Check if the user logged in for the first time
                             /*boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
                             Log.d(TAG, "onComplete: " + (isNew ? "new user" : "old user"));*/
-
+                            //go to main activity the summery fragment
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("fragmentName", "summeryFragment");
                             startActivity(intent);
                             finish();
                         }

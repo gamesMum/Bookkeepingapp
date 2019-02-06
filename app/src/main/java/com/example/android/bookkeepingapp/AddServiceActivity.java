@@ -21,9 +21,12 @@ public class AddServiceActivity extends AppCompatActivity {
 
     private  String TAG = "AddServiceActivity";
     private EditText mServiceName;
-    private EditText mServicePrice;
+    private EditText mOriginalPrice;
+    private EditText mProfitRate;
     private EditText mNotes;
     private Toolbar toolbar;
+    //I need to get this via service
+    private static double TrToIqRatio = 224.510;
 
 
     private String clientID;
@@ -52,7 +55,8 @@ public class AddServiceActivity extends AppCompatActivity {
 
         //Initialize xml element
         mServiceName = (EditText) findViewById( R.id.service_name );
-        mServicePrice = (EditText) findViewById( R.id.service_price );
+        mOriginalPrice = (EditText) findViewById( R.id.service_price );
+        mProfitRate = (EditText) findViewById( R.id.service_profit_rate );
         mNotes = (EditText) findViewById( R.id.service_notes );
 
         //declare the database reference object. This is what we use to access the database.
@@ -80,21 +84,34 @@ public class AddServiceActivity extends AppCompatActivity {
     public void createNewService() {
         //get the elements in the dialog
         String serviceName = mServiceName.getText().toString();
-        double servicePrice =  Double.parseDouble(mServicePrice.getText().toString());
+        double servicePrice =  Double.parseDouble(mOriginalPrice.getText().toString());
+        double serviceProfitRate = Double.parseDouble( mProfitRate.getText().toString() );
         String serviceNotes = mNotes.getText().toString();
-        //....the rest of infos
+
+        //calculate the price plus profit (servicePrice * profit rate)
+       double servicePlusProfit = servicePrice * serviceProfitRate;
+       //calculate the final price in Iraqi dinar (for now)
+       double servicePriceIQ = servicePlusProfit * TrToIqRatio;
 
         //Check if the user enterd the service name and price
         if (serviceName.trim().length() > 0 && servicePrice > 0) {
             String key = mServiceDatabaseReference.push().getKey();
 
-            Service service = new Service(key, serviceName,servicePrice);
+            Service service = new Service(key, serviceName,servicePrice,
+                    serviceProfitRate);
+            //set the necessary inforatio and store in database
             mServiceDatabaseReference.child(key).setValue(service);
-            mServiceDatabaseReference.child(key).child( "notes" ).setValue(serviceNotes);
+            //set the notes if any
+            mServiceDatabaseReference.child(key).child( "serviceNotes" ).setValue(serviceNotes);
+            //set the service price plus profit & price in IQ we calculated earlier
+            mServiceDatabaseReference.child( key ).child( "servicePlusProfit").setValue( servicePlusProfit );
+            mServiceDatabaseReference.child( key ).child( "servicePriceIQ").setValue( servicePriceIQ );
+
             toastMessage("New Service has been saved.");
             mServiceName.setText("");
-            mServicePrice.setText("");
+            mOriginalPrice.setText("");
             mNotes.setText( "" );
+            mProfitRate.setText( "" );
 
             //Go back to service fragment
             Intent intent = new Intent(this,MainActivity.class);

@@ -172,7 +172,7 @@ public class EditServiceActivity extends AppCompatActivity {
             mClientDatabaseReference.child( key ).child( "firstName" ).setValue( firstName );
             mClientDatabaseReference.child( key ).child( "lastName" ).setValue( lastName );*/
 
-            Service service = new Service(key, serviceName,servicePrice);
+            Service service = new Service(key, serviceName,servicePrice, 10);
             mServiceDatabaseReference.child(key).setValue(service);
             mServiceDatabaseReference.child(key).child( "serviceNotes" ).setValue(serviceNotes);
 

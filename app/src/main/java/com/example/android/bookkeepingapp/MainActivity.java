@@ -39,14 +39,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (getFragmentManager().findFragmentById(R.id.content_frame) == null) {
+        /**if there is no content frame selected yet
+         * select the sumery fragment for the logged in user
+        if (getFragmentManager().findFragmentById(R.id.content_frame)== null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new SummeryFragment()).commit();
-        }
+        }*/
 
+       //
         String  extras = getIntent().getStringExtra("fragmentName");
         if (extras != null) {
             switch (extras)
             {
+                case "summeryFragment":
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new SummeryFragment()).commit();
+                    break;
                 case "clientFragment":
                     getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ClientFragment()).commit();
                 break;
@@ -91,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-
                 displayFragment(menuItem);
                 // close drawer when item is tapped
                 mDrawerLayout.closeDrawers();
@@ -114,6 +119,11 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(i);
                     toastMessage("Successfully signed out");
                 }
+                else
+                {
+                    //go to summery fragment
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new SummeryFragment()).commit();
+                }
             }
         };
 
@@ -132,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
 
     private void displayFragment(MenuItem item)
     {
@@ -211,6 +223,57 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        //
+        String  extras = getIntent().getStringExtra("fragmentName");
+        if (extras != null) {
+            switch (extras) {
+                case "summeryFragment":
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new SummeryFragment() ).commit();
+                    break;
+                case "clientFragment":
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new ClientFragment() ).commit();
+                    break;
+
+                case "invoiceFragment":
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new InvoicesFragment() ).commit();
+                    break;
+
+                case "serviceFragment":
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new ServiceFragment() ).commit();
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        //
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //
+        String  extras = getIntent().getStringExtra("fragmentName");
+        if (extras != null) {
+            switch (extras) {
+                case "summeryFragment":
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new SummeryFragment() ).commit();
+                    break;
+                case "clientFragment":
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new ClientFragment() ).commit();
+                    break;
+
+                case "invoiceFragment":
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new InvoicesFragment() ).commit();
+                    break;
+
+                case "serviceFragment":
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new ServiceFragment() ).commit();
+                    break;
+            }
+        }
     }
 
     @Override
