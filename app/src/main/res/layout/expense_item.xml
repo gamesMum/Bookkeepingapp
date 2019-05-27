@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/client_item"
+    android:id="@+id/expense_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -24,22 +24,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
-                android:id="@+id/service_name_text_view_item"
+                android:id="@+id/expense_name_tv_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:paddingLeft="@dimen/horizontal_padding"
                 android:paddingTop="@dimen/virtical_padding"
-                tools:text="Website development" />
+                tools:text="create facebook add" />
 
             <TextView
-                android:id="@+id/service_price_text_view_item"
+                android:id="@+id/expense_value_tv_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_below="@id/service_name_text_view_item"
+                android:layout_below="@id/expense_name_tv_item"
                 android:paddingTop="@dimen/virtical_padding"
                 android:paddingLeft="@dimen/horizontal_padding"
                 android:textAppearance="?android:attr/textAppearanceSmall"

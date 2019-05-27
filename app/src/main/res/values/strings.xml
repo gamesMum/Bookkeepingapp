@@ -41,7 +41,9 @@
     <string name="expendings_text">Expenses</string>
     <string name="clients_add">Add Client</string>
     <string name="service_add">Add Service</string>
+    <string name="expense_add">Add Expense</string>
     <string name="service_edit">Edit Service</string>
+    <string name="expenses_edit">Edit Expense</string>
     <string name="clients_edit">Edit Client</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_pay">Mark as Paied</string>
@@ -54,16 +56,17 @@
     <string name="due_date_text">Due Date</string>
     <string name="payments_text">Client</string>
     <string name="total_text">Total</string>
-    <string name="expenses_text">Expenses</string>
-    <string name="profit_text">Profits</string>
+    <string name="expenses_text">Expenses(TR)</string>
+    <string name="profit_text">Profits(TR)</string>
     <string name="notes_text">Notes</string>
     <string name="invoice_new">New Invoice</string>
+    <string name="invoice_edit">Edit Invoice</string>
     <string name="invoice_number">Invoice Number</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="service_name">Service Name</string>
     <string name="service_price">Original Price(TR)</string>
-    <string name="service_profit_rate">Profit Rate</string>
+    <string name="service_plus_profit">Plus Profit</string>
     <string name="service_view_price_IQ">price(IQ): </string>
     <string name="service_view_plus_profit">Plus Profit(TR): </string>
     <string name="service_view_price">Price(TR): </string>
@@ -90,9 +93,14 @@
     <string name="yellow_stripe">Not Paid</string>
     <string name="red_stripe">Over Due</string>
 
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="quantity_default">1</string>
+
 
     <!--to solve the rendering issue id/invisible-->
     <item name="visible" type="id" />
     <item name="masked" type="id" />
+
 
 </resources>

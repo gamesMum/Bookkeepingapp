@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,28 +31,47 @@ public class ClientAdapter extends ArrayAdapter<Client> {
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
+         //apply View holder to optimize the listView
+        //create a ViewHolder reference
+        ViewHolder holder;
         if (convertView == null) {
+            holder = new ViewHolder();
+
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.client_item,
                     parent, false);
+            // get all views you need to handle from the cell and save them in the view holder
+            holder.clientName = (TextView) convertView.findViewById(R.id.name_text_view_item);
+            holder.companyName = (TextView) convertView.findViewById(R.id.company_name_text_view_item);
+
+            // save the view holder on the cell view to get it back latter
+            convertView.setTag(holder);
+        }
+        else {
+            // the getTag returns the viewHolder object set as a tag to the view
+            holder = (ViewHolder)convertView.getTag();
         }
         //Find the current object
         final Client client = getItem(position);
-        //Find the First and Last name TextViews
-        TextView name = (TextView) convertView.findViewById(R.id.name_text_view_item);
-        TextView companyName = (TextView) convertView.findViewById(R.id.company_name_text_view_item);
-
-        //supply the textViews with the correct data
-        assert client != null;
-        name.setText(client.getFirstName() + " " + client.getLastName());
-        companyName.setText(client.getCompanyName());
-        //Check if there is a company name to display
-       /* if(client.getmCompanyName().toString().trim().length() > 0) {
-            companyName.setVisibility(View.VISIBLE);
-
-        }else {
-            companyName.setVisibility(View.GONE);
-        }*/
-
+        String clientFirstName = client.getFirstName();
+        String clientLastName = client.getLastName();
+        String clientCompanyName = client.getCompanyName();
+        if(clientFirstName != null || clientLastName != null) {
+            //supply the textViews with the correct data
+            assert client != null;
+            holder.clientName.setText( clientFirstName + " " + clientLastName );
+            holder.companyName.setText( clientCompanyName );
+        }
         return convertView;
+    }
+
+    /**
+     * Used to avoid calling "findViewById" every time the getView() method is called,
+     * because this can impact to your application performance when your list is large
+     */
+    private class ViewHolder {
+
+        protected TextView clientName;
+        protected TextView companyName;
+
     }
 }

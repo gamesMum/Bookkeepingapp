@@ -2,9 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.bookkeepingapp">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".EditExpenseActivity"></activity>
+        <activity android:name=".ViewExpensesActivity" />
+        <activity android:name=".AddExpensesActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,13 +29,15 @@
         <activity android:name=".SignupActivity" />
         <activity android:name=".AddInvoiceActivity" />
         <activity android:name=".AddClientActivity" />
-        <activity android:name=".ViewClientActivity" />
+        <activity
+            android:name=".ViewClientActivity"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".EditClientActivity" />
         <activity android:name=".AddServiceActivity" />
         <activity android:name=".ViewServiceActivity" />
         <activity android:name=".ViewInvoiceActivity" />
         <activity android:name=".EditInvoiceActivity" />
-        <activity android:name=".EditServiceActivity"/>
+        <activity android:name=".EditServiceActivity" />
     </application>
 
 </manifest>

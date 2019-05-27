@@ -1,5 +1,6 @@
 package com.example.android.bookkeepingapp;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -42,19 +43,23 @@ public class ViewClientActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     public FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mClientDatabaseReference;
+    public Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_view_client );
 
+
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar_1);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.clints_view_text));
-        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        //enable back navigation icon for costume toolbar
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ActionBar actionbar = getSupportActionBar();
 
         // Initialize Firebase database
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -114,18 +119,25 @@ public class ViewClientActivity extends AppCompatActivity {
             }
         });
 
+
         extras = getIntent().getStringExtra("clientId");
         if (extras != null) {
             //Show Client Name
 
         }
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+      /*  toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                //go back to the Client activity
+                intent = new Intent( view.getContext(), MainActivity.class );
+                intent.putExtra( "fragmentName", "clientFragment" );
+               startActivity( intent );
             }
-        });
+        });*/
+
+
+
 
         //Check user if authenticated
         mAuth = FirebaseAuth.getInstance();
@@ -144,14 +156,17 @@ public class ViewClientActivity extends AppCompatActivity {
         };
     }
 
-  /*  @Override
+
+
+    //this is the physical back (on the actual phone)
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         //Go back to client fragment
         Intent intent = new Intent(this,MainActivity.class);
         intent.putExtra("fragmentName","clientFragment"); //for example
         startActivity(intent);
-    }*/
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -166,6 +181,12 @@ public class ViewClientActivity extends AppCompatActivity {
     {
         switch (item.getItemId())
         {
+            case android.R.id.home:
+                //Go back to client fragment
+                Intent intent = new Intent(this,MainActivity.class);
+                intent.putExtra("fragmentName","clientFragment"); //for example
+                startActivity(intent);
+                return true;
             case R.id.action_delete:
                 //your code here
                 //Add dialog box

@@ -22,11 +22,12 @@ public class AddServiceActivity extends AppCompatActivity {
     private  String TAG = "AddServiceActivity";
     private EditText mServiceName;
     private EditText mOriginalPrice;
-    private EditText mProfitRate;
+    private EditText mPlusProfitSec;
     private EditText mNotes;
     private Toolbar toolbar;
+    Intent intent;
     //I need to get this via service
-    private static double TrToIqRatio = 224.510;
+    private static double secondaryToPrimaryRate = 224.510;
 
 
     private String clientID;
@@ -52,11 +53,12 @@ public class AddServiceActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //add (X) icon to the custom toolbar
         toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
+        intent = new Intent(this,MainActivity.class);
 
         //Initialize xml element
         mServiceName = (EditText) findViewById( R.id.service_name );
         mOriginalPrice = (EditText) findViewById( R.id.service_price );
-        mProfitRate = (EditText) findViewById( R.id.service_profit_rate );
+        mPlusProfitSec = (EditText) findViewById( R.id.service_plus_profit );
         mNotes = (EditText) findViewById( R.id.service_notes );
 
         //declare the database reference object. This is what we use to access the database.
@@ -75,8 +77,13 @@ public class AddServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                //Go back to service fragment
+            intent.putExtra("fragmentName","serviceFragment");
+            startActivity(intent);
             }
         });
+
+
 
 
     }
@@ -85,38 +92,34 @@ public class AddServiceActivity extends AppCompatActivity {
         //get the elements in the dialog
         String serviceName = mServiceName.getText().toString();
         double servicePrice =  Double.parseDouble(mOriginalPrice.getText().toString());
-        double serviceProfitRate = Double.parseDouble( mProfitRate.getText().toString() );
+        double servicePricePlusProfit = Double.parseDouble( mPlusProfitSec.getText().toString() );
         String serviceNotes = mNotes.getText().toString();
 
-        //calculate the price plus profit (servicePrice * profit rate)
-       double servicePlusProfit = servicePrice * serviceProfitRate;
        //calculate the final price in Iraqi dinar (for now)
-       double servicePriceIQ = servicePlusProfit * TrToIqRatio;
-
+       double servicePriceSecCurrency = servicePricePlusProfit;
+       double servicePlusProfit = servicePriceSecCurrency / secondaryToPrimaryRate;
         //Check if the user enterd the service name and price
         if (serviceName.trim().length() > 0 && servicePrice > 0) {
             String key = mServiceDatabaseReference.push().getKey();
 
-            Service service = new Service(key, serviceName,servicePrice,
-                    serviceProfitRate);
+            Service service = new Service(key, serviceName,servicePrice, servicePriceSecCurrency);
             //set the necessary inforatio and store in database
             mServiceDatabaseReference.child(key).setValue(service);
             //set the notes if any
             mServiceDatabaseReference.child(key).child( "serviceNotes" ).setValue(serviceNotes);
             //set the service price plus profit & price in IQ we calculated earlier
             mServiceDatabaseReference.child( key ).child( "servicePlusProfit").setValue( servicePlusProfit );
-            mServiceDatabaseReference.child( key ).child( "servicePriceIQ").setValue( servicePriceIQ );
 
             toastMessage("New Service has been saved.");
             mServiceName.setText("");
             mOriginalPrice.setText("");
             mNotes.setText( "" );
-            mProfitRate.setText( "" );
+            mPlusProfitSec.setText("");
 
             //Go back to service fragment
-            Intent intent = new Intent(this,MainActivity.class);
-            intent.putExtra("fragmentName","serviceFragment"); //for example
-            startActivity(intent);
+           /* Intent intent = new Intent(this,MainActivity.class);
+            intent.putExtra("fragmentName","serviceFragment");
+            startActivity(intent);*/
 
         } else {
             //else tell the user that there is an error

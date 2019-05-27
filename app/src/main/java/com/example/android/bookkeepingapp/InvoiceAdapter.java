@@ -81,7 +81,7 @@ public class InvoiceAdapter extends ArrayAdapter<Invoice> {
         //supply the textViews with the correct data
         assert invoice != null;
         String strInvoiceTotal = formatPrice(invoice.getTotal() );
-        total.setText( "₺" + strInvoiceTotal );
+        total.setText( "ID" + strInvoiceTotal );
 
         return convertView;
     }
@@ -90,7 +90,7 @@ public class InvoiceAdapter extends ArrayAdapter<Invoice> {
         DecimalFormat formatter = new DecimalFormat( "##,###,###" );
         String priceFormatted = formatter.format( price );
         return priceFormatted;
-    }
+}
 
     private String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();

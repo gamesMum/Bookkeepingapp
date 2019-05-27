@@ -90,10 +90,11 @@ public class ViewInvoiceActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar_invoice_view);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.invoices_text));
-        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
-
+        //enable back navigation icon for costume toolbar
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         userData = new User(  );
-        ActionBar actionbar = getSupportActionBar();
 
         // Initialize Firebase database
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -204,7 +205,7 @@ public class ViewInvoiceActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //TODO:check if this work
                 //get the current total expenses for the user
-                userData.setTotalExpenses( dataSnapshot.getValue( User.class ).getTotalExpenses() ); //set the ecp
+                userData.setTotalExpenses( dataSnapshot.getValue( User.class ).getTotalExpenses() ); //set the exp
                 userData.setTotalProfit( dataSnapshot.getValue(User.class).getTotalProfit());
                 //add the sum of this invoice expenses to the current user's
                 //expenses
@@ -273,10 +274,10 @@ public class ViewInvoiceActivity extends AppCompatActivity {
                 for(String s : mServiceNum) {
                     Service service = new Service();
                     service.setServiceName( dataSnapshot.child( s ).getValue( Service.class ).getServiceName() ); //set the name
-                    service.setServicePriceIQ( dataSnapshot.child( s ).getValue( Service.class ).getServicePriceIQ() );
+                    service.setServicePriceSecCurrency( dataSnapshot.child( s ).getValue( Service.class ).getServicePriceSecCurrency() );
 
                     mServices.append( "- " + service.getServiceName() + "\n");
-                    mServicePrice.append("ID " + formatPrice( service.getServicePriceIQ() )+ "\n");
+                    mServicePrice.append("ID " + formatPrice( service.getServicePriceSecCurrency() )+ "\n");
                 }
             }
 
@@ -294,17 +295,6 @@ public class ViewInvoiceActivity extends AppCompatActivity {
 
         }
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              // finish();
-                //Go back to Invoice fragment
-                Intent intent = new Intent(ViewInvoiceActivity.this,MainActivity.class);
-                intent.putExtra("fragmentName","invoiceFragment"); //for example
-                startActivity(intent);
-
-            }
-        });
 
         //Check user if authenticated
         mAuth = FirebaseAuth.getInstance();
@@ -321,6 +311,16 @@ public class ViewInvoiceActivity extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    //this is the physical back (on the actual phone)
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //Go back to client fragment
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.putExtra("fragmentName","invoiceFragment"); //for example
+        startActivity(intent);
     }
 
     //Change the stripe color
@@ -357,6 +357,12 @@ public class ViewInvoiceActivity extends AppCompatActivity {
     {
         switch (item.getItemId())
         {
+            case android.R.id.home:
+                //Go back to invoice fragment
+                Intent intent = new Intent(this,MainActivity.class);
+                intent.putExtra("fragmentName","invoiceFragment"); //for example
+                startActivity(intent);
+                return true;
             case R.id.action_delete:
                 //your code here
                 //Add dialog box
@@ -373,24 +379,35 @@ public class ViewInvoiceActivity extends AppCompatActivity {
                toastMessage("OK edit me now!");
                 return true;
             case R.id.action_pay:
-                //mark this invoice as paid
-                invoice.setPaid( PAID );
-                mInvoiceDatabaseReference.child( keyInvoice ).setValue( invoice );
-                //Update the user expenses and profit
-                //Add the invoice value to user profit (current profit plus the new paid invoice)
-                newUserProfit = userCurrentProfit + invoice.getInvoiceProfit();
-                //subtract the profit from the total expenses
-                newUserExp = userCurrentExp - invoice.getInvoiceExpenses();
-                //update user data
-                mUserDatabaseReference.child( "totalProfit" ).setValue( newUserProfit );
-                mUserDatabaseReference.child( "totalExpenses" ).setValue( newUserExp);
-                //change the stripe color
-                updateInvoiceStatus();
-                toastMessage("This invoice is Paid");//store the Invoice in the database
-                item.setVisible( false );//hide the invoice mark as paid
-                //show the mark Not paid instead
-                item = menu.findItem( R.id.action_un_pay );
-                item.setVisible( true );
+                //check if it is not already paied
+                if(invoice.getIsPaid() == 0) {
+                    //mark this invoice as paid
+                    invoice.setPaid( PAID );
+                    mInvoiceDatabaseReference.child( keyInvoice ).setValue( invoice );
+                    //Update the user expenses and profit
+                    //Add the invoice value to user profit (current profit plus the new paid invoice)
+                    newUserProfit = userCurrentProfit + invoice.getInvoiceProfit();
+                    //subtract the profit from the total expenses
+                    newUserExp = userCurrentExp - invoice.getInvoiceExpenses();
+                    //update user data
+                    mUserDatabaseReference.child( "totalProfit" ).setValue( newUserProfit );
+                    mUserDatabaseReference.child( "totalExpenses" ).setValue( newUserExp );
+                    //change the stripe color
+                    updateInvoiceStatus();
+                    toastMessage( "This invoice is Paid" );//store the Invoice in the database
+                    item.setVisible( false );//hide the invoice mark as paid
+                    //show the mark Not paid instead
+                    item = menu.findItem( R.id.action_un_pay );
+                    item.setVisible( true );
+                }
+                else{
+                    toastMessage( "This invoice is already Paid" );
+                    //hide the set is paid option
+                    item.setVisible( false );//hide the invoice mark as paid
+                    //show the mark Not paid instead
+                    item = menu.findItem( R.id.action_un_pay );
+                    item.setVisible( true );
+                }
                 return true;
 
             case R.id.action_un_pay:
@@ -438,6 +455,12 @@ public class ViewInvoiceActivity extends AppCompatActivity {
         DecimalFormat formatter = new DecimalFormat( "##,###,###" );
         String priceFormatted = formatter.format( price );
         return priceFormatted;
+    }
+
+    double roundTwoDecimals(double d)
+    {
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Double.valueOf(twoDForm.format(d));
     }
 
 }

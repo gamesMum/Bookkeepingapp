@@ -11,53 +11,33 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:title="@string/service_add"
+        app:title="@string/expense_add"
         app:titleTextColor="@android:color/white"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
-    <ImageView
-        android:id="@+id/service_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:background="@drawable/dotted_square"
-        android:gravity="center"
-        android:hint="@string/add_client_text"
-        android:textAppearance="?android:textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/service_name"
+        android:id="@+id/expenses_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textCapSentences"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:paddingBottom="@dimen/virtical_padding"
-        android:hint="@string/service_name" />
+        android:hint="@string/expendings_text" />
 
     <EditText
-        android:id="@+id/service_price"
+        android:id="@+id/expense_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:hint="@string/service_price"
+        android:hint="@string/expenses_text"
         android:inputType="numberDecimal"
         android:paddingBottom="@dimen/virtical_padding" />
 
     <EditText
-        android:id="@+id/service_plus_profit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:hint="@string/service_plus_profit"
-        android:inputType="numberDecimal"
-        android:paddingBottom="@dimen/virtical_padding" />
-
-    <EditText
-        android:id="@+id/service_notes"
+        android:id="@+id/expenses_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"

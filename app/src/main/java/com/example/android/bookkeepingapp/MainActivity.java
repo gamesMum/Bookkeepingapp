@@ -1,9 +1,11 @@
 package com.example.android.bookkeepingapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -35,35 +37,47 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
 
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /**if there is no content frame selected yet
-         * select the sumery fragment for the logged in user
-        if (getFragmentManager().findFragmentById(R.id.content_frame)== null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new SummeryFragment()).commit();
-        }*/
 
-       //
-        String  extras = getIntent().getStringExtra("fragmentName");
-        if (extras != null) {
-            switch (extras)
+        Bundle  bundle = getIntent().getExtras();
+        if (bundle != null) {
+            if(bundle.getString( "fragmentName" ) != null)
             {
+            switch (bundle.getString( "fragmentName" )) {
                 case "summeryFragment":
-                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new SummeryFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new SummeryFragment() ).commit();
+
                     break;
                 case "clientFragment":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ClientFragment()).commit();
-                break;
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new ClientFragment() ).commit();
+                    break;
 
                 case "invoiceFragment":
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new InvoicesFragment()).commit();
-                break;
+                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new InvoicesFragment() ).commit();
+                    break;
 
                 case "serviceFragment":
+                    //go to service fragment
                     getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ServiceFragment()).commit();
+
                     break;
+
+                case "expenseFragment":
+                    //go to service fragment
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new ExpensesFragment()).commit();
+
+                    break;
+
+
+                default:
+                        getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new SummeryFragment() ).commit();
+                        break;
+
+            }
             }
 
         }
@@ -72,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         mSignout = (TextView) findViewById(R.id.signout_text);
 
         //// Set a Toolbar to replace the ActionBar.
-        toolbar = findViewById(R.id.toolbar);
+       toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.app_name));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -117,12 +131,18 @@ public class MainActivity extends AppCompatActivity {
                     //go to login activity
                     Intent i = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(i);
-                    toastMessage("Successfully signed out");
+                    //toastMessage("Successfully signed out");
                 }
                 else
                 {
                     //go to summery fragment
-                    getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new SummeryFragment()).commit();
+                   // getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new SummeryFragment()).commit();
+                    toolbar.setTitle( R.string.summery_text );
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    SummeryFragment fragment = new SummeryFragment();
+                    fragmentTransaction.replace(R.id.content_frame, fragment);
+                    fragmentTransaction.commit();
                 }
             }
         };
@@ -156,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.nav_customers:
                 fragmentClass = ClientFragment.class;
+
                 break;
             case R.id.nav_expendings:
                 fragmentClass = ExpensesFragment.class;
@@ -208,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
         // and will not render the hamburger icon without it.
-        return new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open,  R.string.drawer_close);
+        return new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open,  R.string.drawer_close);
     }
 
     /**
@@ -222,33 +243,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-        //
-        String  extras = getIntent().getStringExtra("fragmentName");
-        if (extras != null) {
-            switch (extras) {
-                case "summeryFragment":
-                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new SummeryFragment() ).commit();
-                    break;
-                case "clientFragment":
-                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new ClientFragment() ).commit();
-                    break;
-
-                case "invoiceFragment":
-                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new InvoicesFragment() ).commit();
-                    break;
-
-                case "serviceFragment":
-                    getSupportFragmentManager().beginTransaction().replace( R.id.content_frame, new ServiceFragment() ).commit();
-                    break;
-            }
+        Bundle bundle = getIntent().getExtras();
+        if(bundle == null)
+        {
+            //go to summery fragment
+            // getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new SummeryFragment()).commit();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            SummeryFragment fragment = new SummeryFragment();
+            fragmentTransaction.replace(R.id.content_frame, fragment);
+            toolbar.setTitle( R.string.summery_text );
+            fragmentTransaction.commit();
         }
+
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        //
+
     }
 
     @Override

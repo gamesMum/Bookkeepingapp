@@ -177,10 +177,15 @@ public class ClientFragment extends Fragment {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Client client = dataSnapshot.getValue( Client.class );
-                    mClientAdapter.add( client );
-                    mProgressBar.setVisibility( ProgressBar.INVISIBLE );
-                    if (!dataSnapshot.exists()) {
+
+                    if (dataSnapshot.exists()) {
+                        Client client = dataSnapshot.getValue( Client.class );
+                        mClientAdapter.add( client );
+                        mProgressBar.setVisibility( ProgressBar.INVISIBLE );
+
+                    }
+                    else
+                    {
                         mProgressBar.setVisibility( ProgressBar.INVISIBLE );
                     }
                     Log.d( TAG + "Added", dataSnapshot.getValue( Client.class ).toString() );
@@ -200,6 +205,12 @@ public class ClientFragment extends Fragment {
             };
             mClientDatabaseReference.addChildEventListener( mChildEventListener );
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().setTitle( R.string.clints_text );
     }
 
     /**

@@ -31,6 +31,7 @@ public class EditClientActivity extends AppCompatActivity {
     private EditText mAddressEditText;
     private EditText mCountryEditText;
     private Toolbar toolbar;
+    private Intent intent;
 
     private String extras;
 
@@ -56,6 +57,7 @@ public class EditClientActivity extends AppCompatActivity {
 
         toolbar.setTitle(getString(R.string.clients_edit));
         toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
+        intent = new Intent(this, MainActivity.class);
         ActionBar actionbar = getSupportActionBar();
 
         //Initialize xml element

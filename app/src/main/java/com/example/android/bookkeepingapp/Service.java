@@ -8,9 +8,8 @@ public class Service {
     private String serviceNum;
     private String serviceName;
     private double servicePrice;
-    private double serviceProfitRate;
     private double servicePlusProfit;
-    private double servicePriceIQ;
+    private double servicePriceSecCurrency;
     private String serviceNotes;
 
     //Add image here (optional)
@@ -19,28 +18,22 @@ public class Service {
 
     Service()
     {}
-    Service(String serviceNum, String serviceName, double servicePrice, double serviceProfitRate)
+    Service(String serviceNum, String serviceName, double servicePrice,
+            double servicePriceSecCurrency)
     {
         this.serviceName = serviceName;
         this.servicePrice = servicePrice;
         this.serviceNum = serviceNum;
-        this.serviceProfitRate = serviceProfitRate;
+        this.servicePriceSecCurrency = servicePriceSecCurrency;
     }
 
-    public double getServiceProfitRate() {
-        return serviceProfitRate;
+
+    public void setServicePriceSecCurrency(double servicePriceSecCurrency) {
+        this.servicePriceSecCurrency = servicePriceSecCurrency;
     }
 
-    public void setServiceProfitRate(double serviceProfitRate) {
-        this.serviceProfitRate = serviceProfitRate;
-    }
-
-    public void setServicePriceIQ(double servicePriceIQ) {
-        this.servicePriceIQ = servicePriceIQ;
-    }
-
-    public double getServicePriceIQ() {
-        return servicePriceIQ;
+    public double getServicePriceSecCurrency() {
+        return servicePriceSecCurrency;
     }
 
     public double getServicePlusProfit() {
@@ -79,5 +72,9 @@ public class Service {
 
     public void setServiceNotes(String serviceNotes) {
         this.serviceNotes = serviceNotes;
+    }
+
+    public void setServiceNum(String serviceNum) {
+        this.serviceNum = serviceNum;
     }
 }

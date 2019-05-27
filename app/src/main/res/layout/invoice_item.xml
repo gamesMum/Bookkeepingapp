@@ -13,12 +13,14 @@
         android:id="@+id/invoice_label_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:src="@drawable/yellow_sq"
-        android:paddingLeft="@dimen/horizontal_padding"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="-25dp"
         android:paddingStart="@dimen/horizontal_padding"
-        android:paddingRight="@dimen/horizontal_padding"
+        android:paddingLeft="@dimen/horizontal_padding"
+        android:paddingTop="@dimen/horizontal_padding"
         android:paddingEnd="@dimen/horizontal_padding"
-        android:paddingTop="@dimen/horizontal_padding"/>
+        android:paddingRight="@dimen/horizontal_padding"
+        tools:src="@drawable/yellow_sq" />
 
     <TextView
         android:id="@+id/total_text"

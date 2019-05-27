@@ -45,14 +45,17 @@
 
     <TextView
         android:id="@+id/client_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/client_name_text_box"
+        android:layout_height="@dimen/client_name_text_box"
+
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/invoice_number_text"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:background="@drawable/dotted_square"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:gravity="center"
         android:hint="@string/add_client_text"
         android:textAppearance="?android:textAppearanceMedium" />
@@ -116,42 +119,50 @@
         android:id="@+id/add_client_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/client_add"
+        android:layout_below="@id/due_date_text"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:background="@android:color/darker_gray"></View>
-
+        android:background="@android:color/darker_gray" />
+<ScrollView
+    android:id="@+id/services_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_below="@id/add_client_divider">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
     <TextView
         android:id="@+id/services_add"
-        android:layout_width="500dp"
+        android:layout_width="@dimen/invoice_box_height"
         android:layout_height="wrap_content"
-        android:layout_below="@id/add_client_divider"
-
-        android:lines="4"
-        android:maxLines="4"
-        android:paddingLeft="40dp"
-        android:paddingStart="40dp"
+        android:paddingLeft="@dimen/note_box_padding"
+        android:paddingStart="@dimen/note_box_padding"
         android:paddingTop="@dimen/virtical_padding"
         android:text="@string/service_add"
         android:textAppearance="?android:textAppearanceMedium" />
 
     <TextView
         android:id="@+id/services_add_price"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/price_box_size"
         android:layout_height="wrap_content"
-        android:layout_below="@id/add_client_divider"
-        android:layout_toRightOf="@id/services_add"
         android:paddingEnd="@dimen/horizontal_padding"
         android:paddingRight="@dimen/horizontal_padding"
         android:paddingTop="@dimen/virtical_padding"
         android:textAppearance="?android:textAppearanceMedium" />
-
+    </LinearLayout>
+    </LinearLayout>
+</ScrollView>
     <View
         android:id="@+id/service_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/services_add"
+        android:layout_below="@id/services_scroll"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:background="@android:color/darker_gray"></View>
+        android:background="@android:color/darker_gray" />
 
     <EditText
         android:id="@+id/notes_add_edit_text"

@@ -29,7 +29,10 @@ public class EditServiceActivity extends AppCompatActivity {
     private TextView mServiceName;
     private TextView mServicePrice;
     private TextView mServiceNotes;
+    private TextView mServicePriceSecCurrency;
     private String extras;
+    //I need to get this via service
+    private static double secondaryToPrimaryRate = 224.510;
 
     // Firebase instance variables
     private FirebaseUser user;
@@ -68,6 +71,7 @@ public class EditServiceActivity extends AppCompatActivity {
         mServiceName = (TextView) findViewById( R.id.service_name_edit );
         mServicePrice = (TextView) findViewById( R.id.service_price_edit );
         mServiceNotes = (TextView) findViewById( R.id.service_notes_edit );
+        mServicePriceSecCurrency = (TextView) findViewById (R.id.service_price_secondary_edit);
 
         mServiceDatabaseReference.addValueEventListener( new ValueEventListener() {
             @Override
@@ -77,9 +81,12 @@ public class EditServiceActivity extends AppCompatActivity {
                 Service service = new Service();
                 service.setServiceName( dataSnapshot.child( extras ).getValue( Service.class ).getServiceName() ); //set the name
                 service.setServicePrice( dataSnapshot.child( extras ).getValue( Service.class ).getServicePrice() ); //set the name
+                service.setServicePriceSecCurrency( dataSnapshot.child( extras).getValue(Service.class).getServicePriceSecCurrency() );
                 service.setServiceNotes( dataSnapshot.child( extras ).getValue( Service.class ).getServiceNotes() );
+                service.setServicePlusProfit( dataSnapshot.child( extras ).getValue( Service.class ).getServicePlusProfit() );
                 mServiceName.append( service.getServiceName() );
                 mServicePrice.append(String.valueOf(  service.getServicePrice() ) );
+                mServicePriceSecCurrency.append( String.valueOf(  service.getServicePriceSecCurrency() )  );
                 if(service.getServiceNotes() != null) {
                     mServiceNotes.append( service.getServiceNotes() );
                 }
@@ -156,12 +163,14 @@ public class EditServiceActivity extends AppCompatActivity {
         //get the elements in the dialog
         String serviceName = mServiceName.getText().toString();
         double servicePrice = Double.valueOf(  mServicePrice.getText().toString());
+        double serviceSecondaryCurrency = Double.valueOf( mServicePriceSecCurrency.getText().toString() );
         String serviceNotes = mServiceNotes.getText().toString();
+        double servicePlusProfit = serviceSecondaryCurrency / secondaryToPrimaryRate;
 
         //....the rest of infos
 
-        //Check if the user enterd either the first or the last name
-        if ((serviceName.trim().length() > 0 && servicePrice > 0)) {
+        //Check if the user inserted the correct default values
+        if ((serviceName.trim().length() > 0 && servicePrice > 0 && serviceSecondaryCurrency > 0)) {
             //set the values at the same clientId selected (update)
             String key = extras;
            /*
@@ -172,13 +181,15 @@ public class EditServiceActivity extends AppCompatActivity {
             mClientDatabaseReference.child( key ).child( "firstName" ).setValue( firstName );
             mClientDatabaseReference.child( key ).child( "lastName" ).setValue( lastName );*/
 
-            Service service = new Service(key, serviceName,servicePrice, 10);
+            Service service = new Service(key, serviceName,servicePrice, serviceSecondaryCurrency);
             mServiceDatabaseReference.child(key).setValue(service);
             mServiceDatabaseReference.child(key).child( "serviceNotes" ).setValue(serviceNotes);
-
+            mServiceDatabaseReference.child( key ).child( "servicePlusProfit").setValue( servicePlusProfit );
             mServiceName.setText("");
             mServicePrice.setText("");
+            mServicePriceSecCurrency.setText("");
             mServiceNotes.setText( "" );
+
             toastMessage("data is up to date.");
 
 

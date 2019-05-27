@@ -29,7 +29,7 @@ public class AddClientActivity extends AppCompatActivity {
     private EditText mAddressEditText;
     private Spinner mCountrySpinner;
     private Toolbar toolbar;
-
+    private  Intent intent;
 
     private String clientID;
 
@@ -61,6 +61,7 @@ public class AddClientActivity extends AppCompatActivity {
         mAddressEditText = (EditText) findViewById( R.id.street_add );
         mCountrySpinner = (Spinner) findViewById( R.id.city_add_spinner );
 
+         intent = new Intent(this,MainActivity.class);
         //declare the database reference object. This is what we use to access the database.
         //NOTE: Unless you are signed in, this will not be useable.
         mAuth = FirebaseAuth.getInstance();
@@ -77,6 +78,9 @@ public class AddClientActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                //Go back to client fragment
+            intent.putExtra("fragmentName","clientFragment"); //for example
+            startActivity(intent);
             }
         });
 
@@ -115,11 +119,15 @@ public class AddClientActivity extends AppCompatActivity {
             toastMessage("New Client has been saved.");
             mFirstNameEditText.setText("");
             mLastNameEditText.setText("");
+            mPhoneNumber.setText("");
+            mCountrySpinner.setSelection( 0 );
+            mEmailEditText.setText( "" );
+            mAddressEditText.setText( "" );
 
             //Go back to client fragment
-            Intent intent = new Intent(this,MainActivity.class);
+           /* Intent intent = new Intent(this,MainActivity.class);
             intent.putExtra("fragmentName","clientFragment"); //for example
-            startActivity(intent);
+            startActivity(intent);*/
 
         } else {
             //else tell the user that there is an error

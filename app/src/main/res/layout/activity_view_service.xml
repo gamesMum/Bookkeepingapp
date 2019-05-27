@@ -54,10 +54,7 @@
             android:paddingBottom="@dimen/virtical_padding"
             android:text="@string/service_view_price"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-        <TextView
-            android:id="@+id/service_view_profit_rate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
 
             android:paddingStart="@dimen/horizontal_padding"
             android:paddingLeft="@dimen/horizontal_padding"

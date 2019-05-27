@@ -169,11 +169,18 @@ public class InvoicesFragment extends Fragment {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Invoice invoice = dataSnapshot.getValue( Invoice.class );
-                    mInvoiceAdapter.add( invoice );
-                    mProgressBar.setVisibility( ProgressBar.INVISIBLE );
-                    if (!dataSnapshot.exists()) {
+                    if (dataSnapshot.getValue() != null && dataSnapshot.getValue() != "") {
+                        Invoice invoice = dataSnapshot.getValue( Invoice.class );
+                        mInvoiceAdapter.add( invoice );
                         mProgressBar.setVisibility( ProgressBar.INVISIBLE );
+                        Log.v(TAG, "there is data!");
+
+                    }
+                    else //make the progress bar also invisible but this time alarm the user
+                    //that there is no data
+                    {
+                        //mProgressBar.setVisibility( ProgressBar.INVISIBLE );
+                        Log.v(TAG, "there is no data!");
                     }
                     Log.d( TAG + "Added", dataSnapshot.getValue( Invoice.class ).toString() );
                 }
@@ -192,6 +199,12 @@ public class InvoicesFragment extends Fragment {
             };
             mInvoiceDatabaseReference.addChildEventListener( mChildEventListener );
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().setTitle( R.string.invoices_text );
     }
 
     /**
