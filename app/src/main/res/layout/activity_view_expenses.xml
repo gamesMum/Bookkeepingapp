@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/client_item"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_expense_view"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:title="View Service"
+        app:titleTextColor="@android:color/white" />
+
+
+
+    <TextView
+        android:id="@+id/expense_name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:paddingStart="@dimen/horizontal_padding"
+        android:paddingLeft="@dimen/horizontal_padding"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        tools:text="Expense Desc: " />
+
+
+    <TextView
+        android:id="@+id/expense_value_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:paddingStart="@dimen/horizontal_padding"
+        android:paddingLeft="@dimen/horizontal_padding"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:text="@string/expenses_text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+    <TextView
+        android:id="@+id/expense_notes_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/horizontal_padding"
+        android:paddingLeft="@dimen/horizontal_padding"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:text="Notes: "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+</LinearLayout>

@@ -8,4 +8,11 @@
     <dimen name="logo_w_h">100dp</dimen>
     <dimen name="horizontal_padding">24dp</dimen>
     <dimen name="virtical_padding">16dp</dimen>
+    <dimen name="check_box_list_margin">20dp</dimen>
+    <dimen name="client_name_text_box">150dp</dimen>
+    <dimen name="service_name_check_box">200dp</dimen>
+    <dimen name="note_box_padding">40dp</dimen>
+    <dimen name="scroll_view_height">100dp</dimen>
+    <dimen name="invoice_box_height">400dp</dimen>
+    <dimen name="price_box_size">150dp</dimen>
 </resources>

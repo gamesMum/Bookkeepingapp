@@ -1,4 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string-array name="country_arrays">
+        <item>Malaysia</item>
+        <item>United States</item>
+        <item>Indonesia</item>
+        <item>France</item>
+        <item>Italy</item>
+        <item>Singapore</item>
+        <item>New Zealand</item>
+        <item>India</item>
+        <item>Iraq</item>
+        <item>Turkey</item>
+    </string-array>
+    <string name="country_prompt">Choose a country</string>
     <string name="app_name">TRACK</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="auth_failed">Authentication error, Please enter a valid email and password or sign up</string>
@@ -18,13 +33,21 @@
     <string name="enter_listItem_text">New Client</string>
     <string name="summery_text">Summery</string>
     <string name="invoices_text">Invoices</string>
+
+    <string name="Service_view_text">View Service</string>
+    <string name="clints_view_text">View Client</string>
     <string name="clints_text">Clients</string>
     <string name="service_text">Services</string>
     <string name="expendings_text">Expenses</string>
     <string name="clients_add">Add Client</string>
     <string name="service_add">Add Service</string>
+    <string name="expense_add">Add Expense</string>
+    <string name="service_edit">Edit Service</string>
+    <string name="expenses_edit">Edit Expense</string>
     <string name="clients_edit">Edit Client</string>
     <string name="menu_delete">Delete</string>
+    <string name="menu_pay">Mark as Paied</string>
+    <string name="menu__un_pay">Mark as Not Paid</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_save">Save</string>
@@ -33,13 +56,21 @@
     <string name="due_date_text">Due Date</string>
     <string name="payments_text">Client</string>
     <string name="total_text">Total</string>
+    <string name="expenses_text">Expenses(TR)</string>
+    <string name="profit_text">Profits(TR)</string>
     <string name="notes_text">Notes</string>
     <string name="invoice_new">New Invoice</string>
+    <string name="invoice_edit">Edit Invoice</string>
     <string name="invoice_number">Invoice Number</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="service_name">Service Name</string>
-    <string name="service_price">Price</string>
+    <string name="service_price">Original Price(TR)</string>
+    <string name="service_plus_profit">Plus Profit</string>
+    <string name="service_view_price_IQ">price(IQ): </string>
+    <string name="service_view_plus_profit">Plus Profit(TR): </string>
+    <string name="service_view_price">Price(TR): </string>
+    <string name="service_view_profit_rate">Profit Rate: </string>
     <string name="service_notes">Notes</string>
     <string name="date_on_issue">On date of issue</string>
     <string name="days_after_15">After 15 days</string>
@@ -57,10 +88,19 @@
     <string name="city_edit">City(Optional)</string>
     <string name="company_edit">Company(Optional)</string>
 
+
+    <string name="green_stripe">Paid</string>
+    <string name="yellow_stripe">Not Paid</string>
+    <string name="red_stripe">Over Due</string>
+
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="quantity_default">1</string>
+
+
     <!--to solve the rendering issue id/invisible-->
     <item name="visible" type="id" />
     <item name="masked" type="id" />
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

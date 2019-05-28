@@ -2,6 +2,7 @@ package com.example.android.bookkeepingapp;
 
 import android.app.Dialog;
 import android.app.LauncherActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
@@ -36,13 +38,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AddInvoiceActivity extends AppCompatActivity {
 
@@ -53,14 +58,21 @@ public class AddInvoiceActivity extends AppCompatActivity {
     private TextView mDueDateTextView;
     private TextView mServicesTextView;
     private TextView mTotalTextView;
+    private TextView mTotalExpensesTextView;
+    private TextView mProfitTextView;
     private EditText mNotesEditText;
+    private String ServiceQuantity;
     private Toolbar toolbar;
     private ListView mClientListView;
     private ListView mServiceListView;
+    private TextView mServicePriceTextView;
+    private TextView mInvoiceNumberTextView;
     private ProgressBar mProgressBar;
 
-
-
+    private CheckedTextView ctv;
+    private TextView mServiceQuantity;
+    private Button mMinusBtn;
+    private Button mPlusBtn ;
 
     private String clientID;
 
@@ -73,39 +85,67 @@ public class AddInvoiceActivity extends AppCompatActivity {
     private DatabaseReference mInvoiceDatabaseReference;
     private DatabaseReference mClientDatabaseReference;
     private DatabaseReference mServiceDatabaseReference;
+    private DatabaseReference mOrderDatabaseReference;
+    private DatabaseReference mUserDatabaseReference;
     private ClientAdapter mClientAdapter;
     private ServiceAdapterCheckBox mServiceAdapter;
     ProgressBar mClientDialogProgressBar;
     ProgressBar mServiceDialogProgressBar;
-    String clientIdFromDialog;
-    //store the selected services in Array list of String
-    private ArrayList<String> serviceNumsFromDialog;
+    private String clientIdFromDialog;
+    private Intent intent;
+    //store the selected services and the quantity of each one
+    private Hashtable<String, Integer> selectedServicesHash;
+    //List of orders for each service
+    private ArrayList<Order> orderArrayList;
+    //the invoice object that will contain the list of orders
+    private Invoice invoice;
+    private   String keyInvoice;
+    private double totalPrice;
+    private double invoiceExpenses;
+    private double invoicePlusProfitFirstCurrence;
+    private double currentTotalExp;
+    private double userNewExp;
+    private double invoiceProfit;
+    private User userData;
     //**************************************************
     private ChildEventListener mChiltEventListener;
     private ChildEventListener mServiceEventListener;
     //**************************************************
-
-
+    //create array of selectes textviews
+    private  ArrayList<TextView> selectedTextViews;
+    private ArrayList<String> selectedServices;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_add_invoice );
+        //Create new Invoice instence with giving the first Id
+        mInvoiceNumberTextView = (TextView) findViewById( R.id.invoice_number_text_value );
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById( R.id.toolbar_invoice );
         setSupportActionBar( toolbar );
         toolbar.setNavigationIcon( R.drawable.ic_close_black_24dp );
-
+        intent = new Intent(this,MainActivity.class);
+         userData = new User();
 
         //Initialize xml element
         mClientTextView = (TextView) findViewById( R.id.client_add );
         mIssueDateTextView = (TextView) findViewById( R.id.issue_date_text_value );
         mDueDateTextView = (TextView) findViewById( R.id.due_date_text_value );
         mServicesTextView = (TextView) findViewById( R.id.services_add );
+        mServicePriceTextView = (TextView) findViewById( R.id.services_add_price );
         mTotalTextView = (TextView) findViewById( R.id.invoice_total_value );
+        mTotalExpensesTextView = (TextView) findViewById( R.id.invoice_expenses_value );
+        mProfitTextView = (TextView) findViewById( R.id.invoice_profit_value );
         mNotesEditText = (EditText) findViewById( R.id.notes_add_edit_text );
         mClientDialogProgressBar = null;
-        serviceNumsFromDialog = new ArrayList<String>(  );
+
+        selectedServicesHash = new Hashtable<String, Integer>();
+        selectedTextViews = new ArrayList<>(  );
+        selectedServices = new ArrayList<>(  );
+
+        clientIdFromDialog = "";
+        orderArrayList = new ArrayList<Order>( );
 
         //set the values for the issue date and due date textviews
         //Due date default is same date of issue
@@ -119,10 +159,14 @@ public class AddInvoiceActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             userID = user.getUid();
+            mUserDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "user" );
         }
         //get the data for stored invoices for the logged in user
         mInvoiceDatabaseReference = mFirebaseDatabase.getReference().
                 child( userID ).child( "invoice" );
+        //get the data for stored invoices for the logged in user
+        mOrderDatabaseReference = mFirebaseDatabase.getReference().
+                child( userID ).child( "order" );
         //get the data for stored clients for the logged in user
         mClientDatabaseReference = mFirebaseDatabase.getReference().
                 child( userID ).child( "client" );
@@ -130,12 +174,16 @@ public class AddInvoiceActivity extends AppCompatActivity {
         mServiceDatabaseReference = mFirebaseDatabase.getReference().
                 child( userID ).child( "service" );
 
-
+        //get new key for the invoice to display it in the text view
+         keyInvoice = mInvoiceDatabaseReference.push().getKey();
+        //set the text to that number (or part of it)
+        mInvoiceNumberTextView.setText( keyInvoice.substring( keyInvoice.length() - 5 ) );
         //set click listeners on textViews (mClientTextView and mServicesTextView)
         mClientTextView.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //clear privious texts__no repetition problem
+                //-------------------------------------------
                 //show list of stored clients
                 createClientDialog();
 
@@ -166,8 +214,34 @@ public class AddInvoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                //Go back to invoice fragment
+                intent.putExtra("fragment Name","invoiceFragment"); //for example
+                startActivity(intent);
             }
         } );
+
+        //get the current User expenses (before invoice is created)
+        mUserDatabaseReference.addValueEventListener( new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //get the current total expenses for the user
+                userData.setTotalExpenses( dataSnapshot.getValue( User.class ).getTotalExpenses() ); //set the ecp
+                //add the sum of this invoice expenses to the current user's
+                //expenses
+                //calculate the total expenses
+                // double newExpenses  = invoiceExpenses + userData.getTotalExpenses();
+                Log.v(TAG, "The value of the  expenses before invoice: " + userData.getTotalExpenses());
+                currentTotalExp = userData.getTotalExpenses();
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        } );
+
 
     }
 
@@ -218,6 +292,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
         } ).create().show();
 
 
+
     }
 
     //helping method to create, populate and showing the client dialog box
@@ -236,9 +311,9 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
             @Override
             public void onCancel(DialogInterface dialog) {
-                toastMessage( "OnCancelListener" );
+                //toastMessage( "OnCancelListener" );
                 //use client id from dialog when the dialog is cloased
-                if(clientIdFromDialog != null) {
+                if(clientIdFromDialog.length() != 0) {
                     mClientDatabaseReference.addValueEventListener( new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -255,7 +330,8 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
                         }
                     } );
-                }
+                }else
+                    mClientTextView.setText( R.string.add_client_text );
 
                 //detach database reader on canceling
                 detachDatabaseReadListener();
@@ -266,7 +342,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
             @Override
             public void onDismiss(DialogInterface dialog) {
-                toastMessage( "OnDismissListener" );
+                //toastMessage( "OnDismissListener" );
                 //detach database reader on dismissing
 
 
@@ -322,7 +398,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
             @Override
             public void onCancel(DialogInterface dialog) {
-                toastMessage( "OnCancelListener" );
+              //  toastMessage( "OnCancelListener" );
                 //detach database reader on canceling
                 detachServiceDatabaseReadListener();
             }
@@ -332,13 +408,11 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
             @Override
             public void onDismiss(DialogInterface dialog) {
-                toastMessage( "OnDismissListener" );
+               // toastMessage( "OnDismissListener" );
                 //detach database reader on dismissing
                 detachServiceDatabaseReadListener();
             }
         } );
-
-
 
         //Prepare ListView in dialog
         mServiceListView = (ListView) getServiceSelectorView.findViewById( R.id.service_list_view_selector );
@@ -346,65 +420,169 @@ public class AddInvoiceActivity extends AppCompatActivity {
         mServiceDialogProgressBar.setVisibility( View.VISIBLE );
         // Initialize client ListView and its adapter
         final List<Service> services = new ArrayList<>();
-        mServiceAdapter = new ServiceAdapterCheckBox( AddInvoiceActivity.this, R.layout.service_item_check_box, services, serviceNumsFromDialog );
+        mServiceAdapter = new ServiceAdapterCheckBox( AddInvoiceActivity.this,
+                R.layout.service_item_check_box, services, selectedServicesHash);
         mServiceListView.setAdapter( mServiceAdapter );
-        mServiceListView.setItemsCanFocus( false );
+        //mServiceListView.setItemsCanFocus( false );
         // we want multiple clicks
         mServiceListView.setChoiceMode( ListView.CHOICE_MODE_MULTIPLE );
-        //attach the data base reader listener to display the latest clients records
+        //mServiceListView.setItemsCanFocus(false);
+        //attach the data base reader listener to display the services
         attachServiceDatabaseReadListener();
 
 
         mServiceListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                CheckedTextView ctv = (CheckedTextView) view;
+                //default quantity for services
+                int defaultQuantity = 1;
+                //find the checkedTextView inside the relative view
+                  ctv = (CheckedTextView) view.findViewById( R.id.checkedTextView );
+                  mServiceQuantity = (TextView) view.findViewById( R.id.quantity_tv );
+                mMinusBtn = ( Button) view.findViewById( R.id.minus_btn );
+                  mPlusBtn = (Button) view.findViewById( R.id.plus_btn );
+                ((CheckedTextView) ctv).toggle();
                 Service service = (Service) parent.getItemAtPosition(position);
-
                 if (ctv.isChecked()) {
-                    //store the selescted services numbers in arraylist
-                    serviceNumsFromDialog.add(service.getServiceNum());
-                    toastMessage( service.getServiceNum() + " is added" );
+                    selectedServicesHash.put( service.getServiceNum(), defaultQuantity);//for default
+                    selectedServices.add(service.getServiceNum());
+                    //get the textview at selected position
+                    //and store it in the list array
+                    selectedTextViews.add((TextView) parent.getChildAt( position -  parent.getFirstVisiblePosition())
+                            .findViewById( R.id.quantity_tv ));
+                    //check if the position value is null
+                    //for debug
+                   /* if (parent.getChildAt(position-parent.getFirstVisiblePosition()) != null){
+
+
+                        for(TextView tv : selectedTextViews) {
+                            Log.v( TAG, "the value of selected textviews:" + tv.getText() );
+                        }
+
+                    }
+                    else
+                    {
+                        Log.v(TAG, "we can't get to that text view!");
+                    }*/
+
+
+                   //get the value of the quantity check box
+                    //ServiceQuantity = mServiceQuantity.getText().toString();
+                    //make the quantity option visible
+                    mMinusBtn.setVisibility( View.VISIBLE );
+                    mPlusBtn.setVisibility( View.VISIBLE );
+                    mServiceQuantity.setVisibility( View.VISIBLE );
 
                 } else {
+                    //remove the service and quantity from table
+                    selectedServicesHash.remove( service.getServiceNum() );
+                    selectedServices.remove( service.getServiceNum() );
+                    //else remove the textview at that position
+                    //if it is nor not selected
+                    selectedTextViews.remove( (TextView) parent.getChildAt( position - parent.getFirstVisiblePosition() )
+                            .findViewById( R.id.quantity_tv ) );
+                    //the quantity option will be invisible
+                    mMinusBtn.setVisibility( View.INVISIBLE );
+                    mPlusBtn.setVisibility( View.INVISIBLE );
+                    mServiceQuantity.setVisibility( View.INVISIBLE );
 
-                    //remove that object
-                    serviceNumsFromDialog.remove(service.getServiceNum());
-                    toastMessage( service.getServiceNum() + " is removed" );
                 }
+
             }
+
         } );
 
         alertDialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                 mServiceAdapter.setSelectedServices( serviceNumsFromDialog );
-                for(String serviceNum : mServiceAdapter.getSelectedServices())
-                {
-                    Log.v("when we press doneXXX", "service Number" + serviceNum);
+                //if there is service(s) selected
+                if(!selectedServicesHash.isEmpty()) {
+                    for(TextView tv : selectedTextViews) {
+                        Log.v( TAG, "the value of selected textviews:" + tv.getText() );
+                    }
+
+                    //remove the initial text
+                    mServicesTextView.setText( " " );
+                    mServicePriceTextView.setText( " " );
+                    mServiceDatabaseReference.addValueEventListener( new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            totalPrice = 0;
+                            invoiceExpenses = 0;
+                            invoiceProfit = 0;
+                            invoicePlusProfitFirstCurrence=0;
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+
+                            //put all the services name of the hashtable in a list
+                             Set<String> serviceNums= selectedServicesHash.keySet();
+                            //for every service selected by the user, display the name
+                            for(String s : serviceNums) {
+                                Service service = new Service();
+                                service.setServiceName( dataSnapshot.child( s ).getValue( Service.class ).getServiceName() ); //set the name
+                                service.setServicePrice( dataSnapshot.child( s ).getValue(Service.class).getServicePrice() );
+                                service.setServicePriceSecCurrency( dataSnapshot.child( s ).getValue(Service.class).getServicePriceSecCurrency() );
+                                service.setServicePlusProfit( dataSnapshot.child( s ).getValue(Service.class).getServicePlusProfit() );
+                                //format the  price ID
+                                //format the price in the label as(2,000,000)
+                                String priceIDFormatted = formatPrice( service.getServicePriceSecCurrency() * selectedServicesHash.get(s) );
+                                //take the sum of all the services and produce the total
+                                //for customers
+                                //multiply by the quantity of each service (1 or more)
+                                totalPrice += service.getServicePriceSecCurrency()*selectedServicesHash.get(s);
+                                //total expenses (original price in tr) for user
+                                invoiceExpenses += service.getServicePrice()*selectedServicesHash.get(s);
+
+                                invoicePlusProfitFirstCurrence += service.getServicePlusProfit()
+                                        *selectedServicesHash.get(s);
+                                Log.v(TAG, "invoicePlusProfitFirstCurrence values" +  invoicePlusProfitFirstCurrence);
+                                mServicesTextView.append( "- " + service.getServiceName() +
+                                        "X " +selectedServicesHash.get(s) + "\n");
+                                mServicePriceTextView.append(priceIDFormatted  + "\n");
+
+
+                            }
+                            //calculate the net profit
+                            //net profit (for user)
+                            invoiceProfit += (invoicePlusProfitFirstCurrence-invoiceExpenses);
+                            //format the total price
+                            //format the price in the label as(2,000,000)
+                            String totalPriceFormatted = formatPrice( totalPrice );
+
+                            //set the text View with the total value for each field
+                            mTotalTextView.setText( totalPriceFormatted );
+                            mTotalExpensesTextView.setText( String.valueOf( invoiceExpenses ) );
+                            mProfitTextView.setText( String.valueOf( roundTwoDecimals(invoiceProfit) ) );
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    } );
                 }
+                else
+                {
+                    //if there is no service selected reset text views
+                    mServicesTextView.setText( R.string.service_add );
+                    mServicePriceTextView.setText("");
+                    mTotalTextView.setText( "ID 0" );
+                    mTotalExpensesTextView.setText( "/" );
+                    mProfitTextView.setText( "/" );
+                    totalPrice = 0;
+                }
+
             }
+
         });
 
         alertDialogBuilder.show();//display the dialog
 
     }
 
-    public void createNewInvoice(String clientID, ArrayList<String> serviceIds) {
-      //use the list of orders we created in createOrderList to create the new invoice
-        //with the extra information payments, dates, and client num, etc
-    }
 
 
 
-    private void createOrderList()
-    {
-        //list of orders for each selected service(s)
-        //ServiceName, serviceNum, ServicePrice
-        //store the list of orders in database each with unique number
-        //use these numbers to create invoice (invoice is list of order(s) adding invoice number
-        // and issue date and due date as extra information)
-    }
+
     private void detachServiceDatabaseReadListener() {
         if (mServiceEventListener != null) {
 
@@ -412,6 +590,10 @@ public class AddInvoiceActivity extends AppCompatActivity {
             mServiceEventListener = null;
         }
     }
+
+    /*private void detacheUserDataReadListener(){
+        if(mUser)
+    }*/
 
     private void detachDatabaseReadListener() {
         if (mChiltEventListener != null) {
@@ -428,7 +610,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Service service = dataSnapshot.getValue( Service.class );
                     mServiceAdapter.add( service );
-                    if(mServiceAdapter.getCount() > 0)
+                    if(mServiceAdapter.getCount() > 0 || mServiceAdapter.getCount() == 0)
                     {
                         mServiceDialogProgressBar.setVisibility( View.INVISIBLE );
                     }
@@ -485,6 +667,62 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
     }
 
+    //create list of the orders (for each service, quantity, and price)
+    //create new Invoice contains the list of orders
+    public void createNewInvoice()
+    {
+        //Check if the client and services are selected (not empty)
+        if(clientIdFromDialog.length() != 0 && selectedServicesHash.size() != 0)
+        {
+            //Create new Order object passing the information provided by the user
+            //create order for every service and add it to the ordet list
+            Set<String> servicesKeys = selectedServicesHash.keySet();
+            for(String s: servicesKeys)
+            {
+                //generate new key for each order
+                String keyOrder = mOrderDatabaseReference.push().getKey();
+                //DONE 1: add quantity later for each service ordered
+                //DONE 2: multiply the each service price by its quantity
+                //DONE 3: get the total price depending on quantity
+                //TODO 4: delete the order(s) after deleting the invoice
+
+                //set the order value with the client Id and service
+                Order order = new Order(keyOrder,clientIdFromDialog, s, selectedServicesHash.get(s) );
+                Log.v(TAG, "list of orders " + order.toString());
+                orderArrayList.add(order);//use this to get total and create invoice
+                //fetch order numbers from arrayList
+                ArrayList<String> orderNums = new ArrayList<String>(  );
+                for(Order o : orderArrayList)
+                {
+                    orderNums.add(o.getOrderNum());
+                }
+                //Create the new Invoice
+                invoice = new Invoice(keyInvoice, clientIdFromDialog, orderNums,
+                        mIssueDateTextView.getText().toString(), mDueDateTextView.getText().toString(), totalPrice,
+                       roundTwoDecimals( invoiceProfit ), roundTwoDecimals( invoiceExpenses ) );
+                //store order in database when invoice is saved and created
+                mOrderDatabaseReference.child(keyOrder).setValue(order);
+                //store the Invoice in the database
+                mInvoiceDatabaseReference.child( keyInvoice ).setValue( invoice );
+                //calculate the user total expenses
+                userNewExp = currentTotalExp + invoiceExpenses;
+                toastMessage( "New Invoice is created" );
+                //Update the user expenses by updating the currentTotalExp to the userNewExp
+                mUserDatabaseReference.child( "totalExpenses" ).setValue( userNewExp );
+                Log.v(TAG, "The current value of the  expenses :" + userData.getTotalExpenses());
+
+
+                //Go back to Invoice fragment
+                Intent intent = new Intent(this,MainActivity.class);
+                intent.putExtra("fragmentName","invoiceFragment"); //for example
+                startActivity(intent);
+
+            }
+        }
+        else
+            toastMessage( "Please pick a client and service!" );
+    }
+
     //get the date after the desired number of days
     //this is the Due date for the invoice
     public String setDueDateAfter( int days)
@@ -537,10 +775,23 @@ public class AddInvoiceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                //createNewInvoice("", {"",""});
+                createNewInvoice();
             default:
                 return super.onOptionsItemSelected( item );
         }
+    }
+
+    private String formatPrice(double price){
+        //format the price in the label as(2,000,000)
+        DecimalFormat formatter = new DecimalFormat( "##,###,###" );
+        String priceFormatted = formatter.format( price );
+        return priceFormatted;
+    }
+
+    double roundTwoDecimals(double d)
+    {
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Double.valueOf(twoDForm.format(d));
     }
 
     @Override

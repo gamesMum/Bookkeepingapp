@@ -34,7 +34,7 @@ public class ServiceFragment extends Fragment {
 
     private static final String TAG = "ServiceFragment";
 
-    //client xml attributes
+    //service xml attributes
     private ListView mServiceListView;
     private ServiceAdapter mServiceAdapter;
     private ProgressBar mProgressBar;
@@ -48,7 +48,7 @@ public class ServiceFragment extends Fragment {
     // Firebase instance variables
 
     public FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mClientDatabaseReference;
+    private DatabaseReference mServiceDatabaseReference;
 
     public ServiceFragment() {
         // Required empty public constructor
@@ -69,9 +69,9 @@ public class ServiceFragment extends Fragment {
         if(user != null) {
             userID = user.getUid();
             //store the data under loggedin user Id
-            mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "service" );
+            mServiceDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "service" );
             //For offline sync of data
-            mClientDatabaseReference.keepSynced(true);
+            mServiceDatabaseReference.keepSynced(true);
         }
 
         // Initialize references to views
@@ -81,14 +81,14 @@ public class ServiceFragment extends Fragment {
 
         // Initialize message ListView and its adapter
         final List<Service> services = new ArrayList<>();
-        mServiceAdapter = new ServiceAdapter( getActivity(), R.layout.client_item, services );
+        mServiceAdapter = new ServiceAdapter( getActivity(), R.layout.service_item, services );
         mServiceListView.setAdapter( mServiceAdapter );
 
         // Initialize progress bar
         mProgressBar.setVisibility( ProgressBar.VISIBLE );
 
 
-        //Add new client
+        //Add new service
         mAddServiceFab.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +159,7 @@ public class ServiceFragment extends Fragment {
     private void detachDatabaseReadListener() {
         if (mChildEventListener != null) {
 
-            mClientDatabaseReference.removeEventListener( mChildEventListener );
+            mServiceDatabaseReference.removeEventListener( mChildEventListener );
             mChildEventListener = null;
         }
     }
@@ -175,7 +175,7 @@ public class ServiceFragment extends Fragment {
                     if (!dataSnapshot.exists()) {
                         mProgressBar.setVisibility( ProgressBar.INVISIBLE );
                     }
-                    Log.d( TAG + "Added", dataSnapshot.getValue( Client.class ).toString() );
+                    Log.d( TAG + "Added", dataSnapshot.getValue( Service.class ).toString() );
                 }
 
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -190,8 +190,14 @@ public class ServiceFragment extends Fragment {
                 public void onCancelled(DatabaseError databaseError) {
                 }
             };
-            mClientDatabaseReference.addChildEventListener( mChildEventListener );
+            mServiceDatabaseReference.addChildEventListener( mChildEventListener );
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().setTitle( R.string.service_text );
     }
 
     /**

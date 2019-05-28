@@ -18,9 +18,11 @@ public class Client {
 
     private String companyName;
 
+    private String country;
     private String address;
     private String email;
     private String phoneNumber;
+
 
     Client()
     {}
@@ -62,6 +64,10 @@ public class Client {
         return this.clientId;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
     public String getPhoneNumber() {
         return this.phoneNumber;
     }
@@ -88,6 +94,10 @@ public class Client {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     @Override

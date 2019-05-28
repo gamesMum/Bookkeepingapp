@@ -2,16 +2,12 @@ package com.example.android.bookkeepingapp;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,17 +21,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 
-public class ViewServiceActivity extends AppCompatActivity {
+public class ViewExpensesActivity extends AppCompatActivity {
 
-
-    private String TAG = "ViewServiceActivity";
+    private String TAG = "ViewExpenseActivity";
     private Toolbar toolbar;
-    private TextView mServiceName;
-    private TextView mServicePrice;
-    private TextView mServiceNotes;
-    private TextView mServicePlusProfit;
-    private  TextView mServicePriceIQ;
-    private TextView mServiceProfitRate;
+    private TextView mExpenseName;
+    private TextView mExpenseValue;
+    private TextView mExpenseNotes;
     private String extras;
     private Intent intent;
 
@@ -45,19 +37,18 @@ public class ViewServiceActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     public FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mServiceDatabaseReference;
+    private DatabaseReference mExpenseDatabaseReference;
     public ValueEventListener databaseEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_view_service );
-
+        setContentView( R.layout.activity_view_expenses );
 
         // Set a Toolbar to replace the ActionBar.
-        toolbar = findViewById( R.id.toolbar_service_view );
+        toolbar = findViewById( R.id.toolbar_expense_view );
         setSupportActionBar( toolbar );
-        toolbar.setTitle( getString( R.string.Service_view_text ) );
+        toolbar.setTitle( getString( R.string.expendings_text ) );
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         //enable back navigation icon for costume toolbar
         setSupportActionBar(toolbar);
@@ -68,23 +59,16 @@ public class ViewServiceActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Service service = new Service();
-                service.setServiceName( dataSnapshot.child( extras ).getValue( Service.class ).getServiceName() ); //set the name
-                service.setServicePrice( dataSnapshot.child( extras ).getValue( Service.class ).getServicePrice() ); //set the price
-                service.setServiceNotes( dataSnapshot.child( extras ).getValue( Service.class ).getServiceNotes() );
-                service.setServicePlusProfit( dataSnapshot.child( extras ).getValue( Service.class ).getServicePlusProfit() );
-                service.setServicePriceSecCurrency( dataSnapshot.child( extras ).getValue( Service.class ).getServicePriceSecCurrency() );
-                //format the price
-                //format the price in the label as(2,000,000)
-                DecimalFormat formatter = new DecimalFormat( "##,###,###" );
-                String servicePriceIQFormatted =  formatter.format( service.getServicePriceSecCurrency() );
+                Expense expense = new Expense();
+                expense.setExpenseName( dataSnapshot.child( extras ).getValue( Expense.class ).getExpenseName() ); //set the name
+                expense.setExpenseValue( dataSnapshot.child( extras ).getValue( Expense.class ).getExpenseValue() ); //set the price
+                expense.setExpenseNote( dataSnapshot.child( extras ).getValue( Service.class ).getServiceNotes() );
+
                 //append the right values for each textView in xml view
-                mServiceName.append( " " + service.getServiceName() );
-                mServicePrice.append(" " + String.valueOf(  service.getServicePrice() ));
-                mServicePlusProfit.append( " " + String.valueOf(  service.getServicePlusProfit() ));
-                mServicePriceIQ.append( " " + servicePriceIQFormatted );
-                if(service.getServiceNotes() != null) {
-                    mServiceNotes.append(" " + service.getServiceNotes() );
+                mExpenseName.append( " " + expense.getExpenseName() );
+                mExpenseValue.append(" " + String.valueOf(  expense.getExpenseValue() ));
+                if(expense.getExpenseNote() != null) {
+                    mExpenseNotes.append(" " + expense.getExpenseNote() );
                 }
             }
 
@@ -100,20 +84,17 @@ public class ViewServiceActivity extends AppCompatActivity {
         if (user != null) {
             userID = user.getUid();
             //store the data under loggedin user Id
-            mServiceDatabaseReference = mFirebaseDatabase.getReference().child( userID ).child( "service" );
+            mExpenseDatabaseReference = mFirebaseDatabase.getReference().child( userID ).child( "expense" );
             //For offline sync of data
-            mServiceDatabaseReference.keepSynced( true );
+            mExpenseDatabaseReference.keepSynced( true );
         }
 
-        mServiceName = (TextView) findViewById( R.id.service_name_text_view );
-        mServicePrice = (TextView) findViewById( R.id.service_price_text_view );
-        mServicePlusProfit = (TextView) findViewById( R.id.service_plus_profit );
-        mServicePriceIQ = (TextView) findViewById( R.id.service_price_IQ );
-        mServiceNotes = (TextView) findViewById( R.id.service_notes_text_view );
-
-        mServiceDatabaseReference.addValueEventListener(databaseEventListener);
-        //get the service number from the ServiceFragment
-        extras = getIntent().getStringExtra( "serviceNum" );
+        mExpenseName = (TextView) findViewById( R.id.expense_name_text_view );
+        mExpenseValue = (TextView) findViewById( R.id.expense_value_view );
+        mExpenseNotes = (TextView) findViewById( R.id.expense_notes_text_view );
+        mExpenseDatabaseReference.addValueEventListener(databaseEventListener);
+        //get the expense number from the ExpenseFragment
+        extras = getIntent().getStringExtra( "expenseNum" );
         if (extras != null) {
             //Show Client Name
 
@@ -139,7 +120,7 @@ public class ViewServiceActivity extends AppCompatActivity {
                 if (user == null) {
                     // User is signed out
                     //go to login activity
-                    Intent i = new Intent( ViewServiceActivity.this, LoginActivity.class );
+                    Intent i = new Intent( ViewExpensesActivity.this, LoginActivity.class );
                     startActivity( i );
                     toastMessage( "Successfully signed out" );
                 }
@@ -160,9 +141,9 @@ public class ViewServiceActivity extends AppCompatActivity {
     private void DeleteService(String ServiceNum){
 
         //delete the service
-        mServiceDatabaseReference.child( ServiceNum ).setValue( null );
+        mExpenseDatabaseReference.child( ServiceNum ).setValue( null );
         //remove the value event listener
-        mServiceDatabaseReference.removeEventListener(databaseEventListener );
+        mExpenseDatabaseReference.removeEventListener(databaseEventListener );
 
     }
 
@@ -180,7 +161,7 @@ public class ViewServiceActivity extends AppCompatActivity {
             case android.R.id.home:
                 //Go back to service fragment
                 Intent intent = new Intent(this,MainActivity.class);
-                intent.putExtra("fragmentName","serviceFragment"); //for example
+                intent.putExtra("fragmentName","expenseFragment"); //for example
                 startActivity(intent);
                 return true;
             case R.id.action_delete:
@@ -196,10 +177,10 @@ public class ViewServiceActivity extends AppCompatActivity {
             case R.id.action_edit:
                 //View edit activity
                 //return the object in the list View
-                String serviceNum = extras;
-                Intent i = new Intent( ViewServiceActivity.this, EditServiceActivity.class );
+                String expenseNum = extras;
+                Intent i = new Intent( ViewExpensesActivity.this, EditExpenseActivity.class );
                 //pass the client Id to the next activity
-                i.putExtra( "serviceNum", serviceNum );
+                i.putExtra( "expenseNum", expenseNum );
                 startActivity( i );
                 Log.v( TAG, "OK edit me now!" );
                 return true;
@@ -216,4 +197,5 @@ public class ViewServiceActivity extends AppCompatActivity {
     private void toastMessage(String message) {
         Toast.makeText( this, message, Toast.LENGTH_SHORT ).show();
     }
+
 }

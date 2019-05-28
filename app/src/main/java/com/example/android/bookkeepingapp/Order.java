@@ -10,11 +10,25 @@ public class Order {
     private String serviceNum;
     private int quantity;
 
+    //empty constructor
+    Order()
+    {
+
+    }
+
     Order(String orderNum, String clientId, String serviceNum, int quantity)
     {
         this.orderNum = orderNum;
         this.serviceNum = serviceNum;
         this.quantity = quantity;
+        this.clientId = clientId;
+    }
+
+    Order(String orderNum, String clientId, String serviceNum)
+    {
+        this.orderNum = orderNum;
+        this.serviceNum = serviceNum;
+        this.quantity = 1;
         this.clientId = clientId;
     }
 
@@ -50,6 +64,16 @@ public class Order {
         this.serviceNum = serviceNum;
     }
 
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
 
+
+    @Override
+    public String toString() {
+        return "Order{" + "clientId='" + clientId + '\'' +
+                ", orderNum='" + orderNum + '\'' + ", serviceNum='" +
+                serviceNum + '\'' + ", quantity=" + quantity + '}';
+    }
 }
 

@@ -1,53 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_service"
+        android:id="@+id/toolbar_edit_service"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:title="@string/service_add"
+        app:title="@string/service_edit"
         app:titleTextColor="@android:color/white"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
-    <ImageView
-        android:id="@+id/service_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:background="@drawable/dotted_square"
-        android:gravity="center"
-        android:hint="@string/add_client_text"
-        android:textAppearance="?android:textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/service_name"
+        android:id="@+id/service_name_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textCapSentences"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/virtical_padding"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:inputType="textCapSentences"
         android:hint="@string/service_name" />
 
     <EditText
-        android:id="@+id/service_price"
+        android:id="@+id/service_price_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:hint="@string/service_price"
-        android:inputType="numberDecimal"
-        android:paddingBottom="@dimen/virtical_padding" />
+        android:inputType="textCapSentences"
+        android:hint="@string/service_price" />
 
     <EditText
-        android:id="@+id/service_plus_profit"
+        android:id="@+id/service_price_secondary_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -56,13 +45,17 @@
         android:inputType="numberDecimal"
         android:paddingBottom="@dimen/virtical_padding" />
 
+
     <EditText
-        android:id="@+id/service_notes"
+        android:id="@+id/service_notes-edit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:inputType="text"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
         android:hint="@string/service_notes" />
+
+
+
 
 </LinearLayout>

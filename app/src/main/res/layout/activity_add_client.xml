@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -22,6 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textCapSentences"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:hint="@string/first_name_edit" />
 
     <EditText
@@ -29,6 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textCapSentences"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:hint="@string/last_name_edit" />
 
     <EditText
@@ -36,6 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textCapSentences"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:hint="@string/company_edit" />
 
 
@@ -43,26 +50,37 @@
         android:id="@+id/email_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:hint="@string/hint_email" />
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:hint="@string/hint_email"
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/phone_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="phone"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:hint="@string/phone_edit" />
 
     <EditText
         android:id="@+id/street_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:hint="@string/street_edit" />
 
-        <EditText
-            android:id="@+id/city_add"
-            android:layout_width="112dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/city_edit" />
+    <Spinner
+        android:id="@+id/city_add_spinner"
+        android:layout_width="112dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/country_arrays"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:prompt="@string/country_prompt">
+
+    </Spinner>
 
 </LinearLayout>
