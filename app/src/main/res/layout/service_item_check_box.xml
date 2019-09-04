@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <CheckedTextView
+        android:id="@+id/checkedTextView"
+        android:layout_width="@dimen/service_name_check_box"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:checked="false"
+        android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
+        android:gravity="center"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:textAppearance="?android:textAppearanceLarge"
+        tools:text="Service 1" />
+
+    <Button
+        android:id="@+id/plus_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/check_box_list_margin"
+        android:layout_marginLeft="@dimen/check_box_list_margin"
+        android:focusable="false"
+        android:text="@string/plus"
+        android:textColor="#000"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/quantity_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/quantity_default"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/minus_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:text="@string/minus"
+        android:textColor="#000"
+        android:visibility="invisible" />
+
+</LinearLayout>

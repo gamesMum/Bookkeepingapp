@@ -1,0 +1,32 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity" >
+    <item
+        android:id="@+id/action_edit"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        android:title="@string/menu_edit"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_pay"
+        android:title="@string/menu_pay"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_un_pay"
+        android:title="@string/menu__un_pay"
+        android:orderInCategory="100"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_delete"
+        android:title="@string/menu_delete"
+        android:orderInCategory="101"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_save_pdf"
+        android:title="@string/menu_save_pdf"
+        android:orderInCategory="102"
+        app:showAsAction="never" />
+
+</menu>

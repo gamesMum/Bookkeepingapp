@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:checkableBehavior="single">
+        <item
+            android:checked="true"
+            android:id="@+id/nav_summery"
+            android:icon="@drawable/ic_insert_chart_black_24dp"
+            android:title="@string/summery_text" />
+        <item
+            android:id="@+id/nav_invoices"
+            android:icon="@drawable/ic_receipt_black_24dp"
+            android:title="@string/invoices_text" />
+        <item
+            android:id="@+id/nav_expendings"
+            android:icon="@drawable/ic_attach_money_black_24dp"
+            android:title="@string/expendings_text" />
+        <item
+            android:id="@+id/nav_profits"
+            android:icon="@drawable/ic_attach_money_black_24dp"
+            android:title="@string/profit_text" />
+        <item
+
+        android:id="@+id/nav_customers"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:title="@string/clints_text" />
+
+        <item
+            android:id="@+id/nav_services"
+            android:icon="@drawable/ic_dns_black_24dp"
+            android:title="@string/service_text" />
+
+    </group>
+</menu>

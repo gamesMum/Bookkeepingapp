@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_invoice_view"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:title="@string/invoice_new"
+        app:titleTextColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/invoice_number_invoice_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="96dp"
+        android:text="@string/invoice_number"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_number_invoice_view_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/invoice_number_invoice_view"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="00001" />
+    <ImageView
+        android:id="@+id/person_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_person_black_48dp"
+        android:layout_marginTop="96dp"
+        android:paddingStart="@dimen/horizontal_padding"
+        android:paddingLeft="@dimen/horizontal_padding"/>
+
+    <TextView
+        android:id="@+id/client_invoice_view_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/person_image"
+        android:layout_marginTop="96dp"
+        android:paddingTop="@dimen/virtical_padding"
+        android:textAppearance="?android:textAppearanceMedium"
+        tools:text="Chris Martin" />
+
+
+    <TextView
+        android:id="@+id/issue_date_invoice_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/invoice_number_invoice_view_value"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="@string/issue_date_text"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/issue_date_text_invoice_view_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/issue_date_invoice_view"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="12/1/2018" />
+
+    <TextView
+        android:id="@+id/due_date_invoice_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/issue_date_text_invoice_view_value"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="@string/due_date_text"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/due_date_invoice_view_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/due_date_invoice_view"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/virtical_padding"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="12/1/2018" />
+
+    <View
+        android:id="@+id/add_client_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/due_date_invoice_view_value"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@android:color/darker_gray"/>
+    <ScrollView
+        android:id="@+id/services_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/scroll_view_height"
+        android:layout_below="@id/add_client_divider">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:maxLines="1"
+        android:ellipsize="end">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/services_invoice_view"
+            android:layout_width="@dimen/invoice_box_height"
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/note_box_padding"
+            android:paddingLeft="@dimen/note_box_padding"
+            android:paddingTop="@dimen/virtical_padding"
+            android:paddingEnd="@dimen/note_box_padding"
+            android:paddingRight="@dimen/note_box_padding"
+            android:textAppearance="?android:textAppearanceMedium"
+            tools:text="Fix computer" />
+
+    <TextView
+        android:id="@+id/services_add_price_invoice_view"
+        android:layout_width="@dimen/price_box_size"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/horizontal_padding"
+        android:paddingRight="@dimen/horizontal_padding"
+        android:paddingLeft="@dimen/horizontal_padding"
+        android:paddingStart="@dimen/horizontal_padding"
+        android:paddingTop="@dimen/virtical_padding"
+        android:textAppearance="?android:textAppearanceMedium"
+        tools:text="100" />
+    </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/service_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/services_scroll"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/invoice_notes_view_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/service_divider"
+        android:lines="2"
+        android:maxLines="3"
+        android:paddingLeft="@dimen/note_box_padding"
+        android:paddingStart="@dimen/note_box_padding"
+        android:textAppearance="?android:textAppearanceLarge"
+        tools:text="some notes" />
+
+    <TextView
+        android:id="@+id/invoice_sub_total_invoice_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/invoice_notes_view_txt"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:text="@string/sub_total_text"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_sub_total_value_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/invoice_sub_total_invoice_view"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="$500" />
+
+    <TextView
+        android:id="@+id/invoice_shipment_invoice_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/invoice_sub_total_value_view"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="8dp"
+        android:text="@string/shipping_exp_text"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/view_invoice_shipment_value_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/invoice_shipment_invoice_view"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="$25" />
+
+    <TextView
+        android:id="@+id/invoice_total_invoice_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/view_invoice_shipment_value_view"
+        android:layout_marginTop="@dimen/horizontal_padding"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="@string/total_text"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_total_value_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/invoice_total_invoice_view"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="$500" />
+    <TextView
+        android:id="@+id/invoice_profit_invoice_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/view_invoice_shipment_value_view"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/horizontal_padding"
+        android:text="@string/profit_text"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_profit_value_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/invoice_total_invoice_view"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="$500" />
+
+    <TextView
+        android:id="@+id/invoic_expenses_invoice_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_invoice_shipment_value_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/horizontal_padding"
+        android:text="@string/expenses_text"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/invoice_expenses_value_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/invoice_total_invoice_view"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black"
+        tools:text="$500" />
+
+<!--Show notification to let the user know the invoice status-->
+    <!--Make them all one TextView and chenge the text and background...daaaaaah-->
+
+    <TextView
+        android:id="@+id/notification_stripe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/invoice_total_value_view"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:gravity="center" />
+    <!--TODO 5: Add discount option
+ <TextView
+         android:id="@+id/discount_text_view"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textAppearance="?android:textAppearanceMedium"
+         android:paddingRight="@dimen/horizontal_padding"
+         android:paddingEnd="@dimen/horizontal_padding"
+         android:layout_above="@id/notification_stripe"
+         android:layout_toLeftOf="@id/invoice_total_value_view"
+         android:text="Add Discount"/>-->
+
+</RelativeLayout>

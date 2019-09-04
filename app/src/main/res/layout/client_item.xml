@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/client_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical">
+    <!-- A CardView that contains a TextView -->
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginBottom="16dp"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation = "1dp"
+        card_view:cardBackgroundColor="@color/backCard">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/name_text_view_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:paddingLeft="@dimen/horizontal_padding"
+            android:paddingTop="@dimen/virtical_padding"
+            tools:text="Kamal Saleem" />
+        <TextView
+            android:id="@+id/company_name_text_view_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/horizontal_padding"
+            android:layout_below="@id/name_text_view_item"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            tools:text="Thunder co." />
+    <TextView
+        android:id="@+id/email_text_view_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/horizontal_padding"
+        android:layout_below="@id/company_name_text_view_item"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        tools:text="ttt@yyy.com" />
+
+</RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
