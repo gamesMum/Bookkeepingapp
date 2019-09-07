@@ -28,7 +28,7 @@ public class Invoice {
 
 
     //the invoice is either paid, not paid, or partially paid
-    int paid;
+    private int paid;
     private final int NOT_PAID = 0;
     private final int PAID = 1;
     private final int PARTIALLY_PAID = -1;
@@ -99,9 +99,11 @@ public class Invoice {
         return invoiceExpenses;
     }
 
-    public int getIsPaid() {
+    public int getPaid() {
         return paid;
     }
+
+
 
     public int getInvoiceStatus()
     {
@@ -137,9 +139,9 @@ public class Invoice {
         this.orderNums = orderNums;
     }
 
-    public void setPaid(int paid) {
-        this.paid = paid;
-    }
+    public void setPaid(int status) {
+        this.paid = status;
+    } //one or zero
 
     public void setTotal(double total) {
         this.total = total;

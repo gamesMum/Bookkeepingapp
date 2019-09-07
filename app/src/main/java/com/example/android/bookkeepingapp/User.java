@@ -70,7 +70,8 @@ public class User {
     }
     double roundTwoDecimals(double d)
     {
-        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        DecimalFormat twoDForm;
+        twoDForm = new DecimalFormat("#.##");
         return Double.valueOf(twoDForm.format(d));
     }
 }

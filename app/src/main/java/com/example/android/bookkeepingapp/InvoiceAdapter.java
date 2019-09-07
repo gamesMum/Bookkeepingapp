@@ -1,8 +1,10 @@
 package com.example.android.bookkeepingapp;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +52,10 @@ public class InvoiceAdapter extends ArrayAdapter<Invoice> {
         SimpleDateFormat sdf = new SimpleDateFormat( "yyyy / MM / dd " );
         assert invoice != null;
         String invoiceDueDate = invoice.getDueDate();
+        double invoiceStatus = invoice.getInvoiceStatus();
 
         date.setText( "Due Date: " + invoiceDueDate );
+
 
         Date dueDate = null;
         try {
@@ -66,7 +70,7 @@ public class InvoiceAdapter extends ArrayAdapter<Invoice> {
             e.printStackTrace();
         }
         //if thew invoice is paid show it in green
-        if (invoice.getIsPaid() == 1) {
+        if (invoice.getInvoiceStatus() == 1) {
             labelImage.setImageResource( R.drawable.green_sq );
         }
         //else check the due date
@@ -78,6 +82,7 @@ public class InvoiceAdapter extends ArrayAdapter<Invoice> {
         else {
             labelImage.setImageResource( R.drawable.red_sq );
         }
+        Log.v("invoiceAdapter", "the invoice status: "+ invoiceStatus);
 
 
         // if(invoice.getDueDate() getCurrentDate() )

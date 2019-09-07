@@ -8,22 +8,20 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.firebase.client.core.view.Change;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,8 +39,6 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -193,18 +189,17 @@ public class ViewInvoiceActivity extends AppCompatActivity {
                 invoice.setDueDate( dataSnapshot.child( extras ).getValue( Invoice.class ).getDueDate() ); //set the name
                 invoice.setIssueDate( dataSnapshot.child( extras ).getValue( Invoice.class ).getIssueDate() ); //set the name
                 invoice.setInvoiceNumber( dataSnapshot.child( extras ).getValue( Invoice.class ).getInvoiceNumber() );
-                invoice.setPaid( dataSnapshot.child( extras ).getValue( Invoice.class ).getIsPaid() );
+                invoice.setPaid( dataSnapshot.child( extras ).getValue( Invoice.class ).getPaid() );
                 invoice.setOrderNums( dataSnapshot.child( extras ).getValue( Invoice.class ).getOrderNums() );
                 invoice.setClientID( dataSnapshot.child( extras ).getValue( Invoice.class ).getClientID() );
                 invoice.setTotal( dataSnapshot.child( extras ).getValue( Invoice.class ).getTotal() );
-                invoice.setPaid( dataSnapshot.child( extras ).getValue( Invoice.class ).getIsPaid() );
                 invoice.setInvoiceExpenses( dataSnapshot.child( extras ).getValue( Invoice.class ).getInvoiceExpenses() );
                 invoice.setInvoiceProfit( dataSnapshot.child( extras ).getValue( Invoice.class ).getInvoiceProfit() );
                 invoice.setInvoiceNote( dataSnapshot.child( extras ).getValue( Invoice.class ).getInvoiceNote() );
                 invoice.setShippingCost( dataSnapshot.child( extras ).getValue( Invoice.class ).getShippingCost() );
                 keyInvoice = invoice.getInvoiceNumber();
                 //check if it is paid or not
-                mInvoiceStatus = invoice.getIsPaid();
+                mInvoiceStatus = invoice.getPaid();
 
 
                 //check if the invoice is overdue
@@ -436,7 +431,7 @@ public class ViewInvoiceActivity extends AppCompatActivity {
                 return true;
             case R.id.action_pay:
                 //check if it is not already paied
-                if (invoice.getIsPaid() == 0) {
+                if (invoice.getPaid() == 0) {
                     //mark this invoice as paid
                     invoice.setPaid( PAID );
                     mInvoiceDatabaseReference.child( keyInvoice ).setValue( invoice );

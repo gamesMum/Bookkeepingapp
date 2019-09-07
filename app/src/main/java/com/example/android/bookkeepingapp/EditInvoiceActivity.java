@@ -3,11 +3,11 @@ package com.example.android.bookkeepingapp;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,8 +24,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.annotations.NotNull;
-import com.firebase.client.annotations.Nullable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -34,8 +32,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -211,7 +207,7 @@ public class EditInvoiceActivity extends AppCompatActivity {
                 invoice.setInvoiceExpenses( dataSnapshot.child(extras).getValue(Invoice.class).getInvoiceExpenses());
                 invoice.setInvoiceProfit( dataSnapshot.child(extras).getValue(Invoice.class).getInvoiceProfit());
                 invoice.setOrderNums( dataSnapshot.child(extras).getValue(Invoice.class).getOrderNums());
-                invoice.setPaid( dataSnapshot.child(extras).getValue(Invoice.class).getIsPaid());
+                invoice.setPaid( dataSnapshot.child(extras).getValue(Invoice.class).getPaid());
                 invoice.setTotal( dataSnapshot.child(extras).getValue(Invoice.class).getTotal());
                 invoice.setInvoiceNumber(  dataSnapshot.child(extras).getValue(Invoice.class).getInvoiceNumber() );
                 invoice.setInvoiceNote(  dataSnapshot.child(extras).getValue(Invoice.class).getInvoiceNote() );

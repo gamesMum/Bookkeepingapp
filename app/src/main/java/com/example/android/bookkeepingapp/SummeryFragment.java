@@ -4,8 +4,8 @@ package com.example.android.bookkeepingapp;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +19,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -115,7 +113,7 @@ public class SummeryFragment extends Fragment {
                 for(DataSnapshot val : dataSnapshot.getChildren())
                 {
                     //if the invoice is not paid
-                    if(Integer.valueOf( val.child( "isPaid" ).getValue().toString() ) == 0){
+                    if(Integer.valueOf( val.child( "paid" ).getValue().toString() ) == 0){
                     //get the due date for each invoice and compare it with today date
                     try {
                          currentDateF = sdf.parse( currentDate );

@@ -3,9 +3,9 @@ package com.example.android.bookkeepingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -141,12 +141,6 @@ public class ServiceFragment extends Fragment {
         // Capture Text in EditText
         mSearchBoxTextView.addTextChangedListener(new TextWatcher() {
 
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                // TODO Auto-generated method stub
-                String text = mSearchBoxTextView.getText().toString().toLowerCase( Locale.getDefault());
-                mServiceAdapter.filter(text);
-            }
 
             @Override
             public void beforeTextChanged(CharSequence arg0, int arg1,
@@ -155,9 +149,16 @@ public class ServiceFragment extends Fragment {
             }
 
             @Override
-            public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+            public void onTextChanged(CharSequence s, int arg1, int arg2,
                                       int arg3) {
                 // TODO Auto-generated method stub
+                // Call back the Adapter with current character to Filter
+                mServiceAdapter.getFilter().filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
