@@ -30,6 +30,7 @@ public class ServiceAdapter extends BaseAdapter implements Filterable {
     private List<Service> mDisplayedValues;    // Values to be displayed
     LayoutInflater inflater;
 
+
     public ServiceAdapter(@NonNull Context context, int resource, List<Service> mServiceList) {
         this.mOriginalValues = mServiceList;
         this.mDisplayedValues = mServiceList;
