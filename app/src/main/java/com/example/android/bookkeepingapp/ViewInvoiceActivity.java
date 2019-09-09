@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +16,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +48,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -51,6 +57,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static androidx.core.content.FileProvider.getUriForFile;
 
 public class ViewInvoiceActivity extends AppCompatActivity {
 
@@ -590,33 +598,38 @@ public class ViewInvoiceActivity extends AppCompatActivity {
 
     private void createPdf() throws FileNotFoundException, DocumentException {
 
-        File docsFolder = new File( Environment.getExternalStorageDirectory() + "/Documents");
-        if (!docsFolder.exists()) {
-            docsFolder.mkdir();
-            Log.i(TAG, "Created a new directory for PDF");
-        }
+        File docsFolder = new File(this.getFilesDir(), "Documents");
+        File pdfName = new File(docsFolder, "default_doc.pdf");
 
-        String pdfname = "GiftItem.pdf";
-        pdfFile = new File(docsFolder.getAbsolutePath(), pdfname);
-        OutputStream output = new FileOutputStream(pdfFile);
-        Document document = new Document( PageSize.A4);
-        PdfPTable table = new PdfPTable(new float[]{3, 3, 3, 3, 3});
-        table.getDefaultCell().setHorizontalAlignment( Element.ALIGN_CENTER);
-        table.getDefaultCell().setFixedHeight(50);
-        table.setTotalWidth(PageSize.A4.getWidth());
-        table.setWidthPercentage(100);
-        table.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
-        table.addCell("Name");
-        table.addCell("Price");
-        table.addCell("Type");
-        table.addCell("URL");
-        table.addCell("Date");
-        table.setHeaderRows(1);
-        PdfPCell[] cells = table.getRow(0).getCells();
-        for (int j = 0; j < cells.length; j++) {
-            cells[j].setBackgroundColor(BaseColor.GRAY);
+        boolean isPresent = true;
+
+        if (!docsFolder.exists()) {
+            isPresent = docsFolder.mkdirs();
+            Log.v(TAG, "Created a new directory for PDF");
         }
-        //here I should retrieve my data
+        if(isPresent) {
+            Log.v(TAG, "found directory" + docsFolder.toString());
+            pdfFile = new File(docsFolder.getAbsolutePath() + pdfName );
+
+            OutputStream output = new FileOutputStream(pdfFile);
+            Document document = new Document( PageSize.A4 );
+            PdfPTable table = new PdfPTable( new float[]{3, 3, 3, 3, 3} );
+            table.getDefaultCell().setHorizontalAlignment( Element.ALIGN_CENTER );
+            table.getDefaultCell().setFixedHeight( 50 );
+            table.setTotalWidth( PageSize.A4.getWidth() );
+            table.setWidthPercentage( 100 );
+            table.getDefaultCell().setVerticalAlignment( Element.ALIGN_MIDDLE );
+            table.addCell( "Name" );
+            table.addCell( "Price" );
+            table.addCell( "Type" );
+            table.addCell( "URL" );
+            table.addCell( "Date" );
+            table.setHeaderRows( 1 );
+            PdfPCell[] cells = table.getRow( 0 ).getCells();
+            for (int j = 0; j < cells.length; j++) {
+                cells[j].setBackgroundColor( BaseColor.GRAY );
+            }
+            //here I should retrieve my data
       /*  for (int i = 0; i < MyList1.size(); i++) {
             name = MyList1.get(i);
             type = MyList1.get(i);
@@ -636,43 +649,48 @@ public class ViewInvoiceActivity extends AppCompatActivity {
             table.addCell(String.valueOf(daten.substring(0, 10)));
 
         }*/
-        table.addCell(String.valueOf("Burda"));
-        table.addCell(String.valueOf("8,000"));
-        table.addCell(String.valueOf(""));
-        table.addCell(String.valueOf(""));
-        table.addCell(String.valueOf(""));
+            table.addCell( String.valueOf( "Burda" ) );
+            table.addCell( String.valueOf( "8,000" ) );
+            table.addCell( String.valueOf( "" ) );
+            table.addCell( String.valueOf( "" ) );
+            table.addCell( String.valueOf( "" ) );
 
 //        System.out.println("Done");
 
-        PdfWriter.getInstance(document, output);
-        document.open();
-        Font f = new Font(Font.FontFamily.TIMES_ROMAN, 30.0f, Font.UNDERLINE, BaseColor.BLUE);
-        Font g = new Font(Font.FontFamily.TIMES_ROMAN, 20.0f, Font.NORMAL, BaseColor.BLUE);
-        document.add(new Paragraph("Pdf Data \n\n", f));
-        document.add(new Paragraph("Pdf File Through Itext", g));
-        document.add(table);
+            PdfWriter.getInstance( document, output );
+
+            document.open();
+            Font f = new Font( Font.FontFamily.TIMES_ROMAN, 30.0f, Font.UNDERLINE, BaseColor.BLUE );
+            Font g = new Font( Font.FontFamily.TIMES_ROMAN, 20.0f, Font.NORMAL, BaseColor.BLUE );
+            document.add( new Paragraph( "Pdf Data \n\n", f ) );
+            document.add( new Paragraph( "Pdf File Through Itext", g ) );
+            document.add( table );
 
 //        for (int i = 0; i < MyList1.size(); i++) {
 //            document.add(new Paragraph(String.valueOf(MyList1.get(i))));
 //        }
-        document.close();
-       // Log.e("safiya", MyList1.toString());
-        previewPdf();
+            document.close();
+            // Log.e("safiya", MyList1.toString());
+            previewPdf();
+        }
+        else{
+            Log.v(TAG, "can't find directory");
+        }
     }
 
     private void previewPdf() {
 
         PackageManager packageManager = this.getPackageManager();
         Intent testIntent = new Intent(Intent.ACTION_VIEW);
-        //testIntent.setType("application/pdf");
+        testIntent.setType("application/pdf");
 
 
         List list = packageManager.queryIntentActivities(testIntent, PackageManager.MATCH_DEFAULT_ONLY);
         if (list.size() > 0) {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
-            Uri targetUri  = Uri.fromFile(pdfFile);
-            intent.setDataAndType(targetUri, "application/pdf");
+            Uri contentUri = getUriForFile(this, "com.mydomain.fileprovider", pdfFile);
+            intent.setDataAndType(contentUri, "application/pdf");
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             this.startActivity(intent);
         } else {

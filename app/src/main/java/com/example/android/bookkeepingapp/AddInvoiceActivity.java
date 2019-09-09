@@ -120,7 +120,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
         setSupportActionBar( toolbar );
         toolbar.setNavigationIcon( R.drawable.ic_close_black_24dp );
         intent = new Intent(this,MainActivity.class);
-         userData = new User();
+        userData = new User();
 
         //Initialize xml element
         mClientTextView = (TextView) findViewById( R.id.client_add );
@@ -171,7 +171,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
                 child( userID ).child( "service" );
 
         //get new key for the invoice to display it in the text view
-         keyInvoice = mInvoiceDatabaseReference.push().getKey();
+        keyInvoice = mInvoiceDatabaseReference.push().getKey();
         //set the text to that number (or part of it)
         mInvoiceNumberTextView.setText( keyInvoice.substring( keyInvoice.length() - 5 ) );
         //set click listeners on textViews (mClientTextView and mServicesTextView)
@@ -363,13 +363,13 @@ public class AddInvoiceActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //return the object in the list View
                 Client client = clients.get( position );
-               clientIdFromDialog = client.getClientId();
+                clientIdFromDialog = client.getClientId();
                 Log.v(TAG, client.toString());
-               dialog.cancel();
+                dialog.cancel();
 
             }
         } );
-    dialog.show();//display the dialog
+        dialog.show();//display the dialog
 
     }
 
@@ -394,7 +394,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
             @Override
             public void onCancel(DialogInterface dialog) {
-              //  toastMessage( "OnCancelListener" );
+                //  toastMessage( "OnCancelListener" );
                 //detach database reader on canceling
                 detachServiceDatabaseReadListener();
             }
@@ -404,7 +404,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
             @Override
             public void onDismiss(DialogInterface dialog) {
-               // toastMessage( "OnDismissListener" );
+                // toastMessage( "OnDismissListener" );
                 //detach database reader on dismissing
                 detachServiceDatabaseReadListener();
             }
@@ -433,10 +433,10 @@ public class AddInvoiceActivity extends AppCompatActivity {
                 //default quantity for services
                 int defaultQuantity = 1;
                 //find the checkedTextView inside the relative view
-                  ctv = (CheckedTextView) view.findViewById( R.id.checkedTextView );
-                  mServiceQuantity = (TextView) view.findViewById( R.id.quantity_tv );
+                ctv = (CheckedTextView) view.findViewById( R.id.checkedTextView );
+                mServiceQuantity = (TextView) view.findViewById( R.id.quantity_tv );
                 mMinusBtn = ( Button) view.findViewById( R.id.minus_btn );
-                  mPlusBtn = (Button) view.findViewById( R.id.plus_btn );
+                mPlusBtn = (Button) view.findViewById( R.id.plus_btn );
                 ((CheckedTextView) ctv).toggle();
                 Service service = (Service) parent.getItemAtPosition(position);
                 if (ctv.isChecked()) {
@@ -449,12 +449,9 @@ public class AddInvoiceActivity extends AppCompatActivity {
                     //check if the position value is null
                     //for debug
                    /* if (parent.getChildAt(position-parent.getFirstVisiblePosition()) != null){
-
-
                         for(TextView tv : selectedTextViews) {
                             Log.v( TAG, "the value of selected textviews:" + tv.getText() );
                         }
-
                     }
                     else
                     {
@@ -462,7 +459,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
                     }*/
 
 
-                   //get the value of the quantity check box
+                    //get the value of the quantity check box
                     //ServiceQuantity = mServiceQuantity.getText().toString();
                     //make the quantity option visible
                     mMinusBtn.setVisibility( View.VISIBLE );
@@ -510,7 +507,7 @@ public class AddInvoiceActivity extends AppCompatActivity {
                             // whenever data at this location is updated.
 
                             //put all the services num of the hashtable in a list
-                             Set<String> serviceNums= selectedServicesHash.keySet();
+                            Set<String> serviceNums= selectedServicesHash.keySet();
                             //for every service selected by the user, display the name
                             for(String s : serviceNums) {
                                 Service service = new Service();

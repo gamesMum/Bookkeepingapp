@@ -68,10 +68,12 @@ public class AddClientActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null) {
             userID = user.getUid();
+
         }
         //store the data under loggedin user Id
         mClientDatabaseReference = mFirebaseDatabase.getReference().child(userID).child( "client" );
-
+        //keep data offline
+        //mFirebaseDatabase.getInstance().setPersistenceEnabled(true);
         //close this activity
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
