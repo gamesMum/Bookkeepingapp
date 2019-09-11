@@ -81,7 +81,7 @@ public class ViewInvoiceActivity extends AppCompatActivity {
 
     //for pdf
     final private int REQUEST_CODE_ASK_PERMISSIONS = 111;
-    private File pdfFile;
+    private File newpdfFile;
 
     private Menu menu;
     private TextView mNotificationStripe;
@@ -598,20 +598,19 @@ public class ViewInvoiceActivity extends AppCompatActivity {
 
     private void createPdf() throws FileNotFoundException, DocumentException {
 
-        File docsFolder = new File(this.getFilesDir(), "Documents");
-        File pdfName = new File(docsFolder, "default_doc.pdf");
+        File pdfPath = new File(this.getFilesDir(), "docs");
+        String pdfName = "default_doc.pdf";
 
         boolean isPresent = true;
 
-        if (!docsFolder.exists()) {
-            isPresent = docsFolder.mkdirs();
-            Log.v(TAG, "Created a new directory for PDF");
+        if (!pdfPath.exists()) {
+            isPresent = pdfPath.mkdirs();
         }
         if(isPresent) {
-            Log.v(TAG, "found directory" + docsFolder.toString());
-            pdfFile = new File(docsFolder.getAbsolutePath() + pdfName );
-
-            OutputStream output = new FileOutputStream(pdfFile);
+           // Log.v(TAG, "found directory" + docsFolder.toString());
+            newpdfFile = new File(pdfPath, pdfName);
+            //Uri contentUri = getUriForFile(this, "com.example.android.bookkeepingapp", pdfFile);
+            OutputStream output = new FileOutputStream(newpdfFile);
             Document document = new Document( PageSize.A4 );
             PdfPTable table = new PdfPTable( new float[]{3, 3, 3, 3, 3} );
             table.getDefaultCell().setHorizontalAlignment( Element.ALIGN_CENTER );
@@ -689,9 +688,13 @@ public class ViewInvoiceActivity extends AppCompatActivity {
         if (list.size() > 0) {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
-            Uri contentUri = getUriForFile(this, "com.mydomain.fileprovider", pdfFile);
+            Uri contentUri = getUriForFile(ViewInvoiceActivity.this, BuildConfig.APPLICATION_ID, newpdfFile);
             intent.setDataAndType(contentUri, "application/pdf");
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+
             this.startActivity(intent);
         } else {
             Toast.makeText(this, "Download a PDF Viewer to see the generated PDF", Toast.LENGTH_SHORT).show();
