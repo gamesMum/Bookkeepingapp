@@ -7,6 +7,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -382,8 +385,34 @@ public class AddInvoiceActivity extends AppCompatActivity {
         //inflate the dialog view and get the RadioGroup element in it
         final View getServiceSelectorView = li.inflate( R.layout.services_selector_dialog, null );
 
+
         // set dialog message
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder( AddInvoiceActivity.this );
+
+        //find the editText in the dialog
+        EditText serviceSearchBox = (EditText) getServiceSelectorView.findViewById( R.id.add_service_search_txt_dialog );
+
+        if(serviceSearchBox != null) {        //attach the filter to it
+            serviceSearchBox.addTextChangedListener( new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // TODO Auto-generated method stub
+                    // Call back the Adapter with current character to Filter
+                    mServiceAdapter.getFilter().filter( s.toString() );
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            } );
+        }else toastMessage( "the search text is not found!!" );
 
         alertDialogBuilder.setView( getServiceSelectorView );
         alertDialogBuilder.setTitle( "Services" );
