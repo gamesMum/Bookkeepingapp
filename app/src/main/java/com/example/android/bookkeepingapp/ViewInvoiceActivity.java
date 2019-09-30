@@ -272,7 +272,6 @@ public class ViewInvoiceActivity extends AppCompatActivity {
         mUserDatabaseReference.addValueEventListener( new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //TODO:check if this work
                 //get the current total expenses for the user
                 userData.setTotalExpenses( dataSnapshot.getValue( User.class ).getTotalExpenses() ); //set the exp
                 userData.setTotalProfit( dataSnapshot.getValue(User.class).getTotalProfit());
@@ -612,11 +611,15 @@ public class ViewInvoiceActivity extends AppCompatActivity {
             //Uri contentUri = getUriForFile(this, "com.example.android.bookkeepingapp", pdfFile);
             OutputStream output = new FileOutputStream(newpdfFile);
             Document document = new Document( PageSize.A4 );
-            PdfPTable table = new PdfPTable( new float[]{3, 3, 3, 3, 3} );
+            //Specify column width
+            float[] columnWidths = {3f, 3f, 3f, 3f};
+            //create PDF table with the given widths
+            PdfPTable table = new PdfPTable( columnWidths );
+            // set table width a percentage of the page width
+            table.setWidthPercentage(100);
             table.getDefaultCell().setHorizontalAlignment( Element.ALIGN_CENTER );
             table.getDefaultCell().setFixedHeight( 50 );
             table.setTotalWidth( PageSize.A4.getWidth() );
-            table.setWidthPercentage( 100 );
             table.getDefaultCell().setVerticalAlignment( Element.ALIGN_MIDDLE );
             table.addCell( "Name" );
             table.addCell( "Price" );
@@ -661,8 +664,8 @@ public class ViewInvoiceActivity extends AppCompatActivity {
             document.open();
             Font f = new Font( Font.FontFamily.TIMES_ROMAN, 30.0f, Font.UNDERLINE, BaseColor.BLUE );
             Font g = new Font( Font.FontFamily.TIMES_ROMAN, 20.0f, Font.NORMAL, BaseColor.BLUE );
-            document.add( new Paragraph( "Pdf Data \n\n", f ) );
-            document.add( new Paragraph( "Pdf File Through Itext", g ) );
+            document.add( new Paragraph( "Herfa wa Rasma \n\n", f ) );
+            document.add( new Paragraph( "Invoice info.\n", g ) );
             document.add( table );
 
 //        for (int i = 0; i < MyList1.size(); i++) {

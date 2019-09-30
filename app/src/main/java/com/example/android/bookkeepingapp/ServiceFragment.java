@@ -111,7 +111,9 @@ public class ServiceFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //return the object in the list View
-                Service service = services.get( position );
+                //Service service = services.get(position -  parent.getFirstVisiblePosition());
+                Service service =(Service) parent.getItemAtPosition(position);
+                Log.v(TAG, "the position is: " + String.valueOf(position -  parent.getFirstVisiblePosition()));
                 Intent i = new Intent( getActivity(), ViewServiceActivity.class );
                 //pass the service number to the next activity
                 i.putExtra( "serviceNum", service.getServiceNum() );
@@ -145,13 +147,11 @@ public class ServiceFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence arg0, int arg1,
                                           int arg2, int arg3) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void onTextChanged(CharSequence s, int arg1, int arg2,
                                       int arg3) {
-                // TODO Auto-generated method stub
                 // Call back the Adapter with current character to Filter
                 mServiceAdapter.getFilter().filter(s.toString());
             }

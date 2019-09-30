@@ -50,7 +50,7 @@ public class ServiceAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public Object getItem(int position) {
-        return position;
+        return mDisplayedValues.get(position);
     }
 
     @Override

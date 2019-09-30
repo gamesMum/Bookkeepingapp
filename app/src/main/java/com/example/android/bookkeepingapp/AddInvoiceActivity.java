@@ -401,7 +401,6 @@ public class AddInvoiceActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    // TODO Auto-generated method stub
                     // Call back the Adapter with current character to Filter
                     mServiceAdapter.getFilter().filter( s.toString() );
 
@@ -475,17 +474,6 @@ public class AddInvoiceActivity extends AppCompatActivity {
                     //and store it in the list array
                     selectedTextViews.add((TextView) parent.getChildAt( position -  parent.getFirstVisiblePosition())
                             .findViewById( R.id.quantity_tv ));
-                    //check if the position value is null
-                    //for debug
-                   /* if (parent.getChildAt(position-parent.getFirstVisiblePosition()) != null){
-                        for(TextView tv : selectedTextViews) {
-                            Log.v( TAG, "the value of selected textviews:" + tv.getText() );
-                        }
-                    }
-                    else
-                    {
-                        Log.v(TAG, "we can't get to that text view!");
-                    }*/
 
 
                     //get the value of the quantity check box

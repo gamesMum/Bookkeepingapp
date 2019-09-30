@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.fragment.app.Fragment;
+
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +54,8 @@ public class InvoicesFragment extends Fragment {
         // Required empty public constructor
     }
 
+    //foe saving the listview position state
+    private static Parcelable state;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -152,6 +156,7 @@ public class InvoicesFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        state = mInvoiceListView.onSaveInstanceState();
         detachDatabaseReadListener();
         Log.v(TAG, TAG + " on pause");
     }
@@ -204,6 +209,12 @@ public class InvoicesFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        // Restore previous state (including selected item index and scroll position)
+        if(state != null) {
+            Log.d(TAG, "trying to restore listview state in onStart.." + String.valueOf( state ));
+            mInvoiceListView.onRestoreInstanceState(state);
+        }
         getActivity().setTitle( R.string.invoices_text );
     }
 
